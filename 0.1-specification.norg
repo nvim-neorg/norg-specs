@@ -1,7 +1,7 @@
 %Use many examples!%
 %And also provide counter-examples for cases which are not expected to work!%
-%Should speech marks ("") be attached modifiers? Imo it could be pretty useful to have them as that%
 
+Things TODO (for the spec writers):
 - |-| add table syntax (cells) (`:`-detached modifier)
 -- |x| grammar
 -- | | documentation
@@ -95,7 +95,7 @@ Table syntax:
 
    Although built with [Neorg] in mind, Norg can be utilized in a wide range of applications,
    from external note taking plugins to even messaging applications. Thanks to its {:layers:}[layer]
-   system you can choose the feature set you want to support, and can ignore the higher levels.
+   system one can choose the feature set they'd like to support and can ignore the higher levels.
    %TODO: should we move the layers into this document?%
    %I would argue so, but we would need to re-evaluate their validity and find a good location here%
 
