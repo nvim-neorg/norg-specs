@@ -94,10 +94,8 @@ Table syntax:
      whitespace-indentation to carry meaning.
 
    Although built with [Neorg] in mind, Norg can be utilized in a wide range of applications,
-   from external note taking plugins to even messaging applications. Thanks to its {:layers:}[layer]
+   from external note taking plugins to even messaging applications. Thanks to its {* layers}[layer]
    system one can choose the feature set they'd like to support and can ignore the higher levels.
-   %TODO: should we move the layers into this document?%
-   %I would argue so, but we would need to re-evaluate their validity and find a good location here%
 
 * Preliminaries
   First, we define some basic concepts which will be used in this specification.
@@ -1430,7 +1428,7 @@ Table syntax:
 
 * Standard Library
   Norg comes loaded with a predetermined set of {*** attributes} and {*** macros} for different
-  {:layers:} of the syntax. These will eventually be described here, or within the layers document
+  {* layers} of the syntax. These will eventually be described here, or within the layers document
   itself.
 
 * Precedence
