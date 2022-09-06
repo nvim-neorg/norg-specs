@@ -1146,6 +1146,7 @@ Table syntax:
    that the user would like to link to. Inside of these curly braces you can find one of five
    types of data:
    - A {# file location}
+   - A line number
    - A URL (most commonly to an external resource)
    - A {# detached modifier} followed by the name of the linkable
    - A {# custom detached modifiers}[custom detached modifier] specifically made for links
@@ -1200,6 +1201,18 @@ Table syntax:
     handled by a lower level component running Norg, e.g. [Neorg] or the underlying Operating
     System.
 
+*** Line Number
+    Similarly to the {*** URL}, you can also link to a set line number within the current file.
+
+    The syntax is as follows:
+    @code norg
+    Line 1
+    Line 2
+
+    This is a reference to line {2}.
+    This is a reference to line {:file:4} in a different file.
+    @end
+    Disambiguating line numbers and URIs is quite simple - URIs seldom begin with digits.
 *** Detached Modifier
     Norg allows you to link to any {# Structural Detached Modifiers}[structural] or
     {# Range-able Detached Modifiers}[range-able] detached modifier:
@@ -1248,7 +1261,7 @@ Table syntax:
 
      Example:
      @code norg
-     Frank's birthday is on {@ Mon 5th May 2023}.
+     Frank's birthday is on {@ Mon 5th May}.
      @end
 
 **** The Magic Char (`#`)
@@ -1374,6 +1387,8 @@ Table syntax:
     {link}
 
     {:link:}
+
+    {:link:20}
 
     {# link
        text}
