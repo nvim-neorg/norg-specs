@@ -103,7 +103,7 @@ Table syntax:
   First, we define some basic concepts which will be used in this specification.
 
 ** Characters
-   A Norg file is made up of /characters/.
+   An Norg file is made up of /characters/.
    A <character> is any Unicode [code point]{https://en.wikipedia.org/wiki/Code_point}.
 
 *** Whitespace
@@ -171,7 +171,7 @@ Table syntax:
    Paragraphs are then formed of consecutive {** paragraph segments}. A paragraph is terminated by:
    - A <paragraph break> (which equals two consecutive {# line ending}s)
    - Any of the {* detached modifiers}
-   - Any of the {* delimiting modifiers}
+   - Any of the {** Delimiting Modifiers}
    - Any of the {** ranged tags}
    - Any of the {*** strong carryover tags}
 
@@ -1231,7 +1231,7 @@ Table syntax:
     (timestamp) and `?` (wiki link) linkable locations.
 
 **** The File Linkable (`/`)
-     Sometimes you may want to link to an external file that is not a Norg file.
+     Sometimes you may want to link to an external file that is not an Norg file.
      In that case you may use `{/ /path/to/my/file.txt}` (notice the mandatory space after the `/`
      char, just like with the {# detached modifier}s). Paths are relative to the Norg
      file that contains the link.
@@ -1472,5 +1472,49 @@ Table syntax:
   @end
   The link takes precedence, and no bold is rendered.
   ===
+
+* Layers
+  Norg is built up of layers, or in other words a set of features that a parser/tool can support
+  depending on how much of the specification they'd like to support.
+
+** Layer 1
+   The first layers contains a very low level implementation of Norg's markup for use in e.g. a
+   messaging application. This includes:
+   - {* Attached Modifiers} (excluding variables and inline mathematics)
+   - {** Links}
+
+** Layer 2
+   The second layer outlines the basic structure for a document:
+   - {** Nestable Detached Modifiers} (quotes, lists)
+   - {* Headings}
+   - Remaining Linkables ({** Anchors}, {** Inline Link Targets})
+   - {*** Verbatim Ranged Tags} (`@code`, etc.)
+   - {** Delimiting Modifiers}
+
+** Layer 3
+   This layer is for documents of medium/high complexity:
+   - {** Carryover Tags} (`#name`, `#color`, etc.)
+   - {** Detached Modifier Extensions}
+   - {** Range-able Detached Modifiers} (excluding tables %TODO: link%)
+   - {* Trailing Modifier}
+   - {** Link Modifier}
+
+** Layer 4
+   The fourth layer supports 80% of the most commonly used features for writing high level and
+   typeset Norg documents.
+   - {*** Standard Ranged Tags} (`|table`, etc.)
+   - {** Free-form Attached Modifiers}
+   - Intersecting modifiers %TODO: link%
+   - {** Attached Modifier Extensions}
+   - The inline mathematics (`$$`) and variable (`&&`) {* attached modifiers}(!s)
+
+** Layer 5
+   Layer five can be seen as the ultimate boss - it features the dynamic elements of Norg
+   documents, including macros, variables and parsing of eval blocks.
+   - Interpretation/Execution of {** macro tags}
+   - Semantic Understanding/Execution of {** carryover tags}
+   - Evaluation of `@code` blocks for the NIP %TODO: document% language (if they are marked with
+     `|eval`).
+   ===
 
 %| vim: set tw=100 :|%
