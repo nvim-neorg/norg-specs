@@ -1150,7 +1150,7 @@ Table syntax:
    - A {# detached modifier} followed by the name of the linkable
    - A {# custom detached modifiers}[custom detached modifier] specifically made for links
      (`/`, `#`)
-   - | | time stamps (see also earlier)
+   - {**** Timestamps (`@`)}
 
 *** File Location
     The file location is a construct that allows you to specify the /target file/ in which you want
@@ -1220,7 +1220,7 @@ Table syntax:
     ranged and non-ranged detached modifier as both have the same meaning, one just allows more
     content to exist within itself.
 
-    NOTE ! You /cannot/ link to a logical %TODO: link% modifier using {* linkables}. Things like
+    *NOTE*: You /cannot/ link to a logical %TODO: link% modifier using {* linkables}. Things like
     {*** macros} and {*** variables} are out of the equation.
 
 *** Custom Detached Modifiers
@@ -1273,8 +1273,10 @@ Table syntax:
        generic catchall link for all heading levels)
      - All files in the current workspace are parsed/enumerated (including subdirectories)
 
-     %TODO: does the `{:file:}` syntax work with wiki links?%
-     %NOTE: YES%
+***** Additional Behaviours With `{:file:}`
+      The wiki link can also be used with the `{:file:}` to limit the search. It can actually double
+      as a "heading catchall" operator as mentioned in the previous section - it will match all
+      headings regardless of nesting level in the file provided.
 
 *** Inline Linkables
     Although most linkable items are either {# Structural Detached Modifiers}[structural] or
@@ -1400,11 +1402,13 @@ Table syntax:
     {* 
     text}
 
+    {* text }
+
     {
     * text}
 
     {* some
-    text   } %TODO: whitespace is no longer around at linkable boundaries%
+    text   }
 
     {
         * text
@@ -1424,6 +1428,8 @@ Table syntax:
 
     {* text}[
     text]
+
+    {* text}[content ]
     @end
 
 * Standard Library
