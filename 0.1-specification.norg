@@ -500,7 +500,7 @@ Table syntax:
     they are defined.
 
     *NOTE*: In order to make tables more aesthetically pleasing, they're commonly mixed with the
-    intersecting modifier %TODO: link% syntax to produce the following:
+    {* intersection modifiers}[intersection modifier] syntax to produce the following:
     @code norg
     : A1 : Content of table cell at `A1`.
     @end
@@ -571,7 +571,7 @@ Table syntax:
     the next level because any detached modifier can be assigned a task status. This can for
     example be useful for the author of a document to keep track of the status of certain sections.
     The syntax is the following:
-    - A TODO status extension starts with a `|` char
+    - A TODO status extension starts with a `(` char
     - Immediately a single status indicator character must follow. The following statuses are
       supported:
     -- |` `|: undone (a literal space)
@@ -582,7 +582,7 @@ Table syntax:
     -- `-`: in-progress/pending
     -- `=`: on hold
     -- `_`: put down/cancelled
-    - Finally another `|` char closes the todo status extension.
+    - Finally another `)` char closes the todo status extension.
 
    NOTE: The TODO status extension /must/ be followed by whitespace (excluding {# line ending}s).
 
@@ -596,11 +596,12 @@ Table syntax:
 
     For example:
     @code norg
-    - |+ 5th July| This task recurs every 5th of July.
-    - |# A|@ 3rd feb| This task has a priority `A` and is assigned to the 3rd of February.
+    - (+ 5th July) This task recurs every 5th of July.
+    - (# A|@ 3rd feb) This task has a priority `A` and is assigned to the 3rd of February.
     @end
     Not all {** detached modifier extensions} support parameters and for good reason. There is no
-    need to attach extra metadata to a done or undone state for instance.
+    need to attach extra metadata to a done or undone state for instance. Different extensions can
+    be delimited with the {* contextual `|` delimiter}.
 
     Below are descriptions for a few other extensions that may be used.
 
@@ -636,7 +637,7 @@ Table syntax:
 
      The syntax is as follows:
      @code norg
-     * |# A| This heading has priority A (highest priority)
+     * (# A) This heading has priority A (highest priority)
      @end
      Note that Norg does not specify strict semantics for this detached modifer extension, and as
      such there is no set-in-stone way to specify priorities. The most common (and recommended) way
@@ -653,7 +654,7 @@ Table syntax:
 
      Syntax:
      @code norg
-     - |< Tue 5th Feb| Do this before the 5th february.
+     - (< Tue 5th Feb) Do this before the 5th february.
      @end
 
 **** Start Date Extension
@@ -662,7 +663,7 @@ Table syntax:
 
      Syntax:
      @code norg
-     - |> Tue 5th Feb| This task starts after the 5th february.
+     - (> Tue 5th Feb) This task starts after the 5th february.
      @end
 
 *** Indent Segment Extension
@@ -817,9 +818,9 @@ Table syntax:
      @code norg
      What is your favourite activity? Hint: there's only one correct answer :)
      #choice
-     - | | Sleeping
-     - | | Learning
-     - |x| Writing `.norg` documents
+     - ( ) Sleeping
+     - ( ) Learning
+     - (x) Writing `.norg` documents
      @end
 
      Here, both the level 1 heading and the level 2 heading along with their contents will be
@@ -1017,8 +1018,8 @@ Table syntax:
      modifier range}).
 
 ** Link Modifier
-   The link modifier, `:`, is a special modifier type called an _intersecting_ modifier. It puts a
-   twist on the original attached modifier rules - in fact, it's the polar opposite.
+   The link modifier, `:`, is a special modifier type - it puts a twist on the original attached
+   modifier rules - in fact, it's the polar opposite.
 
    As described in the {# attached modifiers} section, attached modifier types may not exist
    inbetween words like so:
@@ -1065,7 +1066,7 @@ Table syntax:
    serve different usecases.
 
    The content of {** attached modifier extensions} consists of a set of references to many
-   {*** Attribute}[attributes]. These attributes are delimited by the contextual delimiter `|`.
+   {*** Attribute}[attributes]. These attributes are delimited by the {* contextual `|` delimiter}.
 
 *** Examples
     @code norg
@@ -1077,8 +1078,15 @@ Table syntax:
     {* Link location}[this is an important link](important|red) <- Highlights the link as big & bold
                                                                    and red.
     @end
+* Contextual `|` Delimiter
+  The pipe (`|`) character is a really nice character - it can be applied to many different problems
+  and expressively represent certain behaviours, specifically delimiting. While also used for
+  {*** standard ranged tags} and {** free-form attached modifiers}, the pipe symbol is also used as
+  a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier
+  Extensions}[attached] modifier extensions. Even though it's used 3 times for different purposes,
+  the contexts in which they are used in allows for them to be unambiguous.
 
-* Multifunctional `|` Delimiter
+* Intersection Modifiers
   %TODO%
 
 * Trailing Modifier
@@ -1475,8 +1483,7 @@ Table syntax:
   ~ Free-form attached modifiers
   ~ Free-form modifiers (`|**|`, `|//|` etc.)
   ~ Standard attached modifers
-
-  - | | clarify trailing modifier precedence
+  ~ Trailing modifier (`~`)
 
   Should any extra precedence problems arise (let us know if you find any) they can be disambiguated
   through a simple left-to-right precedence approach.
@@ -1526,9 +1533,9 @@ Table syntax:
 ** Layer 4
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
-   - {*** Standard Ranged Tags} (`|table`, etc.)
+   - {*** Standard Ranged Tags} (`|comment`, etc.)
    - {** Free-form Attached Modifiers}
-   - Intersecting modifiers %TODO: link%
+   - {* Intersection modifiers}
    - {** Attached Modifier Extensions}
    - The inline mathematics (`$$`) and variable (`&&`) {* attached modifiers}(!s)
 
