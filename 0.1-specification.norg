@@ -231,7 +231,6 @@ Table syntax:
      - Range-able
   ::
 
-  - |-| `<`: add drawers/details (range-able)
   - | | `=`: add macros (range-able, logical)
   - | | `%`: add attribute (nestable, logical)
 
@@ -460,9 +459,6 @@ Table syntax:
     Which scans up to the closing modifier.
     ^^
     @end
-*** Drawers/Details
-    The `<` char. %TODO: Perhaps convert to regular ranged tag%.
-
 *** Variables
     Variables are bits of information that can be dynamically inserted into the document.
     @code norg
@@ -850,11 +846,12 @@ Table syntax:
     There are times where you may want to create an isolated block of Norg markup.
     To do this you may use the standard ranged tag, which uses the `|` character.
 
-    Currently it's only used for two tags, `comment` and `example`. The `comment` ranged tag is used
+    Currently it's only used for three tags, `comment`, `example` and `details`. The `comment` ranged tag is used
     for long strings of comments (versus the `%` attached modifier, which is mostly used for short
     comments), whereas the `example` tag is a simple way to show an example of some Norg markup
     without it being rendered and treated as physical markup (most commonly used throughout this
-    very document to show unrendered examples of Norg syntax).
+    very document to show unrendered examples of Norg syntax). `details` is a way to hide away
+    markup (just like {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
 
 **** Examples
      `|example`:
@@ -872,6 +869,14 @@ Table syntax:
 
      * Heading
        /italic/ and *bold*.
+     |end
+     @end
+
+     `|details`:
+     @code norg
+     |details
+     * Here is some hidden markup!
+       Wowzers.
      |end
      @end
 
