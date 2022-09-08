@@ -395,8 +395,20 @@ Table syntax:
     >>>>>>> Quote level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 quote.
     @end
-*** ( ) Attribute
-     The `%` char.
+*** Attribute
+    @code norg
+    % attrib1
+    %% atrrib2
+    %%% atrrib3
+    %%%% atrrib4
+    %%%%% atrrib5
+    %%%%%% atrrib6
+    @end
+    Attributes are detached modifiers that exist solely for the purpose to have altered behaviour
+    through {** carryover tags}. These can then be referenced within {** attached modifier
+    extensions} and the behaviour applied to the attribute iwll be applied to the attached modifier.
+
+    These modifiers can be nested to create a hierarchy of attributes.
 
 *** Invalid Examples
     - ::
@@ -1067,16 +1079,18 @@ Table syntax:
 
    The content of {** attached modifier extensions} consists of a set of references to many
    {*** Attribute}[attributes]. These attributes are delimited by the {* contextual `|` delimiter}.
+   If the attribute is part of a hierarchy (see {*** attribute}[attributes]), you may use the `:`
+   character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies.
 
 *** Examples
     @code norg
-    `print("This is some python")`(python) <- The python attribute highlights the text as python
-    *print("This is some python too")*(python) <- Yes, this is Norg markup highlighted as python.
+    `print("This is some python")`(lang:python) <- The lang:python attribute highlights the text as python
+    *print("This is some python too")*(lang:python) <- Yes, this is Norg markup highlighted as python.
                                                   Don't know why you'd do it but hey you do you.
                                                   %TODO: can attributes impose limits?%
 
-    {* Link location}[this is an important link](important|red) <- Highlights the link as big & bold
-                                                                   and red.
+    {* Link location}[this is an important link](important|color:red) <- Highlights the link as big,
+                                                                         bold (important) and red.
     @end
 * Contextual `|` Delimiter
   The pipe (`|`) character is a really nice character - it can be applied to many different problems
