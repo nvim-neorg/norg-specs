@@ -16,16 +16,16 @@ Things TODO (for the spec writers):
 - |x| refactor free-form attached mods to place `|` inside the attached mods
 -- |x| TODO: tests
 - |x| raise precedence of escape character between standard and free-form verbatim markup
-- | | document intersection modifiers: `<space><char><space>`
--- | | document and support paragraph_segment delimiter: |` : `|
--- | | document and support notice modifier: |` ! `|
+- |x| document intersection modifiers: `<space><char><space>`
+-- |x| document and support paragraph_segment delimiter: |` : `|
+-- |-| document and support notice modifier: |` ! `|
 - |x| add attached modifier extensions (attributes: `*bold*(attribute)`)
 -- |x| grammar
 -- |-| tests (TODO: add more)
 -- | | documentation
 - |x| remove markers
 - | | document and add attribute detached modifier `%` (standard but logical (cannot be linked to))
-- | | Add `>`, `<` detached modifier extensions (GTD-based)
+- |x| Add `>`, `<` detached modifier extensions (GTD-based)
 - | | Add timestamp ranges (`Tue 3rd Jul - Thu 5th Jul`)
 - |?| Document standard library macros/attributes?
 - | | Document slides
@@ -1087,7 +1087,41 @@ Table syntax:
   the contexts in which they are used in allows for them to be unambiguous.
 
 * Intersection Modifiers
-  %TODO%
+  Norg is a syntax designed to be used by many - this includes many styles and preferences. Although
+  it's impossible to satisfy everyone, there are some variations of syntax that can be used to
+  "beautify" Norg markup. The {* intersection modifiers}(!s) does just that - it's a way to
+  intersect two different paragraph segments (and *only* paragraph segments) together on the same
+  line.
+
+  The syntax is as follows:
+  - First, a {# whitespace} character must be matched
+  - Next, the actual modifier (currently only `:`) must be matched.
+  - The token ends with another {# whitespace} character.
+
+  The use case for the intersection modifier is best illustrated by example:
+  @code norg
+  $ Term
+    This is a definition of that term.
+  @end
+  This is perfectly normal syntax that you would write day to day in Norg. But what if you're more
+  of a fan of one liners? The `| : |` intersection modifier (currently the only modifier of this
+  type) can be used to do just this:
+  @code norg
+  $ Term : This is a definition of that term.
+  @end
+  This syntax is especially favoured for table cells %TODO: link%:
+  @code norg
+  : A1 : Content of the cell at A1
+  : A2 : Content of the cell at A2
+  @end
+
+  The `| : |` syntax expands to a newline, which means that after expansion you get:
+  @code norg
+  : A1
+  Content of the cell at A1
+  : A2
+  Content of the cell at A2
+  @end
 
 * Trailing Modifier
   Trailing modifiers are another separate kind of modifiers in the Norg syntax. They have one very
