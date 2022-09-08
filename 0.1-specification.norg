@@ -26,12 +26,12 @@ Things TODO (for the spec writers):
 - (x) remove markers
 - (x) document and add attribute detached modifier `%` (standard but logical (cannot be linked to))
 - (x) Add `>`, `<` detached modifier extensions (GTD-based)
-- ( ) Add timestamp ranges (`Tue 3rd Jul - Thu 5th Jul`)
+- (x) Add timestamp ranges (`Tue 3rd Jul - Thu 5th Jul`)
 - (?) Document standard library macros/attributes?
 - ( ) Document slides
 - ( ) Convert slide to `:`, convert indent segment to `::`.
 - (x) Convert `\| |` to `( )`
-- ( ) Allow for nested attributes (`color:red`) (rangeable detached modifier)
+- (x) Allow for nested attributes (`color:red`) (rangeable detached modifier)
 
 Table syntax:
 - ( ) New motions: `>`, `v`, `^`, `<`
@@ -640,14 +640,19 @@ Table syntax:
      The `<day>` value is reliant on the current locale, but the following alterations of that
      value are permitted:
      - Full version (e.g. `Tuesday`, `Wednesday`)
-     - Shorthand, three letter version (e.g. `Tue`, `Wed`)
-     - Shorthand, more-than-three letter version (`e.g. `Thur`, `Frida`) (useful when very quickly jotting
-       down dates)
-
-     %TODO: When releasing the first release candidate ask people to add ideas here%
+     - An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
+       `M` (monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
+       could satisfy the input.
      $$
 
      %TODO: finish this%
+
+     Apart from just being able to supply a timestamp, you are also permitted to provide a range.
+     The syntax is simple, and is contained within the extension:
+     @code norg
+     {@ 5th Aug 2022 - 20th August 2022}
+     {@ 5th Aug 2022-20th August 2022} <- Also valid
+     @end
 
 **** Priority Extension
      This extension allows for you to specify a priority of your detached modifier extension.
