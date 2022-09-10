@@ -1,64 +1,12 @@
-%Use many examples!%
-%And also provide counter-examples for cases which are not expected to work!%
-
-Things TODO (for the spec writers):
-- (x) add table syntax (cells) (`:`-detached modifier)
--- (x) grammar
--- (x) documentation
-- (x) make sure that no whitespace can appear at linkable boundaries
-- (x) swap strong attribute and non-verbatim ranged tag characters
-- (x) explain differentation of verbatim and non-verbatim tags in spec
-- (x) support and document line number in file links
--- (x) support line numbers in `{:file:123}` links?
-- (x) reverse heading links to be per-level
-- (x) support `?`-linkable target (wiki link)
-- (_) add anonymous node for ellipsis (`...`)
-- (x) refactor free-form attached mods to place `|` inside the attached mods
--- (x) TODO: tests
-- (x) raise precedence of escape character between standard and free-form verbatim markup
-- (x) document intersection modifiers: `<space><char><space>`
--- (x) document and support paragraph_segment delimiter: `| : |`
--- (=) document and support notice modifier: `| ! |`
-- (x) add attached modifier extensions (attributes: `*bold*(attribute)`)
--- (x) grammar
--- (-) tests (TODO: add more)
--- (x) documentation
-- (x) remove markers
-- (x) document and add attribute detached modifier `%` (standard but logical (cannot be linked to))
-- (x) Add `>`, `<` detached modifier extensions (GTD-based)
-- (x) Add timestamp ranges (`Tue 3rd Jul - Thu 5th Jul`)
-- (?) Document standard library macros/attributes?
-- (x) Document slides
-- (x) Convert slide to `:`, convert indent segment to `::`.
-- (x) Convert `\| |` to `( )`
-- (x) Allow for nested attributes (`color:red`) (rangeable detached modifier)
-
-Table syntax:
-- ( ) New motions: `>`, `v`, `^`, `<`
-- ( ) Floor motion (go fully left and down): `_`
-- ( ) Ceiling motion (go fully up and right): `/`
-- ( ) Root of table (A1): `.`
-- ( ) Allow the combination of motions with numerical values (`13>`/`2_`)
-- ( ) Allow underflowing via `<` (B1 -> A3 if A has 3 occupied cells)
-- ::
-  Example:
-@code norg
-  : . : Char
-  : > : Name/Type
-  : > : Categories
-  : _ : `*`
-  : > : Headings
-  : > : structural, nestable
-  : _ : `-`
-  
-  : . : Char
-  : v : `*`
-  : v : `-`
-  : v :
-  : / : Name/Type
-  : v : Headings
-  @end
-  ---
+@document.meta
+title: The 0.1 Norg Specification
+authors: [
+    vhyrro
+    mrossinek
+]
+categories: specifications
+version: 1.0
+@end
 
 * Norg File Format Specification
   This file contains the formal file format specification of the Norg syntax version 0.1.
@@ -504,6 +452,17 @@ Table syntax:
     @code norg
     The content of the above variable is: *this* is some /content/.
     @end
+
+    Variables can be expanded in paragraphs but also in tag parameters:
+    @code norg
+    & MyVariable
+    red
+
+    #color &myvariable&
+    This should be red.
+    @end
+    This is a unique case where an {* attached modifiers}[attached modifier] may be used outside of
+    a paragraph.
 *** Macro Definitions
     To define a macro, you use the macro detached modifier:
     @code norg
@@ -526,7 +485,7 @@ Table syntax:
     Macros can have a special last parameter called `next` or `...`, in which case they can only be
     used as a {** carryover tags}[carryover tag] or {** ranged tags}[ranged tag], respectively. In
     this case, the `next` and `..` variables are an `entity`. Entities are a part of Norg's
-    {** layer 5} metaprogramming capabilities, and are described in the semantics document %TODO: link%:
+    {** layer 5} metaprogramming capabilities, and are described in the {:0.1-semantics:}[semantics] document:
     @code norg
     = MacroName next
     The content of `next` is: &next&.
@@ -871,15 +830,14 @@ Table syntax:
        Everything here should be coloured red!
      |end
      @end
-   The `next` and `...` arguments are automatically supplied. See the semantics %TODO: link%
-   document for more details.
+   The `next` and `...` arguments are automatically supplied. See the {:0.1-semantics:}[semantics
+   document] for more details.
 
 ** Carryover Tags
    Carryover tags are a construct used to assign certain properties to the next item or whole
    {# objects}[object]. In reality, they are a type of {** macro tags}[macro tag], where the next
-   element is given as the last parameter to the macro. For more info see the {:semantics:} document
-   %TODO: create semantics
-   document%.
+   element is given as the last parameter to the macro. For more info see the
+   {:0.1-semantics:}[semantics document].
 
    There are two types of carryover tag, the {*** weak carryover tags}[weak carryover tag] and the
    {*** strong carryover tags}[strong variant].
@@ -1657,8 +1615,7 @@ Table syntax:
 
 * Standard Library
   Norg comes loaded with a predetermined set of {*** attributes} and {*** macro definitions} for different
-  {* layers} of the syntax. These will eventually be described here, or within the layers document
-  itself.
+  {* layers} of the syntax. These are defined in the {:0.1-semantics:}[semantics document].
 
 * Precedence
   Precedence in Norg is rather simple and intuitive. All non-inline elements have direct
@@ -1747,7 +1704,7 @@ Table syntax:
    documents, including macros, variables and parsing of eval blocks.
    - Interpretation/Execution of {** macro tags}
    - Semantic understanding/execution of {** carryover tags}
-   - Evaluation of `@code` blocks for the NIP %TODO: document% language (if they are marked with
+   - Evaluation of `@code` blocks for the {:0.1-semantics:* NIP}[NIP] language (if they are marked with
      `#eval`).
    ===
 
