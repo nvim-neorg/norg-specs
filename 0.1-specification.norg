@@ -2,9 +2,9 @@
 %And also provide counter-examples for cases which are not expected to work!%
 
 Things TODO (for the spec writers):
-- (-) add table syntax (cells) (`:`-detached modifier)
+- (x) add table syntax (cells) (`:`-detached modifier)
 -- (x) grammar
--- ( ) documentation
+-- (x) documentation
 - (x) make sure that no whitespace can appear at linkable boundaries
 - (x) swap strong attribute and non-verbatim ranged tag characters
 - (x) explain differentation of verbatim and non-verbatim tags in spec
@@ -22,14 +22,14 @@ Things TODO (for the spec writers):
 - (x) add attached modifier extensions (attributes: `*bold*(attribute)`)
 -- (x) grammar
 -- (-) tests (TODO: add more)
--- ( ) documentation
+-- (x) documentation
 - (x) remove markers
 - (x) document and add attribute detached modifier `%` (standard but logical (cannot be linked to))
 - (x) Add `>`, `<` detached modifier extensions (GTD-based)
 - (x) Add timestamp ranges (`Tue 3rd Jul - Thu 5th Jul`)
 - (?) Document standard library macros/attributes?
-- ( ) Document slides
-- ( ) Convert slide to `:`, convert indent segment to `::`.
+- (x) Document slides
+- (x) Convert slide to `:`, convert indent segment to `::`.
 - (x) Convert `\| |` to `( )`
 - (x) Allow for nested attributes (`color:red`) (rangeable detached modifier)
 
@@ -634,18 +634,21 @@ Table syntax:
      Obviously, you're not required to type the whole syntax out very time. Any of the elements in
      angled brackets (`<>`) can be dropped/ignored, but the order of those values may not change!
 
-     Here is a detailed index of all possible alterations for each value:
-
-     $$ <day>
-     The `<day>` value is reliant on the current locale, but the following alterations of that
-     value are permitted:
-     - Full version (e.g. `Tuesday`, `Wednesday`)
-     - An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
+     - ::
+       The `<day>` value is reliant on the current locale, but the following alterations of that
+       value are permitted:
+       - Full version (e.g. `Tuesday`, `Wednesday`)
+       - An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
        `M` (monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
        could satisfy the input.
-     $$
-
-     %TODO: finish this%
+     - The `,?` expression means that a `,` character may optionally exist in that location.
+     - The `<day-of-month>` value is simply a numeric value with at most 3 digits (to disambiguate
+       it with the `<year>` value).
+     - The `<month>` value is also dependent on the current locale, and the same shorthand rules apply
+       as in the `<day>` value.
+     - The `<year>` value must be a numeric value with at least 4 digits
+     - The `<time>` value must consist of this format (in regex): `|\d{1,2}:\d{2}(\.\d{1,2})?|`.
+       Some examples would be: `18:00`, `5:32`, `00:12.32`.
 
      Apart from just being able to supply a timestamp, you are also permitted to provide a range.
      The syntax is simple, and is contained within the extension:
@@ -1144,7 +1147,7 @@ Table syntax:
   @code norg
   $ Term : This is a definition of that term.
   @end
-  This syntax is especially favoured for table cells %TODO: link%:
+  This syntax is especially favoured for {*** table cells}: 
   @code norg
   : A1 : Content of the cell at A1
   : A2 : Content of the cell at A2
@@ -1595,7 +1598,7 @@ Table syntax:
    This layer is for documents of medium/high complexity:
    - {** Carryover Tags} (`#name`, `#color`, etc.)
    - {** Detached Modifier Extensions}
-   - {** Range-able Detached Modifiers} (excluding tables %TODO: link%)
+   - {** Range-able Detached Modifiers} (excluding {*** table cells))
    - {* Trailing Modifier}
    - {** Link Modifier}
 
