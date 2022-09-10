@@ -809,16 +809,76 @@ Table syntax:
    (unless they don't adhere to the above rules regarding tag names).
 
 ** Macro Tags
-   Macros are explained further in detail {** Macros}[in their own section].
+   Macro definitions are explained in detail {** Macro Tags}[in their own section].
 
-   The `=` tag invokes a macro and injects its result into the location that the macro tag was invoked.
+   The `=` tag simply invokes a macro with some parameters and injects its result into the location
+   that the macro tag was invoked. This tag does not break up paragraphs unless the injected content
+   contains an element that breaks up paragraphs.
 
-   Example: `=MyMacro myparameter`.
+   Given the following example:
+   @code norg
+   = LoremIpsum
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+   cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+   culpa qui officia deserunt mollit anim id est laborum.
+
+   Here you will see the lorem ipsum text.
+   =LoremIpsum
+   It's pretty nice, isn't it?
+   @end
+   Expands to:
+   @code norg
+   Here you will see the lorem ipsum text.
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+   cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+   culpa qui officia deserunt mollit anim id est laborum.
+   It's pretty nice, isn't it?
+   @end
+   This, naturally, is treated as one whole paragraph.
+
+   As described in the {*** macro definitions} section, the `next` and `...` parameters have special
+   meaning in {** level 5}:
+   - :
+     @code norg
+     == important next
+     #color red
+     &next&
+     ==
+
+     #important
+     This is some important text.
+     @end
+   - :
+     @code norg
+     == important ...
+     %We encapsulate all elements in
+     a group so we colour everything%
+
+     #color red
+     |group
+       &...&
+     |end
+     ==
+
+     |important
+     This is some highly important markup.
+
+     * And this is a very important heading.
+       Everything here should be coloured red!
+     |end
+     @end
+   The `next` and `...` arguments are automatically supplied. See the semantics %TODO: link%
+   document for more details.
 
 ** Carryover Tags
-   Carryover tags are a construct used to assign certain properties to the next item or whole object.
-   In reality, they are a type of {** macro tags}[macro tag], where the next element is given as the
-   last parameter to the macro. For more info see the {:semantics:} document %TODO: create semantics
+   Carryover tags are a construct used to assign certain properties to the next item or whole
+   {# objects}[object]. In reality, they are a type of {** macro tags}[macro tag], where the next
+   element is given as the last parameter to the macro. For more info see the {:semantics:} document
+   %TODO: create semantics
    document%.
 
    There are two types of carryover tag, the {*** weak carryover tags}[weak carryover tag] and the
@@ -915,12 +975,16 @@ Table syntax:
     There are times where you may want to create an isolated block of Norg markup.
     To do this you may use the standard ranged tag, which uses the `|` character.
 
-    Currently it's only used for three tags, `comment`, `example` and `details`. The `comment` ranged tag is used
-    for long strings of comments (versus the `%` attached modifier, which is mostly used for short
-    comments), whereas the `example` tag is a simple way to show an example of some Norg markup
-    without it being rendered and treated as physical markup (most commonly used throughout this
-    very document to show unrendered examples of Norg syntax). `details` is a way to hide away
-    markup (just like {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
+    Currently it's only used for four tags, `comment`, `example`, `details` and `group`:
+    - The `comment` ranged tag is used for long strings of comments (versus the `%` attached modifier,
+      which is mostly used for short comments).
+    - The `example` tag is a simple way to show an example of some Norg markup without it being
+      rendered and treated as physical markup (most commonly used throughout this very document to
+      show unrendered examples of Norg syntax).
+    - The `details` tag is a way to hide away markup (just like
+      {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
+      - The `group` tag may be used to group together many elements and apply a global {*** strong
+        carryover tags}[strong carryover tag] to each and every one of them.
 
 **** Examples
      `|example`:
@@ -946,6 +1010,19 @@ Table syntax:
      |details
      * Here is some hidden markup!
        Wowzers.
+     |end
+     @end
+
+     `|group`:
+     @code norg
+     #color red
+     |group
+     This will be red.
+
+     So will this.
+
+     * So will this
+       And this.
      |end
      @end
 
