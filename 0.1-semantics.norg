@@ -1,0 +1,44 @@
+@document.meta
+title: 0.1-semantics
+description: 
+authors: vhyrro
+categories: 
+created: 2022-09-10
+version: 0.0.13
+@end
+
+- ( ) Document stdlib macros/carryover tags/ranged tags
+- ( ) Describe how tags are evaluated
+- ( ) Document Norg's special NIP language used to manipulate the document with macros.
+- ( ) Document inbuilt attached modifier extensions and their behaviours
+
+Table syntax:
+- ( ) New motions: `>`, `v`, `^`, `<`
+- ( ) Floor motion (go fully left and down): `_`
+- ( ) Ceiling motion (go fully up and right): `/`
+- ( ) Root of table (A1): `.`
+- ( ) Allow the combination of motions with numerical values (`13>`/`2_`)
+- ( ) Allow underflowing via `<` (B1 -> A3 if A has 3 occupied cells)
+- ::
+  Example:
+@code norg
+  : . : Char
+  : > : Name/Type
+  : > : Categories
+  : _ : `*`
+  : > : Headings
+  : > : structural, nestable
+  : _ : `-`
+  
+  : . : Char
+  : v : `*`
+  : v : `-`
+  : v :
+  : / : Name/Type
+  : v : Headings
+  @end
+  ---
+
+* Introduction
+
+* NIP
