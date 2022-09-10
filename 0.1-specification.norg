@@ -8,9 +8,6 @@ categories: specifications
 version: 1.0
 @end
 
-TODOS:
-- ( ) Convert all `@code norg` instances to `|example`:s
-
 * Norg File Format Specification
   This file contains the formal file format specification of the Norg syntax version 0.1.
   This document is written in the Norg format in its original form and, thus, attempts to be
@@ -110,11 +107,11 @@ TODOS:
 
    A {# line ending} terminates the paragraph segment. This means that a paragraph segment is
    essentially just a line of text:
-   @code norg
+   |example
    I am a paragraph segment.
    I am another paragraph segment.
    And together we form a paragraph.
-   @end
+   |end
 
 ** Paragraphs
    Paragraphs are then formed of consecutive {** paragraph segments}. A paragraph is terminated by:
@@ -201,26 +198,26 @@ TODOS:
    it is required for the many types of {** carryover tags} to function.
 
 *** Examples
-    @code norg
+    |example
     The following items naturally group because they are range-able, forming
     a definition list:
     $ Term 1
       Definition 1!
     $ Term 2
       Definition 2!
-    @end
+    |end
 
-    @code norg
+    |example
     Together, these form one whole unordered list:
     - List item 1
     - List item 2
-    @end
+    |end
 
-    @code norg
+    |example
     - List item in one list
 
     - This item is in another list, because we used a {# paragraph break} to split these items
-    @end
+    |end
 
 ** Structural Detached Modifiers
    The first detached modifier type is the /structural/ modifier type. As the name suggests,
@@ -238,7 +235,7 @@ TODOS:
    the same level.
 
 *** Headings
-    @code norg
+    |example
     * Heading level 1
     ** Heading level 2
     *** Heading level 3
@@ -246,7 +243,7 @@ TODOS:
     ***** Heading level 5
     ****** Heading level 6
     ******* Heading level 7 (falls back to level 6 in the tree-sitter parser)
-    @end
+    |end
 
     Although headings are both structural /and/ nestable (see next section), the former takes
     precedence over the latter, meaning that headings only affect a single
@@ -275,7 +272,7 @@ TODOS:
     Unordered lists provide an easy way to enumerate items in an unordered fashion. Useful for data
     that's categorically similar but doesn't need to follow a strict order.
 
-    @code norg
+    |example
     - Unordered list level 1
     -- Unordered list level 2
     --- Unordered list level 3
@@ -298,14 +295,14 @@ TODOS:
            This text is still part of the level 6 list item.
     ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 list item.
-    @end
+    |end
 
 *** Ordered Lists
     This list type is only useful for data that needs to be kept in sequence. In contrast to other
     formats which may use a syntax like `1.`/`1)`, Norg counts the items automatically - this
     reduces complexity and makes reordering items simple.
 
-    @code norg
+    |example
     ~ Ordered list level 1
     ~~ Ordered list level 2
     ~~~ Ordered list level 3
@@ -328,10 +325,10 @@ TODOS:
            This text is still part of the level 6 list item.
     ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 list item.
-    @end
+    |end
 
 *** Quotes
-    @code norg
+    |example
     > Quote level 1
     >> Quote level 2
     >>> Quote level 3
@@ -354,16 +351,16 @@ TODOS:
            This text is still part of the level 6 quote.
     >>>>>>> Quote level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 quote.
-    @end
+    |end
 *** Attributes
-    @code norg
+    |example
     % attrib1
     %% atrrib2
     %%% atrrib3
     %%%% atrrib4
     %%%%% atrrib5
     %%%%%% atrrib6
-    @end
+    |end
     Attributes are detached modifiers that exist solely for the purpose to have altered behaviour
     through {** carryover tags}. These can then be referenced within {** attached modifier
     extensions} and the behaviour applied to the attribute iwll be applied to the attached modifier.
@@ -372,7 +369,7 @@ TODOS:
 
 *** Invalid Examples
     - ::
-        @code norg
+      |example
         >I am not a quote
 
         some preceding text > I am also not a quote
@@ -383,7 +380,7 @@ TODOS:
 
         *
             I am not a valid heading title.
-        @end
+        |end
     - Headings are also /nestable/ detached modifiers but will only be discussed later as part of the
       {# structural detached modifiers} section.
 
@@ -404,71 +401,71 @@ TODOS:
     Definitions are primarily of use to people who write technical documents.
     They consist of a term, and then are followed by a definition of that term.
 
-    @code norg
+    |example
     $ Term
     Definition content.
-    @end
+    |end
 
     To create longer definitions, use the ranged definition syntax instead:
-    @code norg
+    |example
     $$ Term
     Content of the definition.
 
     Which scans up to the closing modifier.
     $$
-    @end
+    |end
 *** Footnotes
     Footnotes allow the user to give supplementary information related to some text without
     polluting the paragraph itself. Footnotes can be linked to using {# linkables}.
 
-    @code norg
+    |example
     ^ Single Footnote
     Optional footnote content.
-    @end
+    |end
 
     To create longer footnotes, use the ranged term instead:
-    @code norg
+    |example
     ^^ Ranged Footnote
     Content of the footnote.
 
     Which scans up to the closing modifier.
     ^^
-    @end
+    |end
 *** Variables
     Variables are bits of information that can be dynamically inserted into the document.
-    @code norg
+    |example
     & Variable Name
     Variable value
-    @end
-    @code norg
+    |end
+    |example
     && Variable Name
     *this* is some /content/.
     &&
-    @end
+    |end
 
     After being defined a single time, it can be inserted into paragraphs using the `&` attached
     modifier:
-    @code norg
+    |example
     The content of the above variable is: &variable name&.
-    @end
+    |end
     After the logical detached modifiers are evaluated, the above example would expand to:
-    @code norg
+    |example
     The content of the above variable is: *this* is some /content/.
-    @end
+    |end
 
     Variables can be expanded in paragraphs but also in tag parameters:
-    @code norg
+    |example
     & MyVariable
     red
 
     #color &myvariable&
     This should be red.
-    @end
+    |end
     This is a unique case where an {* attached modifiers}[attached modifier] may be used outside of
     a paragraph.
 *** Macro Definitions
     To define a macro, you use the macro detached modifier:
-    @code norg
+    |example
     = MacroName parameter1 parameter2
     The meaning of &parameter1& is &parameter2&.
 
@@ -483,38 +480,38 @@ TODOS:
 
     =MacroName life 42
     =LongMacro
-    @end
+    |end
 
     Macros can have a special last parameter called `next` or `...`, in which case they can only be
     used as a {** carryover tags}[carryover tag] or {** ranged tags}[ranged tag], respectively. In
     this case, the `next` and `..` variables are an `entity`. Entities are a part of Norg's
     {** layer 5} metaprogramming capabilities, and are described in the {:0.1-semantics:}[semantics] document:
-    @code norg
+    |example
     = MacroName next
     The content of `next` is: &next&.
 
     = differentmacroname ...
     The content of the ranged tag is: &content&.
-    @end
+    |end
 
 *** Table Cells
     Table cells are used to, well, build up a table. Here are a few examples of table cells:
-    @code norg
+    |example
     : A1
       Content of table cell at `A1`.
     :: A2
     > Content of table cell at `A2` (in a quote).
     ::
-    @end
+    |end
     Their semantics are described in more detail in the {:semantics:* Tables}[semantics] document,
     which we recommend reading if you are interested in the behaviour of objects as opposed to how
     they are defined.
 
     *NOTE*: In order to make tables more aesthetically pleasing, they're commonly mixed with the
     {* intersection modifiers}[intersection modifier] syntax to produce the following:
-    @code norg
+    |example
     : A1 : Content of table cell at `A1`.
-    @end
+    |end
 ** Delimiting Modifiers
    In Norg, headings (and other {** structural detached modifiers}) must be terminated by a {**
    delimiting modifiers}[delimiting modifier]. This kind of modifier must abide by the following
@@ -537,7 +534,7 @@ TODOS:
 *** Weak Delimiting Modifier
     This modifier uses the `-` character and immediately closes the /current/ heading level
     (decreases the current nesting level by one).
-    @code norg
+    |example
     * Heading level 1
       Text under first level heading.
 
@@ -546,11 +543,11 @@ TODOS:
        ---
 
       Text under first level heading again.
-    @end
+    |end
 
 *** Strong Delimiting Modifier
     This modifier uses the `=` character and immediately closes all heading levels.
-    @code norg
+    |example
     * Heading level 1
       Text under first level heading.
 
@@ -559,18 +556,18 @@ TODOS:
        ===
 
     Text belonging to no heading level (i.e. to the document's root).
-    @end
+    |end
 
 *** Horizontal Rule
     This modifier uses the `_` character and simply renders a horizontal line. It does _NOT_
     affect the heading level but immediately terminates a {# paragraphs}[paragraph].
-    @code norg
+    |example
     * Heading level 1
       Text under first level heading.
       ___
       This is a new paragraph separated from the previous one by a horizontal line.
       This text still belongs to the first level heading.
-    @end
+    |end
 
 ** Detached Modifier Extensions
    {# Detached modifiers} support extensions which must immediately follow the detached modifier
@@ -606,10 +603,10 @@ TODOS:
     follow. This set of {** words} then becomes the parameters for the indicator.
 
     For example:
-    @code norg
+    |example
     - (+ 5th July) This task recurs every 5th of July.
     - (# A|@ 3rd feb) This task has a priority `A` and is assigned to the 3rd of February.
-    @end
+    |end
     Not all {** detached modifier extensions} support parameters and for good reason. There is no
     need to attach extra metadata to a done or undone state for instance. Different extensions can
     be delimited with the {* contextual `|` delimiter}.
@@ -646,18 +643,18 @@ TODOS:
 
      Apart from just being able to supply a timestamp, you are also permitted to provide a range.
      The syntax is simple, and is contained within the extension:
-     @code norg
+     |example
      {@ 5th Aug 2022 - 20th August 2022}
      {@ 5th Aug 2022-20th August 2022} <- Also valid
-     @end
+     |end
 
 **** Priority Extension
      This extension allows for you to specify a priority of your detached modifier extension.
 
      The syntax is as follows:
-     @code norg
+     |example
      * (# A) This heading has priority A (highest priority)
-     @end
+     |end
      Note that Norg does not specify strict semantics for this detached modifer extension, and as
      such there is no set-in-stone way to specify priorities. The most common (and recommended) way
      to specify priorities is to go from `A-Z`, but many also prefer `0-9` or even named priorities
@@ -672,18 +669,18 @@ TODOS:
      taking and time management applications.
 
      Syntax:
-     @code norg
+     |example
      - (< Tue 5th Feb) Do this before the 5th february.
-     @end
+     |end
 
 **** Start Date Extension
      A counterpart to the {**** due date extension} - defines when a task *begins*. Also useful in
      [GTD].
 
      Syntax:
-     @code norg
+     |example
      - (> Tue 5th Feb) This task starts after the 5th february.
-     @end
+     |end
 
 *** Indent Segment Extension
     Since {# nestable detached modifiers} can only contain a {# paragraphs}[paragraph] this can cause severe
@@ -693,11 +690,11 @@ TODOS:
 
     There are two variations of the indent segment, the /slide/ and the actual /indent segment/.
     The slide, denoted with a single `:`, allows for a *single* complex item below:
-    @code norg
+    |example
     - :
       $ Term
         This is the term's definition.
-    @end
+    |end
     The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
     This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
     the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
@@ -705,7 +702,7 @@ TODOS:
     `unordered_list_level_2` item.
 
     Examples:
-    @code norg
+    |example
     - ::
       This is some content.
 
@@ -729,7 +726,7 @@ TODOS:
 
     Since there was no other item of the same type after the indent segment
     it must be closed with `---` or `===`.
-    @end
+    |end
     After an indent segment extension is matched (either `:` or `::`) a newline must instantly follow.
 
 * Tags
@@ -754,14 +751,14 @@ TODOS:
     `document.meta`.
   - ::
     After a {# whitespace} character any number of parameters on the same line may follow:
-    @code norg
+    |example
     #tag-name.subtag parameter1 parameter2
-    @end
+    |end
     By default parameters are space-separated. In order to create multi-word parameters, you may
     escape the space character with a backslash (`\`).
-    @code norg
+  |example
     #tag-name.subtag parameter1\ with\ spaces parameter2
-    @end
+    |end
     Parameters may consist of any character (apart from a {# line break}, of course).
     ---
 
@@ -778,7 +775,7 @@ TODOS:
    contains an element that breaks up paragraphs.
 
    Given the following example:
-   @code norg
+   |example
    = LoremIpsum
    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -789,9 +786,9 @@ TODOS:
    Here you will see the lorem ipsum text.
    =LoremIpsum
    It's pretty nice, isn't it?
-   @end
+   |end
    Expands to:
-   @code norg
+   |example
    Here you will see the lorem ipsum text.
    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -799,13 +796,13 @@ TODOS:
    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
    culpa qui officia deserunt mollit anim id est laborum.
    It's pretty nice, isn't it?
-   @end
+   |end
    This, naturally, is treated as one whole paragraph.
 
    As described in the {*** macro definitions} section, the `next` and `...` parameters have special
    meaning in {** level 5}:
    - :
-     @code norg
+     |example
      == important next
      #color red
      &next&
@@ -813,9 +810,9 @@ TODOS:
 
      #important
      This is some important text.
-     @end
+     |end
    - :
-     @code norg
+     |example
      == important ...
      %We encapsulate all elements in
      a group so we colour everything%
@@ -832,7 +829,7 @@ TODOS:
      * And this is a very important heading.
        Everything here should be coloured red!
      |end
-     @end
+     |end
    The `next` and `...` arguments are automatically supplied. See the {:0.1-semantics:}[semantics
    document] for more details.
 
@@ -861,24 +858,24 @@ TODOS:
 
 **** Examples
      Only the second item is affected:
-     @code norg
+     |example
      - List item 1
      +color red
      - List item 2
      - List item 3
-     @end
+     |end
 
      Only the `Heading 1` and `This is some content` text is highlighted:
-     @code norg
+     |example
      +color red
      * Heading 1
        This is some content.
      ** Heading 2
         This is also some content.
-     @end
+     |end
 
      Special behaviour for indent segments:
-    @code norg
+        |example
     - List item 1
     +color red
     - List item 2
@@ -891,7 +888,7 @@ TODOS:
       -- This is also green
       -- And so is this.
       ---
-    @end
+    |end
 
 *** Strong Carryover Tags
     Contrary to its weak variant, the strong carryover tag exists to annotate an entire
@@ -904,23 +901,23 @@ TODOS:
 **** Examples
      A nice use case is the `#choice` carryover tag, which converts all items in a list into a
      single-choice question with right/wrong answers:
-     @code norg
+     |example
      What is your favourite activity? Hint: there's only one correct answer :)
      #choice
      - ( ) Sleeping
      - ( ) Learning
      - (x) Writing `.norg` documents
-     @end
+     |end
 
      Here, both the level 1 heading and the level 2 heading along with their contents will be
      coloured red:
-     @code norg
+     |example
      #color red
      * Heading 1
        This is some content.
      ** Heading 2
         This is also some content.
-     @end
+     |end
 
 ** Ranged Tags
    Ranged tags are a way to express custom information within a range.
@@ -949,14 +946,14 @@ TODOS:
 
 **** Examples
      `|example`:
-     @code norg
+     |example
      |example
      * This is an example heading.
      |end
-     @end
+     |end
 
      `|comment`:
-     @code norg
+       |example
      |comment
      This is a very long comment with some content
      and with some markup!
@@ -964,18 +961,18 @@ TODOS:
      * Heading
        /italic/ and *bold*.
      |end
-     @end
+     |end
 
      `|details`:
-     @code norg
+       |example
      |details
      * Here is some hidden markup!
        Wowzers.
      |end
-     @end
+     |end
 
      `|group`:
-     @code norg
+       |example
      #color red
      |group
      This will be red.
@@ -985,7 +982,7 @@ TODOS:
      * So will this
        And this.
      |end
-     @end
+     |end
 
 *** Verbatim Ranged Tags
     In other cases you may be more interested in a {# verbatim ranged tags}[verbatim ranged tag],
@@ -1016,18 +1013,18 @@ TODOS:
      terminated as soon as they encounter a {# paragraph break}.
 
      This means that this:
-     @code norg
+  |example
      *this
 
      text*
-     @end
+     |end
      Will *not* result in any bold text, as it's divided by a {# paragraph break}.
      However, this:
 
-     @code norg
+  |example
      *this
      text*
-     @end
+     |end
      Is fine, and will result in *`this text`* being bold.
   - Nested {# attached modifiers} should be closed in the opposite order they were opened.
   - Two or more consecutive attached modifiers of the same type (i.e. `**`, `//` etc.) should be
@@ -1051,7 +1048,7 @@ TODOS:
   - \&variable\&: &variable& (verbatim)
 
 ** Valid Examples
-   @code norg
+   |example
    *Bold text*
 
    *Bold text*,
@@ -1064,10 +1061,10 @@ TODOS:
    */Bold and italic/ and only bold*
 
    Text */with/ _different_ ^markup^ !types!*
-   @end
+   |end
 
 ** Invalid Examples
-   @code norg
+   |example
    * Bold text *
 
    *Bold text *
@@ -1092,7 +1089,7 @@ TODOS:
 
    Also closed in the wrong order:
    */Bold and italic* and only italic/
-   @end
+   |end
 
 ** Free-form Attached Modifiers
    Even with all the rules described in the above sections there are still some evident limitations
@@ -1105,13 +1102,13 @@ TODOS:
 
    Free-form modifiers fix this with a special syntax to specify the
    beginning and end of a ranged block. For example:
-   @code norg
+   |example
    Here, I can write `| leading and trailing whitespace (with a ` char)  |` within a verbatim block
    without accidentally terminating it.
-   @end
-   @code norg
+   |end
+   |example
    Here, I can use a literal `$` inside of inline math: $| 10$ + 10$ = 20$ |$.
-   @end
+   |end
 
    The use of pipes is special because the position of the pipe (i.e. whether it's before or after the
    attached modifier) can unambiguously tell us whether that symbol is an opening attached modifier
@@ -1129,20 +1126,20 @@ TODOS:
 
    As described in the {# attached modifiers} section, attached modifier types may not exist
    inbetween words like so:
-   @code norg
+   |example
    abso/freaking/lutely!
-   @end
+   |end
 
    It's entirely plausible to want to do this however, which is why the {** link modifier}[link
    modifier] was devised. With it, you can bridge attached modifiers and regular text together:
-   @code norg
+   |example
    abso:/freaking/:lutely!
-   @end
+   |end
 
    It is important to note that link modifiers do not need to occur in pairs. This:
-   @code norg
+   |example
    Ex:*ample* text
-   @end
+   |end
    Will also result in `ample` becoming *bold*. In fact, using a link modifier at the end will not
    give the desired result (it will be rendered as a regular `:` char). To understand why keep
    reading.
@@ -1177,13 +1174,13 @@ TODOS:
    character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies.
 
 *** Examples
-    @code norg
+    |example
     `print("This is some python")`(lang:python) <- The lang:python attribute highlights the text as python
     *some green and bold text!*(color:green)    <- some green and bold text
 
     {* Link location}[this is an important link](important|color:red) <- Highlights the link as big,
                                                                          bold (important) and red.
-    @end
+    |end
     ---
 
 *** Limits
@@ -1221,29 +1218,29 @@ TODOS:
   - The token ends with another {# whitespace} character.
 
   The use case for the intersection modifier is best illustrated by example:
-  @code norg
+  |example
   $ Term
     This is a definition of that term.
-  @end
+  |end
   This is perfectly normal syntax that you would write day to day in Norg. But what if you're more
   of a fan of one liners? The `| : |` intersection modifier (currently the only modifier of this
   type) can be used to do just this:
-  @code norg
+  |example
   $ Term : This is a definition of that term.
-  @end
+  |end
   This syntax is especially favoured for {*** table cells}: 
-  @code norg
+  |example
   : A1 : Content of the cell at A1
   : A2 : Content of the cell at A2
-  @end
+  |end
 
   The `| : |` syntax expands to a newline, which means that after expansion you get:
-  @code norg
+  |example
   : A1
   Content of the cell at A1
   : A2
   Content of the cell at A2
-  @end
+  |end
 
 * Trailing Modifier
   Trailing modifiers are another separate kind of modifiers in the Norg syntax. They have one very
@@ -1254,50 +1251,50 @@ TODOS:
    The `~`-trailing modifier will concatenate the line which it ends with the following one.
    This allows you to do something like the following:
 
-   @code norg
+   |example
    * I am a very long heading title~
      which did not end here because of the trailing modifier
-   @end
+   |end
 
    Note, that the `~`-trailing modifier will concatenate the two lines with a single separating
    whitespace. In other words it transforms a line ending, `\n`, into a single white space, `| |`.
 
    It completely swallows the next line break, allowing for things like this:
-   @code norg
+     |example
    - I am a list item~
 
    - And I am still the same list
-   @end
+   |end
 
    Without the trailing modifier those two items would have been treated as two separate lists, but
    since the `~` char swallows the line break it makes the parser actually see:
-   @code norg
+     |example
    - I am a list item
    - And I am still the same list
-   @end
+   |end
 
    Note that trailing modifiers may also exist on a separate line:
-   @code norg
+     |example
    - I am a list item
    ~
    - And I am still the same list
-   @end
+   |end
 
    Be aware however, that detached modifiers take {# Precedence} over trailing modifiers. So in the
    following, you will still be obtaining the list item, despite of the trailing modifer ending the
    previous paragraph:
-   @code norg
+     |example
    That's when she opened the box~
    - she couldn't believe what she saw.
-   @end
+   |end
 
    If you want to change this, you need to escape the detached modifier in order to make it part of
    the paragraph, treating this specific example like a sentence with a hyphen between its two
    parts:
-   @code norg
+     |example
    That's when she opened the box~
    \- she couldn't believe what she saw.
-   @end
+   |end
 
 * Linkables
   Finally, there is one more kind of in-line syntax which is the {# linkables} kind.
@@ -1330,9 +1327,9 @@ TODOS:
     When standalone, the link syntax will simply point to another `.norg` file relative to the
     current file the link is contained in:
 
-    @code norg
+    |example
     {:path/to/other-file:}
-    @end
+    |end
 
     Note that you do *not* provide the `.norg` extension within the path.
     You can use traditional modifiers in your path, like `/` (in e.g. `/my/file`) to signify the
@@ -1347,25 +1344,25 @@ TODOS:
     A file location may /only/ be accompanied by a {# detached modifier} or the
     {# The Magic Char (`#`)}[the magic char], in which case the link looks like so:
 
-    @code norg
+    |example
     {:path/to/file:# Location within that file}
     {:path/to/file:** Level 2 heading}
-    @end
+    |end
 
     `/`, `@` and URLs are not allowed:
 
-    @code norg
+|example
     {:path:/ file} <- invalid
     {:path:@ timestamp} <- invalid
     {:path:https://my-url} <- also invalid
-    @end
+    |end
 
 *** URL
     You can define a link to an external resource by simply putting in the URL:
 
-    @code norg
+|example
     {https://github.com/nvim-neorg/neorg}
-    @end
+    |end
     Actions related to schemas like `https://`, `ftp://` etc. (when attempting to open the link) are
     handled by a lower level component running Norg, e.g. [Neorg] or the underlying Operating
     System.
@@ -1374,24 +1371,24 @@ TODOS:
     Similarly to the {*** URL}, you can also link to a set line number within the current file.
 
     The syntax is as follows:
-    @code norg
+|example
     Line 1
     Line 2
 
     This is a reference to line {2}.
     This is a reference to line {:file:4} in a different file.
-    @end
+    |end
     Disambiguating line numbers and URIs is quite simple - URIs seldom begin with digits.
 *** Detached Modifier
     Norg allows you to link to any {# Structural Detached Modifiers}[structural] or
     {# Range-able Detached Modifiers}[range-able] detached modifier:
 
-    @code norg
+|example
     * I am a level 1 heading
 
     Strict link to a level 1 heading:
     {* I am a level 1 heading}
-    @end
+    |end
 
     The inside of the link location looks just like a detached modifier definition, and that is
     because it pretty much is. You can substitute the `*` char for any other
@@ -1418,9 +1415,9 @@ TODOS:
 
      In addition to just providing a path, you may also specify a line number at the end via a colon `:`.
      Example:
-     @code norg
+|example
      {/ my-file.txt:123} <- This is a link to `my-file.txt` at line 123
-     @end
+     |end
      As with the {# file location} syntax, the file linkable also supports the special `$` character
      to denote the root of the current workspace.
 
@@ -1429,9 +1426,9 @@ TODOS:
      {**** timestamp extension}.
 
      Example:
-     @code norg
+|example
      Frank's birthday is on {@ Mon 5th May}.
-     @end
+     |end
 
 **** The Magic Char (`#`)
      Sometimes you simply want to be lazy, or you want to link to an {# inline linkables}[inline
@@ -1446,9 +1443,9 @@ TODOS:
      just the title of the heading you want to search for.
 
      Syntax:
-     @code norg
+|example
      Cats are {? mammals}, they make for great {? house pets} too!
-     @end
+     |end
      For developers implementing this behaviour: there are no restrictions in which order you parse
      your files to hop between wiki links, as long as the following coniditions are met:
      - The current file is the first file that is searched (this allows for `?` to also work as a
@@ -1494,16 +1491,16 @@ TODOS:
    Links in Norg can exist as a standalone {# link location} in which case their text is used as
    the link title (often makes sense for headings):
 
-   @code norg
+|example
    {* I am a standalone link}
-   @end
+   |end
 
    When a custom description is required, it must be placed *_after_* the link location. This makes
    sense in terms of writing as you first define where you link to, and then annotate it afterwards:
 
-   @code norg
+|example
    Click {* I am a link}[here] to find out more.
-   @end
+   |end
 ** Anchors
    Norg also has a concept called {# anchors}. These allow you to place a standalone
    {# link description} inside of text (referred to as an <anchor declaration>).
@@ -1513,11 +1510,11 @@ TODOS:
    often, like for example a specific website.
 
    Few usage examples:
-   @code norg
+|example
    [Neorg] is a fancy organizational tool for everyone.
 
    I like shilling [Neorg]{https://github.com/nvim-neorg/neorg} sorry :(
-   @end
+   |end
    Here we /declare/ the anchor once at the top, then /define/ the anchor at the very bottom. The
    `[Neorg]` declaration points directly to the website, just like the definition does. It's like a
    copy + paste of the link location without needing to type it out.
@@ -1535,14 +1532,14 @@ TODOS:
    in your document. We call these {# inline link targets} which are formatted inside of angled
    brackets: `<>`.
 
-   @code norg
+|example
    One thing to mention is <inline link targets> - they allow you to link to any location in a
    document.
 
    ...
 
    Refer to {# inline link targets} if you are interested in learning more.
-   @end
+   |end
 
    An important thing to note is that since inline link targets are - well - inline, they cannot be
    directly linked to with a dedicated char in the link syntax.
@@ -1552,7 +1549,7 @@ TODOS:
 
 ** Valid/Invalid Examples
 *** Valid Examples
-    @code norg
+|example
     {link}
 
     {:link:}
@@ -1573,10 +1570,10 @@ TODOS:
     xt]{# linkable}
 
     {* Link to {# headings}[heading]}[*markup*]
-    @end
+    |end
 
 *** Invalid Examples
-    @code norg
+|example
     {*text}
 
     {:file:https://github.com}
@@ -1614,7 +1611,7 @@ TODOS:
     text]
 
     {* text}[content ]
-    @end
+    |end
 
 * Standard Library
   Norg comes loaded with a predetermined set of {*** attributes} and {*** macro definitions} for different
@@ -1648,14 +1645,14 @@ TODOS:
   linkable will have higher precedence.
 
   For example, this is valid:
-  @code norg
+|example
   *{# i am a bold link!}*
-  @end
+  |end
 
   However, in this case:
-  @code norg
+|example
   *am I {* bold?} - No!
-  @end
+  |end
   The link takes precedence, and no bold is rendered.
   ===
 
