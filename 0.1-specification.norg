@@ -8,6 +8,9 @@ categories: specifications
 version: 1.0
 @end
 
+TODOS:
+- ( ) Convert all `@code norg` instances to `|example`:s
+
 * Norg File Format Specification
   This file contains the formal file format specification of the Norg syntax version 0.1.
   This document is written in the Norg format in its original form and, thus, attempts to be
