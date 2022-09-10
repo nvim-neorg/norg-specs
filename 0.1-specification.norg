@@ -236,8 +236,12 @@ Table syntax:
      - Range-able
      - Logical
   ::
-
-  - ( ) `=`: add macros (range-able, logical)
+  : _ : `=`
+  : > : Macros
+  :: >
+     - Range-able
+     - Logical
+  ::
 
 ** Grouping
    Both nestable and range-able detached modifiers have a unique quality - when several consecutive
@@ -500,8 +504,36 @@ Table syntax:
     @code norg
     The content of the above variable is: *this* is some /content/.
     @end
-*** ( ) Macros
-    The `=` char.
+*** Macro Definitions
+    To define a macro, you use the macro detached modifier:
+    @code norg
+    = MacroName parameter1 parameter2
+    The meaning of &parameter1& is &parameter2&.
+
+    == LongMacro
+    This is a snippet of text with no parameters.
+
+    $ Definition
+      And this is a hardcoded definition.
+    ==
+
+    Afterwards we can invoke these using the macro tag:
+
+    =MacroName life 42
+    =LongMacro
+    @end
+
+    Macros can have a special last parameter called `next` or `...`, in which case they can only be
+    used as a {** carryover tags}[carryover tag] or {** ranged tags}[ranged tag], respectively. In
+    this case, the `next` and `..` variables are an `entity`. Entities are a part of Norg's
+    {** layer 5} metaprogramming capabilities, and are described in the semantics document %TODO: link%:
+    @code norg
+    = MacroName next
+    The content of `next` is: &next&.
+
+    = differentmacroname ...
+    The content of the ranged tag is: &content&.
+    @end
 
 *** Table Cells
     Table cells are used to, well, build up a table. Here are a few examples of table cells:
@@ -1318,8 +1350,8 @@ Table syntax:
     ranged and non-ranged detached modifier as both have the same meaning, one just allows more
     content to exist within itself.
 
-    *NOTE*: You /cannot/ link to a logical %TODO: link% modifier using {* linkables}. Things like
-    {*** macros}, {*** variables} and {*** attributes} are out of the equation.
+    *NOTE*: You /cannot/ link to a logical modifier using {* linkables}. Things like
+    {*** macro definitions}, {*** variables} and {*** attributes} are out of the equation.
 
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
@@ -1533,7 +1565,7 @@ Table syntax:
     @end
 
 * Standard Library
-  Norg comes loaded with a predetermined set of {*** attributes} and {*** macros} for different
+  Norg comes loaded with a predetermined set of {*** attributes} and {*** macro definitions} for different
   {* layers} of the syntax. These will eventually be described here, or within the layers document
   itself.
 
