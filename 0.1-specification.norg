@@ -86,7 +86,7 @@ version: 1.0
     within free-form verbatim segments (see {** free-form attached modifiers}).
     For more information about precedence, take a look at the {* precedence} section.
 
-*** Other Characters
+*** Regular Characters
     Any other character not described by the previous sections is treated as a generic code
     point/character.
 
@@ -97,7 +97,7 @@ version: 1.0
    outlined in the later sections of this document.
 
    A *word* is considered to be any combination of {** characters} which are neither
-   {*** whitespace} nor {*** punctuation} (see {*** other characters}).
+   {*** whitespace} nor {*** punctuation} (see {*** regular characters}).
 
 ** Paragraph Segments
    {** Words} are first combined into *paragraph segments*. A paragraph segment may then contain any
@@ -759,7 +759,7 @@ version: 1.0
     whether or not the character is an attached modifier opener or a tag opener until we would have
     parsed the whole line; in other words, we would be dealing with ambiguity). The special tag
     character is then /immediately/ followed by text, which becomes the /tag name/. Said tag name
-    can consist of any {# other characters}[alphanumeric character] and/or `-`, `_` and `.`.
+    can consist of any {# regular characters}[regular character] and/or `-`, `_` and `.`.
   - Tags can have their names delimited by a `.` in order to create a "hierarchy", e.g.
     `document.meta`.
   - ::
@@ -769,7 +769,7 @@ version: 1.0
     |end
     By default parameters are space-separated. In order to create multi-word parameters, you may
     escape the space character with a backslash (`\`).
-  |example
+    |example
     #tag-name.subtag parameter1\ with\ spaces parameter2
     |end
     Parameters may consist of any character (apart from a {# line break}, of course).
@@ -800,6 +800,7 @@ version: 1.0
    =LoremIpsum
    It's pretty nice, isn't it?
    |end
+
    Expands to:
    |example
    Here you will see the lorem ipsum text.
@@ -810,6 +811,7 @@ version: 1.0
    culpa qui officia deserunt mollit anim id est laborum.
    It's pretty nice, isn't it?
    |end
+
    This, naturally, is treated as one whole paragraph.
 
    As described in the {*** macro definitions} section, the `next` and `...` parameters have special
@@ -865,9 +867,8 @@ version: 1.0
       not carry over to its children).
     - When the element is part of an {# object}, no other items other than the item below
       the weak carryover tag is affected.
-
-    *NOTE*: When a weak carryover tag is applied to an {# indent segment}, the whole indent segment
-    (including its children) are affected.
+    - An exception is made when a weak carryover tag is applied to an {# indent segment}, in which
+      case the whole indent segment (including its children) are affected.
 
 **** Examples
      Only the second item is affected:
@@ -888,20 +889,20 @@ version: 1.0
      |end
 
      Special behaviour for indent segments:
-        |example
-    - List item 1
-    +color red
-    - List item 2
-    -- This isn't red
-    -- Neither is this
-    +color green
-    - ::
-      This is green.
+     |example
+     - List item 1
+     +color red
+     - List item 2
+     -- This isn't red
+     -- Neither is this
+     +color green
+     - ::
+       This is green.
 
-      -- This is also green
-      -- And so is this.
-      ---
-    |end
+       -- This is also green
+       -- And so is this.
+       ---
+     |end
 
 *** Strong Carryover Tags
     Contrary to its weak variant, the strong carryover tag exists to annotate an entire
@@ -966,7 +967,7 @@ version: 1.0
      |end
 
      `|comment`:
-       |example
+     |example
      |comment
      This is a very long comment with some content
      and with some markup!
@@ -977,7 +978,7 @@ version: 1.0
      |end
 
      `|details`:
-       |example
+     |example
      |details
      * Here is some hidden markup!
        Wowzers.
@@ -985,7 +986,7 @@ version: 1.0
      |end
 
      `|group`:
-       |example
+     |example
      #color red
      |group
      This will be red.
@@ -1001,7 +1002,8 @@ version: 1.0
     In other cases you may be more interested in a {# verbatim ranged tags}[verbatim ranged tag],
     which disallows any Norg markup to exist inside of itself. A prime example of this is `@code`,
     which creates a code block - you obviously don't want nested Norg syntax within that! Note how
-    in the following example the `@MyAnnotation` would clash with Norg's verbatim ranged tag syntax.
+    in the following example the `@MyAnnotation` would clash with Norg's verbatim ranged tag syntax, but
+    doesn't as no nested markup is allowed within.
     @code java
     @MyAnnotation(name="someName", value="Hello World")
     public class TheClass {
@@ -1022,23 +1024,24 @@ version: 1.0
   - A closing modifier may only be succeeded by {# whitespace} or {# punctuation}
   +name attached modifier range
   - ::
-     {# Attached modifiers} can only span at maximum a single {# paragraphs}[paragraph], i.e. they get
-     terminated as soon as they encounter a {# paragraph break}.
+    {# Attached modifiers} can only span at maximum a single {# paragraphs}[paragraph], i.e. they get
+    terminated as soon as they encounter a {# paragraph break}.
 
-     This means that this:
-  |example
-     *this
+    This means that this:
+    |example
+    *this
 
-     text*
-     |end
-     Will *not* result in any bold text, as it's divided by a {# paragraph break}.
-     However, this:
+    text*
+    |end
 
-  |example
-     *this
-     text*
-     |end
-     Is fine, and will result in *`this text`* being bold.
+    Will *not* result in any bold text, as it's divided by a {# paragraph break}.
+    However, this:
+    |example
+    *this
+    text*
+    |end
+
+    Is fine, and will result in *`this text`* being bold.
   - Nested {# attached modifiers} should be closed in the opposite order they were opened.
   - Two or more consecutive attached modifiers of the same type (i.e. `**`, `//` etc.) should be
     instantly "disqualified" and parsed as raw text in /all/ circumstances and without any
@@ -1118,8 +1121,7 @@ version: 1.0
    |example
    Here, I can write `| leading and trailing whitespace (with a ` char)  |` within a verbatim block
    without accidentally terminating it.
-   |end
-   |example
+
    Here, I can use a literal `$` inside of inline math: $| 10$ + 10$ = 20$ |$.
    |end
 
@@ -1163,15 +1165,15 @@ version: 1.0
    This distinction is visible even when they don't occur in pairs.
 
    In the case that the link modifier is opening (the attached modifier appears on the right):
-   - The link modifier may only be preceded by an {# alphanumeric characters}[alphanumeric character]
-     (or, in other words, may /not/ be preceded by a punctuation character nor by a whitespace
-     character).
+   - The link modifier may only be preceded by a {# regular characters}[regular character]
+     (or, in other words, may /not/ be preceded by a {*** punctuation} character nor by a
+     {*** whitespace} character).
    - The link modifier may only be succeeded by an opening attached modifier.
 
    In the case that the link modifier is closing (the attached modifier appears on the left):
    - The link modifier may only be preceded by a closing attached modifier.
    - The link modifier may only be succeeded by an
-     {# alphanumeric characters}[alphanumeric character].
+     {# regular characters}[regular character].
 
    If the above conditions are not met, then the character should be treated as a literal `:`.
 
