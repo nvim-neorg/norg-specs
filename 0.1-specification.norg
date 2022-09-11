@@ -345,6 +345,20 @@ version: 1.0
 
     These modifiers can be nested to create a hierarchy of attributes.
 
+**** Limits
+     You can impose limits on where the attribute can be used through the `attribute-limits` tag,
+     which should be placed before the attribute definition. The tag takes in a list of the following
+     parameters:
+     - `none` - no limits
+     - `verbatim` - can be used only for the \`verbatim\` attached modifier
+     - `math` - can be only used on the mathematics attached modifier
+     - `variables` - can only be used on the variable modifier
+     - `links` - can only be used on links, this includes anchors)
+     - `non-verbatim` - for all the other non-verbatim attached modifiers (bold, italic, subscript,
+       superscript, underline, comments etc.)
+ 
+     These limits can be chained, i.e. `#attribute-limits links non-verbatim`.
+
 *** Invalid Examples
     |example
     >I am not a quote
@@ -1186,7 +1200,8 @@ version: 1.0
    The content of {** attached modifier extensions} consists of a set of references to many
    {*** attributes}. These attributes are delimited by the {* contextual `|` delimiter}.
    If the attribute is part of a hierarchy (see {*** attributes}), you may use the `:`
-   character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies.
+   character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies
+   (a comprehensive list can be found in the {:0.1-semantics:}[semantics document]).
 
 *** Examples
     |example
@@ -1196,21 +1211,6 @@ version: 1.0
     {* Link location}[this is an important link](important|color:red) <- Highlights the link as big,
                                                                          bold (important) and red.
     |end
-    ---
-
-*** Limits
-    You can impose limits on where the attribute can be used through the `attribute-limits` tag,
-    which should be placed before the attribute definition. The tag takes in a list of the following
-    parameters:
-    - `none` - no limits
-    - `verbatim` - can be used only for the \`verbatim\` attached modifier
-    - `math` - can be only used on the mathematics attached modifier
-    - `variables` - can only be used on the variable modifier
-    - `links` - can only be used on links, this includes anchors)
-    - `non-verbatim` - for all the other non-verbatim attached modifiers (bold, italic, subscript,
-      superscript, underline, comments etc.)
-
-    These limits can be chained, i.e. `#attribute-limits links non-verbatim`.
 
 * Contextual `|` Delimiter
   The pipe (`|`) character is a really nice character - it can be applied to many different problems
@@ -1257,8 +1257,8 @@ version: 1.0
   Content of the cell at A2
   |end
 
-* Trailing Modifier
-  Trailing modifiers are another separate kind of modifiers in the Norg syntax. They have one very
+* Trailing Modifiers
+  Trailing modifiers are another separate kind of modifier in the Norg syntax. They have one very
   simple rule: they may only exist at the end of a line and may not be followed by any characters
   after themselves.
 
@@ -1275,7 +1275,7 @@ version: 1.0
    whitespace. In other words it transforms a line ending, `\n`, into a single white space, `| |`.
 
    It completely swallows the next line break, allowing for things like this:
-     |example
+   |example
    - I am a list item~
 
    - And I am still the same list
@@ -1283,7 +1283,7 @@ version: 1.0
 
    Without the trailing modifier those two items would have been treated as two separate lists, but
    since the `~` char swallows the line break it makes the parser actually see:
-     |example
+   |example
    - I am a list item
    - And I am still the same list
    |end
@@ -1295,10 +1295,10 @@ version: 1.0
    - And I am still the same list
    |end
 
-   Be aware however, that detached modifiers take {# Precedence} over trailing modifiers. So in the
-   following, you will still be obtaining the list item, despite of the trailing modifer ending the
+   Be aware however that detached modifiers take {* precedence} over trailing modifiers. Thus, in the
+   following, you will still be obtaining a list item, despite the trailing modifer ending the
    previous paragraph:
-     |example
+   |example
    That's when she opened the box~
    - she couldn't believe what she saw.
    |end
@@ -1306,13 +1306,13 @@ version: 1.0
    If you want to change this, you need to escape the detached modifier in order to make it part of
    the paragraph, treating this specific example like a sentence with a hyphen between its two
    parts:
-     |example
+   |example
    That's when she opened the box~
    \- she couldn't believe what she saw.
    |end
 
 * Linkables
-  Finally, there is one more kind of in-line syntax which is the {# linkables} kind.
+  Finally, there is one more kind of inline syntax which is the {# linkables} kind.
   Linkables can link to any element /anywhere/ in the document.
 
   When resolving links, the first match should always be the only match, starting from the top of
@@ -1356,17 +1356,18 @@ version: 1.0
     repository, and for other note taking apps it could simply be the root of the directory where
     all the notes are stored.
 
-    A file location may /only/ be accompanied by a {# detached modifier} or the
-    {# The Magic Char (`#`)}[the magic char], in which case the link looks like so:
+    A file location may /only/ be accompanied by a {# detached modifier}, {# line number} or {# the
+    magic char (`#`)}[the magic char], in which case the links look like so:
 
     |example
+    {:path/to/file:123}
     {:path/to/file:# Location within that file}
     {:path/to/file:** Level 2 heading}
     |end
 
     `/`, `@` and URLs are not allowed:
 
-|example
+    |example
     {:path:/ file} <- invalid
     {:path:@ timestamp} <- invalid
     {:path:https://my-url} <- also invalid
@@ -1375,9 +1376,10 @@ version: 1.0
 *** URL
     You can define a link to an external resource by simply putting in the URL:
 
-|example
+    |example
     {https://github.com/nvim-neorg/neorg}
     |end
+
     Actions related to schemas like `https://`, `ftp://` etc. (when attempting to open the link) are
     handled by a lower level component running Norg, e.g. [Neorg] or the underlying Operating
     System.
@@ -1386,19 +1388,21 @@ version: 1.0
     Similarly to the {*** URL}, you can also link to a set line number within the current file.
 
     The syntax is as follows:
-|example
+    |example
     Line 1
     Line 2
 
     This is a reference to line {2}.
     This is a reference to line {:file:4} in a different file.
     |end
-    Disambiguating line numbers and URIs is quite simple - URIs seldom begin with digits.
+
+    Disambiguating line numbers and URIs is quite simple - URIs do not begin with digits.
+
 *** Detached Modifier
     Norg allows you to link to any {# Structural Detached Modifiers}[structural] or
     {# Range-able Detached Modifiers}[range-able] detached modifier:
 
-|example
+    |example
     * I am a level 1 heading
 
     Strict link to a level 1 heading:
@@ -1430,9 +1434,10 @@ version: 1.0
 
      In addition to just providing a path, you may also specify a line number at the end via a colon `:`.
      Example:
-|example
+     |example
      {/ my-file.txt:123} <- This is a link to `my-file.txt` at line 123
      |end
+
      As with the {# file location} syntax, the file linkable also supports the special `$` character
      to denote the root of the current workspace.
 
@@ -1441,7 +1446,7 @@ version: 1.0
      {**** timestamp extension}.
 
      Example:
-|example
+     |example
      Frank's birthday is on {@ Mon 5th May}.
      |end
 
@@ -1458,9 +1463,10 @@ version: 1.0
      just the title of the heading you want to search for.
 
      Syntax:
-|example
+     |example
      Cats are {? mammals}, they make for great {? house pets} too!
      |end
+
      For developers implementing this behaviour: there are no restrictions in which order you parse
      your files to hop between wiki links, as long as the following coniditions are met:
      - The current file is the first file that is searched (this allows for `?` to also work as a
@@ -1473,7 +1479,7 @@ version: 1.0
       headings regardless of nesting level in the file provided.
 
 *** Inline Linkables
-    Although most linkable items are either {# Structural Detached Modifiers}[structural] or
+    Although most linkable items are either {# structural detached modifiers}[structural] or
     {# Range-able Detached Modifiers}[range-able], there are also syntax elements in Norg that
     are inline - these are the `#name` {# Carryover Tags}[carryover tag] and the
     {# Inline Link Target}[inline link target]. Both of these can be linked to through the
@@ -1506,16 +1512,17 @@ version: 1.0
    Links in Norg can exist as a standalone {# link location} in which case their text is used as
    the link title (often makes sense for headings):
 
-|example
+   |example
    {* I am a standalone link}
    |end
 
    When a custom description is required, it must be placed *_after_* the link location. This makes
    sense in terms of writing as you first define where you link to, and then annotate it afterwards:
 
-|example
+   |example
    Click {* I am a link}[here] to find out more.
    |end
+
 ** Anchors
    Norg also has a concept called {# anchors}. These allow you to place a standalone
    {# link description} inside of text (referred to as an <anchor declaration>).
@@ -1524,8 +1531,8 @@ version: 1.0
    {** link location}. This is especially useful when you want to link to the same target very
    often, like for example a specific website.
 
-   Few usage examples:
-|example
+   Below are a few usage examples:
+   |example
    [Neorg] is a fancy organizational tool for everyone.
 
    I like shilling [Neorg]{https://github.com/nvim-neorg/neorg} sorry :(
@@ -1543,11 +1550,11 @@ version: 1.0
    like this: `[anchor name][anchor description]`.
 
 ** Inline Link Targets
-   Finally, Norg also has the possibility of placing link targets at arbitrary in-line positions
+   Finally, Norg also has the possibility of placing link targets at arbitrary inline positions
    in your document. We call these {# inline link targets} which are formatted inside of angled
    brackets: `<>`.
 
-|example
+   |example
    One thing to mention is <inline link targets> - they allow you to link to any location in a
    document.
 
@@ -1557,14 +1564,14 @@ version: 1.0
    |end
 
    An important thing to note is that since inline link targets are - well - inline, they cannot be
-   directly linked to with a dedicated char in the link syntax.
-   To link to these syntax elements you can /only/ use {# The Magic Char (`#`)}[the magic char].
+   directly linked to with a dedicated char in the link syntax. To link to these syntax elements you
+   can /only/ use {# the magic char (`#`)}[the magic char].
 
    Unlike {# links} and {# anchors}, {# inline link targets} may /not/ have a description.
 
 ** Valid/Invalid Examples
 *** Valid Examples
-|example
+    |example
     {link}
 
     {:link:}
@@ -1588,7 +1595,7 @@ version: 1.0
     |end
 
 *** Invalid Examples
-|example
+    |example
     {*text}
 
     {:file:https://github.com}
@@ -1660,16 +1667,15 @@ version: 1.0
   linkable will have higher precedence.
 
   For example, this is valid:
-|example
+  |example
   *{# i am a bold link!}*
   |end
 
   However, in this case:
-|example
-  *am I {* bold?} - No!
+  |example
+  *am I {* bold?} - no!
   |end
   The link takes precedence, and no bold is rendered.
-  ===
 
 * Layers
   Norg is built up of layers, or in other words a set of features that a parser/tool can support
@@ -1699,16 +1705,17 @@ version: 1.0
 ** Layer 3
    This layer is for documents of medium/high complexity:
    - Support for {**** timestamps (`@`)} in {** links} and {** inline link targets}
-   - {** Carryover Tags} (`#name`, `#color`, etc.)
+   - {** Carryover Tags} (`#name`, `#color`/`+name`, `+color` etc.)
    - {** Detached Modifier Extensions}
    - {** Range-able Detached Modifiers} (excluding {*** table cells))
-   - {* Trailing Modifier}
+   - {* Trailing Modifiers}
    - {** Link Modifier}
 
 ** Layer 4
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
    - {*** Standard Ranged Tags} (`|comment`, etc.)
+   - {*** Table cells}
    - {** Free-form Attached Modifiers}
    - {* Intersection modifiers}
    - {** Attached Modifier Extensions}
