@@ -9,7 +9,7 @@ version: 1.0
 @end
 
 * Norg File Format Specification
-  This file contains the formal file format specification of the Norg syntax version 0.1.
+  This file contains the formal file format specification of the Norg syntax version 1.0.
   This document is written in the Norg format in its original form and, thus, attempts to be
   self-documenting.
 
@@ -26,14 +26,14 @@ version: 1.0
 ** What is Norg?
    The Norg syntax is a /structured/ plain-text file format which aims to be human readable when
    viewed standalone while also providing a suite of markup utilities for typesetting structured
-   documents. Compared to other plain-text file formats like e.g. Markdown, RST or AsciiDoc, it sets
-   itself apart most notably by following a strict philosophy to abide by the following simple
+   documents. Compared to other plain-text file formats like e.g. Markdown, Org, RST or AsciiDoc, it
+   sets itself apart most notably by following a strict philosophy to abide by the following simple
    rules:
    ~ *Consistency:* the syntax should be consistent. Even if you know only a part of the syntax,
      learning new parts should not be surprising and rather feel predictable and intuitive.
    ~ *Unambiguity:* the syntax should leave _no_ room for ambiguity. This is especially motivated by
      the use of [tree-sitter]{https://tree-sitter.github.io/tree-sitter/} for the original syntax
-     parser which takes a strict left-to-right parsing approach and only has single-character
+     parser, which takes a strict left-to-right parsing approach and only has single-character
      look-ahead.
    ~ *[Free-form]{https://en.wikipedia.org/wiki/Free-form_language}:* whitespace is _only_ used to
      delimit tokens but has no other significance! This is probably the most contrasting feature to
@@ -78,8 +78,7 @@ version: 1.0
 *** Punctuation
     A {** characters}[character] is considered to be *punctuation* if it is any of the following:
     - A standard ASCII punctuation character: `| !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ |`
-    - A Unicode punctuation character is an ASCII punctuation character or anything in the general
-      Unicode categories `Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po`, or `Ps`.
+    - Anything in the general Unicode categories `Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po` or `Ps`.
 
 *** Escaping
     A single {** characters}[character] can be escaped if it is immediately preceded by a backslash,
@@ -88,7 +87,8 @@ version: 1.0
     For more information about precedence, take a look at the {* precedence} section.
 
 *** Other Characters
-    Any other character not described by the previous sections is treated as a generic code point.
+    Any other character not described by the previous sections is treated as a generic code
+    point/character.
 
 ** Words
    The Norg format is designed to be parsed on a word-by-word basis from left-to-right through the
@@ -97,7 +97,7 @@ version: 1.0
    outlined in the later sections of this document.
 
    A *word* is considered to be any combination of {** characters} which are neither
-   {*** whitespace}, {*** punctuation} nor other {*** special characters}.
+   {*** whitespace} nor {*** punctuation} (see {*** other characters}).
 
 ** Paragraph Segments
    {** Words} are first combined into *paragraph segments*. A paragraph segment may then contain any
@@ -110,20 +110,20 @@ version: 1.0
    |example
    I am a paragraph segment.
    I am another paragraph segment.
-   And together we form a paragraph.
+   Together we form a paragraph.
    |end
 
 ** Paragraphs
    Paragraphs are then formed of consecutive {** paragraph segments}. A paragraph is terminated by:
    - A <paragraph break> (which equals two consecutive {# line ending}s)
    - Any of the {* detached modifiers}
-   - Any of the {** Delimiting Modifiers}
+   - Any of the {** delimiting modifiers}
    - Any of the {** ranged tags}
    - Any of the {*** strong carryover tags}
 
 * Detached Modifiers
   Norg has several detached modifiers. The name originates from their differentiation to the
-  {* Attached Modifiers}, which will be discussed later.
+  {* attached modifiers}, which will be discussed later.
 
   All detached modifiers must abide by the following rules:
   - A detached modifier can _only_ occur at the beginning of the line (arbitrary {*** whitespace}
@@ -131,7 +131,7 @@ version: 1.0
   - A detached modifier must be immediately followed by {*** whitespace} (excl. {# line ending}s!),
     another detached modifier of the same type or by any of the {# detached modifier extensions}
 
-  The following list outlines all valid *detached* modifiers. The list also adds various possible
+  The following list outlines all valid *detached modifiers*. The list also adds various possible
   properties to each category which will be explained in more detail below.
   : . : Character
   : > : Name
@@ -191,34 +191,6 @@ version: 1.0
      - Logical
   ::
 
-** Grouping
-   Both nestable and range-able detached modifiers have a unique quality - when several consecutive
-   modifiers /of the same type/ are encountered (by consecutive we mean _NOT_ separated via a
-   {# paragraph break}), they are treated as one whole <object>. This is crucial to understand as
-   it is required for the many types of {** carryover tags} to function.
-
-*** Examples
-    |example
-    The following items naturally group because they are range-able, forming
-    a definition list:
-    $ Term 1
-      Definition 1!
-    $ Term 2
-      Definition 2!
-    |end
-
-    |example
-    Together, these form one whole unordered list:
-    - List item 1
-    - List item 2
-    |end
-
-    |example
-    - List item in one list
-
-    - This item is in another list, because we used a {# paragraph break} to split these items
-    |end
-
 ** Structural Detached Modifiers
    The first detached modifier type is the /structural/ modifier type. As the name suggests,
    modifiers under this category *structure* the Neorg document in some form or another.
@@ -227,12 +199,12 @@ version: 1.0
    /title/ of the modifier.
 
    A property of {** structural detached modifiers} is that they consume *all* other non-structural
-   detached modifiers, lower-level structual modifiers, inline markup and {** paragraphs};
+   detached modifiers, lower-level structural modifiers, inline markup and {** paragraphs};
    they are the most important detached modifier in the hierarchy of modifiers.
 
    To manually terminate a structural detached modifier (like a heading) you must use a
-   {** delimiting modifiers}[delimiting modifier], or you simply use another structural modifier of
-   the same level.
+   {** delimiting modifiers}[delimiting modifier]. Structural detached modifiers are automatically
+   closed when you use another structural modifier of the same or higher level.
 
 *** Headings
     |example
@@ -252,13 +224,14 @@ version: 1.0
     also non-{** grouping}.
 
     Headings serve as a way to categorize and organize other elements into smaller chunks for better
-    readability.
+    readability. They are currently the /only/ structural detached modifier present in the Norg
+    syntax.
 
 ** Nestable Detached Modifiers
    Nestable detached modifiers are a kind which may be repeated multiple times in order to produce a
    _nested_ object of the given type. The nesting levels are capped at 6 in the [tree-sitter] parser
    but longer repetitions of the same modifier are allowed, falling back to the sixth nesting level.
-   Other parsers may choose to support higher nesting levels.
+   Other parsers may choose to support higher (or infinite) nesting levels.
 
    Furthermore, in contrast to the {# standard detached modifiers} this detached modifier type has
    /no/ title, and affects the following `paragraph` instead of only the next
@@ -266,66 +239,66 @@ version: 1.0
    This means that in order to terminate the detached modifier contents, you need two consecutive
    line breaks (see {# paragraph break}).
 
-   Here are some correct examples of nestable detached modifiers:
+   Below you will find some examples of nestable detached modifiers.
 
 *** Unordered Lists
+    |example
+    - Unordered list level 1
+    -- Unordered list level 2
+    --- Unordered list level 3
+    ---- Unordered list level 4
+    ----- Unordered list level 5
+    ------ Unordered list level 6
+    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)
+
+    - Unordered list level 1
+      This text is still part of the level 1 list item.
+    -- Unordered list level 2
+       This text is still part of the level 2 list item.
+    --- Unordered list level 3
+        This text is still part of the level 3 list item.
+    ---- Unordered list level 4
+         This text is still part of the level 4 list item.
+    ----- Unordered list level 5
+          This text is still part of the level 5 list item.
+    ------ Unordered list level 6
+           This text is still part of the level 6 list item.
+    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)
+            This text is still part of the level 7 list item.
+    |end
+
     Unordered lists provide an easy way to enumerate items in an unordered fashion. Useful for data
     that's categorically similar but doesn't need to follow a strict order.
 
+*** Ordered Lists
     |example
-    - Unordered list level 1
-    -- Unordered list level 2
-    --- Unordered list level 3
-    ---- Unordered list level 4
-    ----- Unordered list level 5
-    ------ Unordered list level 6
-    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)
+    ~ Ordered list level 1
+    ~~ Ordered list level 2
+    ~~~ Ordered list level 3
+    ~~~~ Ordered list level 4
+    ~~~~~ Ordered list level 5
+    ~~~~~~ Ordered list level 6
+    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)
 
-    - Unordered list level 1
+    ~ Ordered list level 1
       This text is still part of the level 1 list item.
-    -- Unordered list level 2
+    ~~ Ordered list level 2
        This text is still part of the level 2 list item.
-    --- Unordered list level 3
+    ~~~ Ordered list level 3
         This text is still part of the level 3 list item.
-    ---- Unordered list level 4
+    ~~~~ Ordered list level 4
          This text is still part of the level 4 list item.
-    ----- Unordered list level 5
+    ~~~~~ Ordered list level 5
           This text is still part of the level 5 list item.
-    ------ Unordered list level 6
+    ~~~~~~ Ordered list level 6
            This text is still part of the level 6 list item.
-    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)
+    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 list item.
     |end
 
-*** Ordered Lists
     This list type is only useful for data that needs to be kept in sequence. In contrast to other
     formats which may use a syntax like `1.`/`1)`, Norg counts the items automatically - this
     reduces complexity and makes reordering items simple.
-
-    |example
-    ~ Ordered list level 1
-    ~~ Ordered list level 2
-    ~~~ Ordered list level 3
-    ~~~~ Ordered list level 4
-    ~~~~~ Ordered list level 5
-    ~~~~~~ Ordered list level 6
-    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)
-
-    ~ Ordered list level 1
-      This text is still part of the level 1 list item.
-    ~~ Ordered list level 2
-       This text is still part of the level 2 list item.
-    ~~~ Ordered list level 3
-        This text is still part of the level 3 list item.
-    ~~~~ Ordered list level 4
-         This text is still part of the level 4 list item.
-    ~~~~~ Ordered list level 5
-          This text is still part of the level 5 list item.
-    ~~~~~~ Ordered list level 6
-           This text is still part of the level 6 list item.
-    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)
-            This text is still part of the level 7 list item.
-    |end
 
 *** Quotes
     |example
@@ -352,6 +325,9 @@ version: 1.0
     >>>>>>> Quote level 7 (falls back to level 6 in the tree-sitter parser)
             This text is still part of the level 7 quote.
     |end
+
+    Quotes are rather self-explanatory - they allow you to cite e.g. a passage from another source.
+
 *** Attributes
     |example
     % attrib1
@@ -361,28 +337,27 @@ version: 1.0
     %%%%% atrrib5
     %%%%%% atrrib6
     |end
-    Attributes are detached modifiers that exist solely for the purpose to have altered behaviour
+
+    Attributes are detached modifiers that exist solely for the purpose of having altered behaviour
     through {** carryover tags}. These can then be referenced within {** attached modifier
-    extensions} and the behaviour applied to the attribute iwll be applied to the attached modifier.
+    extensions} and the tags applied to the attribute will be applied to the attached modifier with
+    said attribute.
 
     These modifiers can be nested to create a hierarchy of attributes.
 
 *** Invalid Examples
-    - ::
-      |example
-        >I am not a quote
+    |example
+    >I am not a quote
 
-        some preceding text > I am also not a quote
+    some preceding text > I am also not a quote
 
-        >- I am not a valid detached modifier
+    >- I am not a valid detached modifier
 
-        > > I am only a level 1 quote
+    > > I am only a level 1 quote
 
-        *
-            I am not a valid heading title.
-        |end
-    - Headings are also /nestable/ detached modifiers but will only be discussed later as part of the
-      {# structural detached modifiers} section.
+    *
+        I am not a valid heading title.
+    |end
 
 ** Range-able Detached Modifiers
    Range-able detached modifiers can occur in two forms:
@@ -512,6 +487,35 @@ version: 1.0
     |example
     : A1 : Content of table cell at `A1`.
     |end
+
+** Grouping
+   Both nestable and range-able detached modifiers have a unique quality - when several consecutive
+   modifiers /of the same type/ are encountered (by consecutive we mean _NOT_ separated via a
+   {# paragraph break}), they are treated as one whole <object>. This is crucial to understand as
+   it is required for the many types of {** carryover tags} to function.
+
+*** Examples
+    |example
+    The following items naturally group because they are range-able, forming
+    a definition list:
+    $ Term 1
+      Definition 1!
+    $ Term 2
+      Definition 2!
+    |end
+
+    |example
+    Together, these form one whole unordered list:
+    - List item 1
+    - List item 2
+    |end
+
+    |example
+    - List item in one list
+
+    - This item is in another list, because we used a {# paragraph break} to split these items
+    |end
+
 ** Delimiting Modifiers
    In Norg, headings (and other {** structural detached modifiers}) must be terminated by a {**
    delimiting modifiers}[delimiting modifier]. This kind of modifier must abide by the following
