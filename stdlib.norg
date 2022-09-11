@@ -1,0 +1,55 @@
+|comment
+This document is a real implementation of the Norg standard library.
+This includes all carryover tags, ranged tags and their behaviours.
+|end
+
+== color color next
+#eval
+@code nip
+{
+    inherit color,
+} @next
+@end
+==
+
+== name name next
+#eval
+@code nip
+{
+    inherit name,
+} @next
+@end
+==
+
+%See: {:0.1-specification:**** Limits}%
+== attribute-limits ...limits next
+#eval
+@code nip
+# If assertion fails then don't evaluate to anything
+if attribute in next => (attribute == .(attribute)) do
+    # Ensure that every attribute given to the `attribute-limits` tag is one of the values in the
+    # list.
+    assert limit in limits => ([ "none", "verbatim", "non-verbatim", "math", "variables", "links" ] <- limit:type);
+
+    # Assign the limits to the attribute
+    {
+        inherit limits,
+    } @next;
+else
+    {
+        none: .(_),
+        verbatim: .(verbatim),
+        non-verbatim: .(!(verbatim)),
+        math: .(inline-math),
+        variables: .(inline-variable),
+        links: .(links),
+    } @map;
+
+    assert-any (limit in limits => (map:(limit) == next));
+
+    {
+        inherit limits,
+    } @next;
+end
+@end
+==

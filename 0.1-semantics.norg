@@ -40,5 +40,15 @@ Table syntax:
   ---
 
 * Introduction
+  This file contains a formal description of the semantics of the Norg file format. For an
+  introduction of what the Norg file format is, it is recommended that you read the
+  [specification] first. When writing a syntax parser, it's not necessary for
+  you to understand exactly how Norg is intended to behave - however, when writing a more
+  sophisticated tool like {https://github.com/nvim-neorg/neorg}[neorg], understanding how various
+  tags and elements behave is quite crucial. This document also covers the {* NIP} language, which
+  is a functional Norg DSL specifically used to manipulate and query information from any document.
 
-* NIP
+* ( ) NIP
+
+  ===
+%| vim: set tw=100 :|%
