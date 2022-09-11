@@ -389,6 +389,7 @@ version: 1.0
     Which scans up to the closing modifier.
     $$
     |end
+
 *** Footnotes
     Footnotes allow the user to give supplementary information related to some text without
     polluting the paragraph itself. Footnotes can be linked to using {# linkables}.
@@ -406,12 +407,15 @@ version: 1.0
     Which scans up to the closing modifier.
     ^^
     |end
+
 *** Variables
     Variables are bits of information that can be dynamically inserted into the document.
+
     |example
     & Variable Name
     Variable value
     |end
+
     |example
     && Variable Name
     *this* is some /content/.
@@ -423,6 +427,7 @@ version: 1.0
     |example
     The content of the above variable is: &variable name&.
     |end
+
     After the logical detached modifiers are evaluated, the above example would expand to:
     |example
     The content of the above variable is: *this* is some /content/.
@@ -436,8 +441,10 @@ version: 1.0
     #color &myvariable&
     This should be red.
     |end
+
     This is a unique case where an {* attached modifiers}[attached modifier] may be used outside of
     a paragraph.
+
 *** Macro Definitions
     To define a macro, you use the macro detached modifier:
     |example
@@ -517,7 +524,7 @@ version: 1.0
     |end
 
 ** Delimiting Modifiers
-   In Norg, headings (and other {** structural detached modifiers}) must be terminated by a {**
+   In Norg, headings (and other {** structural detached modifiers}) may be terminated by a {**
    delimiting modifiers}[delimiting modifier]. This kind of modifier must abide by the following
    rules:
    - A delimiting modifier can _only_ occur at the beginning of the line (arbitrary {# whitespace}
@@ -564,7 +571,7 @@ version: 1.0
 
 *** Horizontal Rule
     This modifier uses the `_` character and simply renders a horizontal line. It does _NOT_
-    affect the heading level but immediately terminates a {# paragraphs}[paragraph].
+    affect the heading level but immediately terminates any {# paragraphs}[paragraph].
     |example
     * Heading level 1
       Text under first level heading.
@@ -612,7 +619,7 @@ version: 1.0
     - (# A|@ 3rd feb) This task has a priority `A` and is assigned to the 3rd of February.
     |end
     Not all {** detached modifier extensions} support parameters and for good reason. There is no
-    need to attach extra metadata to a done or undone state for instance. Different extensions can
+    need to attach extra metadata to a done or undone state for instance. Many extensions should
     be delimited with the {* contextual `|` delimiter}.
 
     Below are descriptions for a few other extensions that may be used.
@@ -632,16 +639,17 @@ version: 1.0
      - ::
        The `<day>` value is reliant on the current locale, but the following alterations of that
        value are permitted:
-       - Full version (e.g. `Tuesday`, `Wednesday`)
-       - An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
-       `M` (monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
-       could satisfy the input.
+       -- Full version (e.g. `Tuesday`, `Wednesday`)
+       -- An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
+          `M` (monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
+          could satisfy the input.
      - The `,?` expression means that a `,` character may optionally exist in that location.
      - The `<day-of-month>` value is simply a numeric value with at most 3 digits (to disambiguate
        it with the `<year>` value).
-     - The `<month>` value is also dependent on the current locale, and the same shorthand rules apply
-       as in the `<day>` value.
-     - The `<year>` value must be a numeric value with at least 4 digits
+     - The `<month>` value is a word-based representation of the current month (i.e. `October`,
+       `January` etc.) dependent on the current locale. The same shorthand rules apply as in the `<day>`
+       value.
+     - The `<year>` value must be a numeric value with at least 4 digits.
      - The `<time>` value must consist of this format (in regex): `|\d{1,2}:\d{2}(\.\d{1,2})?|`.
        Some examples would be: `18:00`, `5:32`, `00:12.32`.
 
@@ -731,7 +739,8 @@ version: 1.0
     Since there was no other item of the same type after the indent segment
     it must be closed with `---` or `===`.
     |end
-    After an indent segment extension is matched (either `:` or `::`) a newline must instantly follow.
+
+    *NOTE*: After an indent segment extension is matched (either `:` or `::`) a newline must /instantly/ follow.
 
 * Tags
   The main differentiator from simple markup formats and more complex ones is the ability to define
