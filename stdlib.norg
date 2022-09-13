@@ -6,6 +6,8 @@ This includes all carryover tags, ranged tags and their behaviours.
 == color color next
 #eval
 @code nip
+%TODO: This is inconsistent with the `attribute-limits` code.
+There should be a different way to apply "attributes" to nodes.%
 {
     inherit color,
 } @next
@@ -52,4 +54,8 @@ else
     } @next;
 end
 @end
+==
+
+%Yup, this is the implementation of `comment`%
+== comment ...
 ==
