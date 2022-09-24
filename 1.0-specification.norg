@@ -439,7 +439,7 @@ version: 1.0
     they are defined.
 
     *NOTE*: In order to make tables more aesthetically pleasing, they're commonly mixed with the
-    {* intersection modifiers}[intersection modifier] syntax to produce the following:
+    {* intersecting modifiers}[intersecting modifier] syntax to produce the following:
     |example
     : A1 : Content of table cell at `A1`.
     |end
@@ -1241,11 +1241,11 @@ version: 1.0
   Extensions}[attached] modifier extensions. Even though it's used 3 times for different purposes,
   the contexts in which they are used in allows for them to be unambiguous.
 
-* Intersection Modifiers
+* Intersecting Modifiers
   Norg is a syntax designed to be used by many - this includes many styles and preferences. Although
   it's impossible to satisfy everyone, there are some variations of syntax that can be used to
   "beautify" Norg markup.
-  The intersection modifier does just that - it's a way to intersect two different paragraph
+  The intersecting modifier does just that - it's a way to intersect two different paragraph
   segments (and *only* paragraph segments) together on the same line.
 
   The syntax is as follows:
@@ -1253,13 +1253,13 @@ version: 1.0
   - Next, the actual modifier (currently only `:`) must be matched.
   - The token ends with another {*** whitespace} character.
 
-  The usecase for the intersection modifier is best illustrated by example:
+  The usecase for the intersecting modifier is best illustrated by example:
   |example
   $ Term
     This is a definition of that term.
   |end
   This is perfectly normal syntax that you would write day to day in Norg. But what if you're more
-  of a fan of one liners? The `| : |` intersection modifier (currently the only modifier of this
+  of a fan of one liners? The `| : |` intersecting modifier (currently the only modifier of this
   type) can be used to do just this:
   |example
   $ Term : This is a definition of that term.
@@ -1738,7 +1738,7 @@ version: 1.0
    - {*** Standard Ranged Tags} (`|comment`, etc.)
    - {*** Table cells}
    - {** Free-form Attached Modifiers}
-   - {* Intersection modifiers}
+   - {* Intersecting modifiers}
    - {** Attached Modifier Extensions}
    - The inline mathematics (`$$`) and variable (`&&`) {* attached modifiers}
 
