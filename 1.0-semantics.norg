@@ -1,5 +1,5 @@
 @document.meta
-title: 0.1-semantics
+title: 1.0-semantics
 description: 
 authors: vhyrro
 categories: 
@@ -29,7 +29,7 @@ Table syntax:
   : > : Headings
   : > : structural, nestable
   : _ : `-`
-  
+
   : . : Char
   : v : `*`
   : v : `-`
