@@ -483,7 +483,7 @@ version: 1.0
     that you cannot use these as targets for {* linkables}.
 
 ** Grouping
-   Both, nestable and range-able, detached modifiers have a unique quality - when several consecutive
+   Both nestable and range-able detached modifiers have a unique quality - when several consecutive
    modifiers /of the same type/ are encountered (by consecutive we mean _NOT_ separated via a
    {# paragraph break}), they are treated as one whole <object>. This is crucial to understand as
    it is required for the many types of {** carryover tags} to function.
