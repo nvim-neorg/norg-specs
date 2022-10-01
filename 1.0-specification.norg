@@ -326,6 +326,7 @@ version: 1.0
     Quotes are rather self-explanatory - they allow you to cite e.g. a passage from another source.
 
 *** Attributes
+    %TODO: MORE USAGE EXAMPLES!!!!!!!!!%
     |example
     % attrib1
     %% atrrib2
@@ -768,9 +769,9 @@ version: 1.0
     ---
 
   ^ Disambiguating tags and attached modifiers
-  If tag characters were attached modifiers then we wouldn't know whether or not the character is an
-  attached modifier opener or a tag opener until we would have parsed the whole line; in other
-  words, we would be dealing with ambiguity
+    If tag characters were attached modifier openers there would be no way to know whether or not the
+    character is an attached modifier opener or a tag opener until the whole line has been parsed;
+    in other words, such a scenario would entail a difficult to resolve ambiguity.
 
   Norg provides several inbuilt tag names that are reserved, but their details are not explained
   in this specification - this document strictly covers syntax - see {:1.0-semantics:} for a list of
@@ -778,28 +779,36 @@ version: 1.0
   any disallowed names that a parser should omit (unless they don't adhere to the above rules
   regarding tag names).
 
-** ( ) Macro Tags
-
-   %TODO: explain general macro tag syntax `=macro`, `=end`%
-   %TODO: explain that such a ranged tag can contain arbitrary Norg elements%
-   %TODO: explain that generally speaking, all tags are implemented as macros%
-   %TODO: show example macro%
-
-   The `next` and `...` arguments are automatically supplied. See the {:1.0-semantics:}[semantics
-   document] for more details.
-
 ** Ranged Tags
-
-   %TODO: update this section after macro tags got rewritten%
-
    Ranged tags are a way to express custom information within a range.
    They begin with the traditional tag declaration and are ended with an `end` statement.
 
    The `end` statement has a simple ruleset:
    - Must be at the start of a line, may be preceded by any {*** whitespace} (but nothing else)
    - Must use the same prefix as its parent (in the case of standard ranged tags: `|`; in the case
-     of verbatim tags: `@`)
+     of verbatim tags: `@`; for macro tags: `=`)
    - Must *immediately* be succeeded by a {# line ending}.
+
+*** Macro Tags
+    Macro tags (also known as /macro definitions/) are a tag type designed to declare and define
+    macros. Macros are templates that can be executed with parameters in order to place some
+    structured text into the document.
+
+    The content of the macro tag is /any/ norg markup - this includes {** structural detached
+    modifiers} and nested {* tags}. The macro tag is closed with the `=end` statement.
+
+    %TODO: explain that generally speaking, all tags are implemented as macros%
+    %TODO: show example macro%
+
+    The `next` and `...` arguments are automatically supplied. See the {:1.0-semantics:}[semantics
+    document] for more details.
+
+    Example:
+    |example
+    =see url
+    (see {&url&})
+    =end
+    |end
 
 *** Standard Ranged Tags
     There are times where you may want to create an isolated block of Norg markup.
