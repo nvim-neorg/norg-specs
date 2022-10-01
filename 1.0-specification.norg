@@ -659,7 +659,8 @@ version: 1.0
 **** Timestamp Extension
      The timestamp extension allows you to associate a {* detached modifiers}[detached modifier]
      with a date/time.
-     The syntax for a timestamp is as follows: `<day>,? <day-of-month> <month> <year> <time> <timezone>`
+     The syntax for a timestamp is as follows {^ Note to parser developers}:
+     `<day>,? <day-of-month> <month> <year> <time> <timezone>`
      - ::
        The `<day>` value is reliant on the current locale, but the following alterations of that
        value are permitted:
@@ -689,6 +690,12 @@ version: 1.0
      {@ 5th Aug 2022 - 20th August 2022}
      {@ 5th Aug 2022-20th August 2022} <- Also valid
      |end
+
+     ^ Note to parser developers
+     It should be mentioned, that a parser of the Norg format is not required to perform any
+     timestamp analysis further than detecting what set of characters contains a timestamp.
+     The actual interpretation of its internal fields and the interpretation of a {# range} are the
+     responsibility of the *semantic analyzer* (see also {:1.0-semantics:}).
 
 **** Priority Extension
      This extension allows for you to specify a priority of your detached modifier extension.
