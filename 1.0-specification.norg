@@ -910,6 +910,31 @@ version: 1.0
         This is also some content.
      |end
 
+*** Carryover Tags and Paragraphs
+    A feature of {** carryover tags} which we have not discussed yet, is how they interact with
+    {** paragraphs} (and {** paragraph segments}). Basically, the following simple rules apply:
+    - {*** strong carryover tags} affect the next {** paragraphs}[paragraph]
+    - {*** weak carryover tags} affect the next {** paragraph segments}[paragraph segment]
+
+    For example:
+    |example
+    #color blue
+    This entire paragraph
+    will not appear in blue
+    color.
+
+    This next paragraph is normal-colored.
+    +color red
+    But this single line is colored red,
+    whereas this line is normal-colored again.
+
+    #color blue
+    This part if blue,
+    +color red
+    but the later defined carryover tag takes precedence, making this part red,
+    and this part blue again, since the weak carryover tag does not affect this segment.
+    |end
+
 ** Ranged Tags
    Ranged tags are a way to express custom information within a range.
    They begin with the traditional tag declaration and are ended with an `end` statement.
