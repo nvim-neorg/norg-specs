@@ -187,12 +187,6 @@ version: 1.0
      - Range-able
      - Logical
   ::
-  : _ : `=`
-  : > : Macros
-  :: >
-     - Range-able
-     - Logical
-  ::
 
 ** Structural Detached Modifiers
    The first detached modifier type is the /structural/ modifier type. As the name suggests,
@@ -361,6 +355,10 @@ version: 1.0
 
      These limits can be chained, i.e. `#attribute-limits links non-verbatim`.
 
+**** Logical Detached Modifiers
+     {*** Attributes} are the first kind of *logical* detached modifiers which we encounter here.
+     These detached modifier types can:*not* be linked to using {* linkables}.
+
 *** Invalid Nestable Detached Modifier Examples
     |example
     >I am not a quote
@@ -481,53 +479,8 @@ version: 1.0
     This is a unique case where an {* attached modifiers}[attached modifier] may be used outside of
     a paragraph.
 
-**** Logical Detached Modifiers
-     {*** Variables} are the first kind of *logical* detached modifiers which we encounter here.
-     These detached modifier types can:*not* be linked to using {* linkables}.
-
-*** Macro Definitions
-    To define a macro, you use the macro detached modifier:
-    |example
-    = MacroName parameter1 parameter2
-    The meaning of &parameter1& is &parameter2&.
-
-    == LongMacro
-    This is a snippet of text with no parameters.
-
-    $ Definition
-      And this is a hardcoded definition.
-    ==
-
-    Afterwards we can invoke these using the macro tag:
-
-    =MacroName life 42
-    =LongMacro
-
-    This will be evaluated to:
-
-    The meaning of life is 42.
-    This is a snippet of text with no parameters.
-
-    $ Definition
-      And this is a hardcoded definition.
-
-    |end
-
-    Just like {*** variables}, macros are also {**** logical detached modifiers}.
-
-**** Some details: Macros and their metaprogramming capabilities
-     Macros can have a special last parameter called `next` or `...`, in which case they can only be
-     used as a {** carryover tags}[carryover tag] or {** ranged tags}[ranged tag], respectively. In
-     this case, the `next` and `...` variables are an `entity`. Entities are a part of Norg's
-     {** layer 5} metaprogramming capabilities, and are described in the {:1.0-semantics:}[semantics]
-     document:
-     |example
-     = MacroName next
-     The content of `next` is: &next&.
-
-     = differentmacroname ...
-     The content of the ranged tag is: &content&.
-     |end
+    Just like {*** attributes}, variables are also {**** logical detached modifiers}, which means
+    that you cannot use these as targets for {* linkables}.
 
 ** Grouping
    Both, nestable and range-able, detached modifiers have a unique quality - when several consecutive
@@ -791,14 +744,14 @@ version: 1.0
   Tags are Norg's official way of extending its own syntax. It's the /only/ way that extensions
   may be made to the format.
 
-  There are 5 different tag types, each with their own way of changing the way text in Norg is
+  There are 6 different tag types, each with their own way of changing the way text in Norg is
   interpreted. Before we discuss those, however, we should discuss the syntax rules for tags:
   - A tag is similar to a {# detached modifiers}[detached modifier] in the sense that it must begin
     at the beginning of a line with optional {*** whitespace} (but nothing else) preceding it.
-  - After that you will encounter a special tag character (`@`, `|`, `+`, `#` and `=`), /none/ of
-    which are attached modifiers (see {^ disambiguating tags and attached modifiers}). The special
-    tag character is then /immediately/ followed by text, which becomes the /tag name/. Said tag
-    name can consist of any {# regular characters}[regular character] and/or `-` and `_`.
+  - After that you will encounter a special tag character (`=`, `|`, `@`, `#`, `+` and `.`), /none/
+    of which are attached modifiers (see {^ disambiguating tags and attached modifiers}). The
+    special tag character is then /immediately/ followed by text, which becomes the /tag name/. Said
+    tag name can consist of any {# regular characters}[regular character] and/or `-` and `_`.
   - Tags can have their names delimited by a `.` in order to create a "hierarchy", e.g.
     `document.meta`.
   - ::
@@ -825,7 +778,109 @@ version: 1.0
   any disallowed names that a parser should omit (unless they don't adhere to the above rules
   regarding tag names).
 
+** ( ) Macro Tags
+
+   %TODO: explain general macro tag syntax `=macro`, `=end`%
+   %TODO: explain that such a ranged tag can contain arbitrary Norg elements%
+   %TODO: explain that generally speaking, all tags are implemented as macros%
+   %TODO: show example macro%
+
+   The `next` and `...` arguments are automatically supplied. See the {:1.0-semantics:}[semantics
+   document] for more details.
+
+** Ranged Tags
+
+   %TODO: update this section after macro tags got rewritten%
+
+   Ranged tags are a way to express custom information within a range.
+   They begin with the traditional tag declaration and are ended with an `end` statement.
+
+   The `end` statement has a simple ruleset:
+   - Must be at the start of a line, may be preceded by any {*** whitespace} (but nothing else)
+   - Must use the same prefix as its parent (in the case of standard ranged tags: `|`; in the case
+     of verbatim tags: `@`)
+   - Must *immediately* be succeeded by a {# line ending}.
+
+*** Standard Ranged Tags
+    There are times where you may want to create an isolated block of Norg markup.
+    To do this you may use the standard ranged tag, which uses the `|` character.
+
+    Currently it is only used for four tags, `comment`, `example`, `details` and `group`:
+    - The `comment` ranged tag is used for long strings of comments (versus the `%` attached modifier,
+      which is mostly used for short comments).
+    - The `example` tag is a simple way to show an example of some Norg markup without it being
+      rendered and treated as physical markup (most commonly used throughout this very document to
+      show unrendered examples of Norg syntax).
+    - The `details` tag is a way to hide away markup (just like
+      {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
+      - The `group` tag may be used to group together many elements and apply a global {*** strong
+        carryover tags}[strong carryover tag] to each and every one of them.
+
+    %TODO: show actual underlying implementations of example or comment and group or details using
+    the macro tag syntax%
+    %TODO: based on the above, explain in which scenario the tags-contents get embedded into the
+    Norg document and can therefore be linked to%
+
+**** Examples
+     `|example`:
+     |example
+     |example
+     * This is an example heading.
+     |end
+     |end
+
+     `|comment`:
+     |example
+     |comment
+     This is a very long comment with some content
+     and with some markup!
+
+     * Heading
+       /italic/ and *bold*.
+     |end
+     |end
+
+     `|details`:
+     |example
+     |details
+     * Here is some hidden markup!
+       Wowzers.
+     |end
+     |end
+
+     `|group`:
+     |example
+     #color red
+     |group
+     This will be red.
+
+     So will this.
+
+     * So will this
+       And this.
+     |end
+     |end
+
+*** Verbatim Ranged Tags
+    In other cases you may be more interested in an isolated block with:*OUT* Norg markup (i.e. a
+    /verbatim/ block). A prime example of this is `@code`, which creates a code block - you
+    obviously don't want nested Norg syntax within that! Note how in the following example the
+    `@MyAnnotation` would clash with Norg's verbatim ranged tag syntax, but doesn't as no nested
+    markup is allowed within:
+    @code java
+    @MyAnnotation(name="someName", value="Hello World")
+    public class TheClass {
+      // ...
+    }
+    @end
+    This ranged tag type is the most commonly used one as it has the widest range of applications.
+    The {*** standard ranged tags}[standard ranged tag] is a much more niche syntax element targeted
+    at specific usecases.
+
 ** Carryover Tags
+
+   %TODO: check if this needs updates after rewriting the macro tags section%
+
    Carryover tags are a construct used to assign certain properties to the next item or whole
    {# objects}[object].
 
@@ -936,153 +991,15 @@ version: 1.0
     and this part blue again, since the weak carryover tag does not affect this segment.
     |end
 
-** Ranged Tags
-   Ranged tags are a way to express custom information within a range.
-   They begin with the traditional tag declaration and are ended with an `end` statement.
+** ( ) Infirm Tag
 
-   The `end` statement has a simple ruleset:
-   - Must be at the start of a line, may be preceded by any {*** whitespace} (but nothing else)
-   - Must use the same prefix as its parent (in the case of standard ranged tags: `|`; in the case
-     of verbatim tags: `@`)
-   - Must *immediately* be succeeded by a {# line ending}.
+   %TODO: explain the infirm tag sytnax for single-line, embeddable macro invocation%
 
-*** Standard Ranged Tags
-    There are times where you may want to create an isolated block of Norg markup.
-    To do this you may use the standard ranged tag, which uses the `|` character.
-
-    Currently it is only used for four tags, `comment`, `example`, `details` and `group`:
-    - The `comment` ranged tag is used for long strings of comments (versus the `%` attached modifier,
-      which is mostly used for short comments).
-    - The `example` tag is a simple way to show an example of some Norg markup without it being
-      rendered and treated as physical markup (most commonly used throughout this very document to
-      show unrendered examples of Norg syntax).
-    - The `details` tag is a way to hide away markup (just like
-      {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
-      - The `group` tag may be used to group together many elements and apply a global {*** strong
-        carryover tags}[strong carryover tag] to each and every one of them.
-
-**** Examples
-     `|example`:
-     |example
-     |example
-     * This is an example heading.
-     |end
-     |end
-
-     `|comment`:
-     |example
-     |comment
-     This is a very long comment with some content
-     and with some markup!
-
-     * Heading
-       /italic/ and *bold*.
-     |end
-     |end
-
-     `|details`:
-     |example
-     |details
-     * Here is some hidden markup!
-       Wowzers.
-     |end
-     |end
-
-     `|group`:
-     |example
-     #color red
-     |group
-     This will be red.
-
-     So will this.
-
-     * So will this
-       And this.
-     |end
-     |end
-
-*** Verbatim Ranged Tags
-    In other cases you may be more interested in an isolated block with:*OUT* Norg markup (i.e. a
-    /verbatim/ block). A prime example of this is `@code`, which creates a code block - you
-    obviously don't want nested Norg syntax within that! Note how in the following example the
-    `@MyAnnotation` would clash with Norg's verbatim ranged tag syntax, but doesn't as no nested
-    markup is allowed within:
-    @code java
-    @MyAnnotation(name="someName", value="Hello World")
-    public class TheClass {
-      // ...
-    }
-    @end
-    This ranged tag type is the most commonly used one as it has the widest range of applications.
-    The {*** standard ranged tags}[standard ranged tag] is a much more niche syntax element targeted
-    at specific usecases.
-
-** Macro Tags
-   Macro definitions are explained in detail {*** Macro Definitions}[in their own section].
-
-   The `=` tag simply invokes a macro with some parameters and injects its result into the location
-   that the macro tag was invoked. This tag does not break up paragraphs unless the injected content
-   contains an element that breaks up paragraphs.
-
-   Given the following example:
    |example
-   = LoremIpsum
-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-   cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-   culpa qui officia deserunt mollit anim id est laborum.
-
-   Here you will see the lorem ipsum text.
-   =LoremIpsum
-   It's pretty nice, isn't it?
+   This is a paragraph.
+   .some_macro
+   This is still the same paragraph (assuming the macro invocation only inserted text).
    |end
-
-   Expands to:
-   |example
-   Here you will see the lorem ipsum text.
-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-   cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-   culpa qui officia deserunt mollit anim id est laborum.
-   It's pretty nice, isn't it?
-   |end
-
-   This, naturally, is treated as one whole paragraph.
-
-   As described in the {*** macro definitions} section, the `next` and `...` parameters have special
-   meaning in {** layer 5}:
-   - :
-     |example
-     == important next
-     #color red
-     &next&
-     ==
-
-     #important
-     This is some important text.
-     |end
-   - :
-     |example
-     == important ...
-     %We encapsulate all elements in a group so we color everything%
-
-     #color red
-     |group
-       &...&
-     |end
-     ==
-
-     |important
-     This is some highly important markup.
-
-     * And this is a very important heading.
-       Everything here should be coloured red!
-     |end
-     |end
-   The `next` and `...` arguments are automatically supplied. See the {:1.0-semantics:}[semantics
-   document] for more details.
 
 * Attached Modifiers
   We can now discuss attached modifiers (which originally gave rise to the name of
@@ -1473,7 +1390,7 @@ version: 1.0
     content to exist within itself.
 
     /NOTE/: You can:*NOT* link to a logical modifier using {* linkables}. Objects like
-    {*** macro definitions}, {*** variables} and {*** attributes} are out of the equation.
+    {*** attributes} and {*** variables} are out of the equation.
 
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
@@ -1690,7 +1607,7 @@ version: 1.0
     |end
 
 * Standard Library
-  Norg comes loaded with a predetermined set of {*** attributes} and {*** macro definitions} for
+  Norg comes loaded with a predetermined set of {*** attributes} and {** macro tags} for
   different {* layers} of the syntax. These are defined in the {:1.0-semantics:}[semantics document].
 
 * Precedence
@@ -1700,7 +1617,7 @@ version: 1.0
   - Verbatim elements have greater priority than non-verbatim elements.
 
   Here's the full list ordered by decreasing precedence:
-  ~ {# Tags} (`#infecting`, `+carryover`, `|standard`, `@verbatim` and `=macro`)
+  ~ {# Tags} (`#infecting`, `+carryover`, `.infirm`, `|standard`, `@verbatim` and `=macro`)
   ~ {# Structural detached modifiers}
   ~ {# Nestable detached modifiers} and {# range-able detached modifiers}
   -- (there isn't a case where these can overlap)
