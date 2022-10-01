@@ -820,9 +820,10 @@ version: 1.0
   words, we would be dealing with ambiguity
 
   Norg provides several inbuilt tag names that are reserved, but their details are not explained
-  in this specification - this document strictly covers syntax. There is no restriction in regards
-  to the length of a tag name, nor are there any disallowed names that a parser should omit
-  (unless they don't adhere to the above rules regarding tag names).
+  in this specification - this document strictly covers syntax - see {:1.0-semantics:} for a list of
+  the builtin tags. There is no restriction in regards to the length of a tag name, nor are there
+  any disallowed names that a parser should omit (unless they don't adhere to the above rules
+  regarding tag names).
 
 ** Carryover Tags
    Carryover tags are a construct used to assign certain properties to the next item or whole

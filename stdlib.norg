@@ -23,7 +23,7 @@ There should be a different way to apply "attributes" to nodes.%
 @end
 ==
 
-%See: {:0.1-specification:**** Limits}%
+%See: {:1.0-specification:**** Limits}%
 == attribute-limits ...limits next
 #eval
 @code nip
