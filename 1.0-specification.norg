@@ -842,11 +842,6 @@ version: 1.0
       - The `group` tag may be used to group together many elements and apply a global {*** strong
         carryover tags}[strong carryover tag] to each and every one of them.
 
-    %TODO: show actual underlying implementations of example or comment and group or details using
-    the macro tag syntax%
-    %TODO: based on the above, explain in which scenario the tags-contents get embedded into the
-    Norg document and can therefore be linked to%
-
 **** Examples
      `|example`:
      |example
@@ -886,6 +881,31 @@ version: 1.0
        And this.
      |end
      |end
+
+**** Edge Cases and Semantic Interpretation
+     A commonly arising question is "how are these interpreted at parse time?" - can you link to
+     elements within `|comment` tags? What governs the behaviour of these differing tags?
+
+     The answer may be simply illustrated by showing how both of these tags are implemented.
+     As mentioned in the {*** macro tags} section, all tag types apart from the macro tag are a
+     macro invocation under the hood. Below are the implementations for `|comment` and `|group`,
+     respectively:
+     - :
+       |example
+       =comment ...
+       =end
+       |end
+     - :
+       |example
+       =group ...
+       &...&
+       =end
+       |end
+
+    %TODO: show actual underlying implementations of example or comment and group or details using
+    the macro tag syntax%
+    %TODO: based on the above, explain in which scenario the tags-contents get embedded into the
+    Norg document and can therefore be linked to%
 
 *** Verbatim Ranged Tags
     In other cases you may be more interested in an isolated block with:*OUT* Norg markup (i.e. a
