@@ -797,17 +797,34 @@ version: 1.0
     The content of the macro tag is /any/ norg markup - this includes {** structural detached
     modifiers} and nested {* tags}. The macro tag is closed with the `=end` statement.
 
-    %TODO: explain that generally speaking, all tags are implemented as macros%
-    %TODO: show example macro%
+    Under the hood, all other {* tags}[tag] types are implemented as macros with special parameters
+    and contents.
 
-    The `next` and `...` arguments are automatically supplied. See the {:1.0-semantics:}[semantics
-    document] for more details.
-
-    Example:
+    The following is an example of a macro:
     |example
     =see url
     (see {&url&})
     =end
+    |end
+
+    It can then be invoked using any of the other tag types, for example the {** infirm tag}:
+    |example
+    This is a recipe for a cake
+    .see https://wikipedia.com/some-cool-cake-recipe
+    \- let's begin cooking!
+    |end
+
+    After macro expansion, this is what the document would look like:
+    |example
+    This is a recipe for a cake
+    (see {https://wikipedia.com/some-cool-cake-recipe})
+    \- let's begin cooking!
+    |end
+
+    Which, when reformatted, would look (and render) like so:
+    |example
+    This is a recipe for a cake (see {https://wikipedia.com/some-cool-cake-recipe}) - let's begin
+    cooking!
     |end
 
 *** Standard Ranged Tags
