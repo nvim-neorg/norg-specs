@@ -319,7 +319,6 @@ version: 1.0
     Quotes are rather self-explanatory - they allow you to cite e.g. a passage from another source.
 
 *** Attributes
-    %TODO: MORE USAGE EXAMPLES!!!!!!!!!%
     |example
     % attrib1
     %% atrrib2
@@ -333,7 +332,19 @@ version: 1.0
     through {** carryover tags}. These can then be referenced within {** attached modifier extensions}
     and the tags applied to the attribute will be applied to the attached modifier with said attribute.
 
-    These modifiers can be nested to create a hierarchy of attributes.
+    These modifiers can be nested to create a hierarchy of attributes. Below is an example of this
+    in action:
+    |example
+    % color
+    +color #FF0000
+    %% red
+    +color #00FF00
+    %% green
+    +color #0000FF
+    %% blue
+
+    This will be /red/(color:red), /green/(color:green) and /blue/(color:blue).
+    |end
 
 **** Limits
      You can impose limits on where the attribute can be used through the `attribute-limits` tag,
