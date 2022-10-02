@@ -1347,7 +1347,7 @@ version: 1.0
    - A {# line number}
    - A {# URL} (most commonly to an external resource)
    - A {# detached modifier} followed by the name of the linkable
-   -- {# logical detached modifiers} can:*NOT* be linked to
+   -- {# nestable detached modifiers} can:*NOT* be linked to
    - A {# custom detached modifiers}[custom detached modifier] specifically made for links (`/`, `#`)
    - {**** Timestamps (`@`)}
 
