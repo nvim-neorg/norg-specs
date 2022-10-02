@@ -874,14 +874,12 @@ version: 1.0
     at specific usecases.
 
 ** Carryover Tags
-
-   %TODO: check if this needs updates after rewriting the macro tags section%
-
    Carryover tags are a construct used to assign certain properties to the next item or whole
    {# objects}[object].
 
    /Note/: Internally, they are a type of {** macro tags}[macro tag], where the next element is given
-   as the last parameter to the macro. For more info see the {:1.0-semantics:}[semantics document].
+   as the last parameter to the macro. For more info see {*** macro tags} and the
+   {:1.0-semantics:}[semantics document].
 
    There are two types of carryover tag, the {*** weak carryover tags}[weak carryover tag] and the
    {*** strong carryover tags}[strong variant].
@@ -890,14 +888,13 @@ version: 1.0
     The weak carryover tag affects the next element and next element /only/. It does not work with
     whole collections of elements (see {*** strong carryover tags}).
 
-    Weak carryover tags only apply to the next element; they behave this way in the following
-    contexts:
+    Weak carryover tags only apply to the next element; the behaviours are as follows:
     - When the element has children, the weak carryover tag only applies to the single item (it does
       not carry over to its children).
     - When the element is part of an {# object}, no other items other than the item below the weak
       carryover tag is affected.
-    - An exception is made when a weak carryover tag is applied to an {# indent segment}, in which
-      case the whole indent segment (including its children) are affected.
+    - An exception is made when a weak carryover tag is applied to an {# indent segment} or a
+      {** ranged tags}(!s), in which case the whole node (including its children) is affected.
 
 **** Examples
      Only the second item is affected:
@@ -963,8 +960,8 @@ version: 1.0
      |end
 
 *** Carryover Tags and Paragraphs
-    A feature of {** carryover tags} which we have not discussed yet, is how they interact with
-    {** paragraphs} (and {** paragraph segments}). Basically, the following simple rules apply:
+    A feature of {** carryover tags} which we have not discussed yet is how they interact with
+    {** paragraphs} (and {** paragraph segments}). The following simple rules apply:
     - {*** strong carryover tags} affect the next {** paragraphs}[paragraph]
     - {*** weak carryover tags} affect the next {** paragraph segments}[paragraph segment]
 
