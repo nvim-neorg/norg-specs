@@ -833,7 +833,7 @@ version: 1.0
      A commonly arising question is "how are these interpreted at parse time?" - can you link to
      elements within `|comment` tags? What governs the behaviour of these differing tags?
 
-     The answer may be simply illustrated by showing how both of these tags are implemented.
+     The answer may be illustrated simply by showing how both of these tags are implemented.
      As mentioned in the {*** macro tags} section, all tag types apart from the macro tag are a
      macro invocation under the hood. Below are the implementations for `|comment` and `|group`,
      respectively:
@@ -849,10 +849,13 @@ version: 1.0
        =end
        |end
 
-    %TODO: show actual underlying implementations of example or comment and group or details using
-    the macro tag syntax%
-    %TODO: based on the above, explain in which scenario the tags-contents get embedded into the
-    Norg document and can therefore be linked to%
+     The `|comment` tag evaluates to /no value/. Anything that is placed within a comment during
+     invocation (the `...` parameter) is simply dropped. Because of this it is *not* possible to
+     link to elements within comment tags. The `|group` tag returns back everything that you give
+     it, because of this it *is* possible to freely link to any element within a `|group`.
+
+     To summarize - the behaviour of each individual standard ranged tag is fully governed by its
+     implementation.
 
 *** Verbatim Ranged Tags
     In other cases you may be more interested in an isolated block with:*OUT* Norg markup (i.e. a
