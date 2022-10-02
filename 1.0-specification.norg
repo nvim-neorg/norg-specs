@@ -1410,7 +1410,7 @@ version: 1.0
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
     custom modifiers specifically designed for links. These are the `#` (magic), `/` (file), `@`
-    (timestamp) and `!` (wiki link) linkable locations.
+    (timestamp), `!` (wiki link) and `?` (extended) linkable locations.
 
 **** The Magic Char (`#`)
      Sometimes you simply want to be lazy, or you want to link to an {# inline linkables}[inline
@@ -1463,6 +1463,23 @@ version: 1.0
       The wiki link can also be used with the `{:file:}` to limit the search. It can actually double
       as a "heading catchall" operator as mentioned in the previous section - it will match all
       headings regardless of nesting level in the file provided.
+
+**** Extendable Links (`?`)
+     Apart from having links with set behaviours Norg also features an extendable link marked with
+     the `?` character. This link has its behaviours governed by {** attached modifier extensions}
+     supplied to the link and by the software running the Norg format (e.g. [Neorg]).
+
+     Syntax:
+     |example
+     +bibliography ./myreferences.bib
+     % my_bibliography
+
+     This is a reference to a bibliography: {? Neorg2022}(my_bibliography).
+     |end
+
+     For a more detailed explanation of the behaviour of this link consult the
+     {:1.0-semantics:}[semantics] document.
+
 
 *** Inline Linkables
     Although most linkable items are either {# structural detached modifiers}[structural] or
@@ -1683,14 +1700,15 @@ version: 1.0
    The second layer outlines the basic structure for a document:
    - {** Nestable Detached Modifiers} (only quotes, lists)
    - {*** Headings}
-   - {* Linkables} (broader support for {** links} (minus {**** timestamps (`@`)} and
-     {**** wiki links (`!`)}), {** anchors})
+   - {* Linkables} (broader support for {** links} (minus {**** timestamps (`@`)},
+     {**** wiki links (`!`)} and {**** extendable links (`?`)}), {** anchors})
    - {*** Verbatim Ranged Tags} (`@code`, etc.)
    - {** Delimiting Modifiers}
 
 ** Layer 3
    This layer is for documents of medium/high complexity:
-   - Support for {**** timestamps (`@`)} in {** links} and {** inline link targets}
+   - Support for {**** timestamps (`@`)} in {** links}
+   - {** Inline Link Targets}
    - {** Carryover Tags} (`#name`, `#color`/`+name`, `+color` etc.)
    - {** Detached Modifier Extensions}
    - {** Range-able Detached Modifiers} (excluding {*** table cells}))
@@ -1700,6 +1718,7 @@ version: 1.0
 ** Layer 4
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
+   - Support for {**** extendable links (`?`)}
    - {*** Standard Ranged Tags} (`|comment`, etc.)
    - {*** Table cells}
    - {** Free-form Attached Modifiers}
