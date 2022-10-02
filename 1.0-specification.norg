@@ -430,46 +430,6 @@ version: 1.0
     : A1 : Content of table cell at `A1`.
     |end
 
-*** Variables
-    Variables are bits of information that can be dynamically inserted into the document.
-
-    |example
-    & Variable Name
-    Variable value
-    |end
-
-    |example
-    && Variable Name
-    *this* is some /content/.
-    &&
-    |end
-
-    After being defined a single time, it can be inserted into paragraphs using the `&` attached
-    modifier:
-    |example
-    The content of the above variable is: &variable name&.
-    |end
-
-    After the logical detached modifiers are evaluated, the above example would expand to:
-    |example
-    The content of the above variable is: *this* is some /content/.
-    |end
-
-    Variables can be expanded in paragraphs but also in tag parameters:
-    |example
-    & MyVariable
-    red
-
-    #color &myvariable&
-    This should be red.
-    |end
-
-    This is a unique case where an {* attached modifiers}[attached modifier] may be used outside of
-    a paragraph.
-
-    Just like {*** attributes}, variables are also {**** logical detached modifiers}, which means
-    that you cannot use these as targets for {* linkables}.
-
 ** Grouping
    Both nestable and range-able detached modifiers have a unique quality - when several consecutive
    modifiers /of the same type/ are encountered (by consecutive we mean _NOT_ separated via a
@@ -1126,13 +1086,18 @@ version: 1.0
    */Bold and italic* and only italic/
    |end
 
+** Variables
+   Variables are a {** layer 5} attached modifier that allow a user to invoke a macro without any
+   parameters and place the result inside of e.g. a paragraph. For more information on their
+   behaviours see the {:1.0-semantics:}[semantics] document.
+
 ** Free-form Attached Modifiers
    Even with all the rules described in the above sections there are still some evident limitations
    with attached modifiers, namely:
    - Arbitrary {*** whitespace} within {* attached modifiers} is not permitted: `*  bold  *` is
      invalid and thus not bold.
    - Representing verbatim attached modifier chars within the corresponding verbatim blocks is not
-     possible: `|I cannot place a (\`) char inside here without accidentally terminating the
+     possible: `|I cannot place a (`) char inside here without accidentally terminating the
      block.|`.
 
    Free-form modifiers fix this with a special syntax to specify the beginning and end of a ranged
