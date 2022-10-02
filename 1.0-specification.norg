@@ -1410,7 +1410,7 @@ version: 1.0
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
     custom modifiers specifically designed for links. These are the `#` (magic), `/` (file), `@`
-    (timestamp) and `?` (wiki link) linkable locations.
+    (timestamp) and `!` (wiki link) linkable locations.
 
 **** The Magic Char (`#`)
      Sometimes you simply want to be lazy, or you want to link to an {# inline linkables}[inline
@@ -1442,7 +1442,7 @@ version: 1.0
      Frank's birthday is on {@ Mon 5th May}.
      |end
 
-**** Wiki Links (`?`)
+**** Wiki Links (`!`)
      When building large knowledge bases it's sensible to want to quickly create links between files
      without worrying about the location of said file. The *wiki link* allows you to link to any
      heading in any file in the current workspace. You don't specify any filepaths within the link,
@@ -1450,7 +1450,7 @@ version: 1.0
 
      Syntax:
      |example
-     Cats are {? mammals}, they make for great {? house pets} too!
+     Cats are {! mammals}, they make for great {! house pets} too!
      |end
 
      For developers implementing this behavior: there are no restrictions in which order you parse
@@ -1684,7 +1684,7 @@ version: 1.0
    - {** Nestable Detached Modifiers} (only quotes, lists)
    - {*** Headings}
    - {* Linkables} (broader support for {** links} (minus {**** timestamps (`@`)} and
-     {**** wiki links (`?`)}), {** anchors})
+     {**** wiki links (`!`)}), {** anchors})
    - {*** Verbatim Ranged Tags} (`@code`, etc.)
    - {** Delimiting Modifiers}
 
