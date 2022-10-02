@@ -1320,7 +1320,8 @@ version: 1.0
    - A {# URL} (most commonly to an external resource)
    - A {# detached modifier} followed by the name of the linkable
    -- {# nestable detached modifiers} can:*NOT* be linked to
-   - A {# custom detached modifiers}[custom detached modifier] specifically made for links (`/`, `#`)
+   - A {# custom detached modifiers}[custom detached modifier] specifically made for links (`/`,
+     `#`, `?`)
    - {**** Timestamps (`@`)}
 
 *** File Location
@@ -1504,6 +1505,24 @@ version: 1.0
        accessing items within the file.
     ~ `{file://my/file.norg}` is simply utilizing the `file://` schema to access a file. This
        isn't /the/ recommended way to link to files, but it exists simply because of URI schemas.
+
+*** Scoping
+    Within linkables it is possible to narrow down the search of the link via the `| : |` scoping
+    modifier. This modifier can exist because under normal circumstances when parsing e.g. the title
+    of a heading a `| : |` sequence of characters would be considered a {* intersecting modifiers}(!s).
+
+    Below is an example of the scoping modifier in use:
+    |example
+    {* Heading Name : *** Level 3 heading}
+    |end
+
+    The search narrows the search to a `Level 3 heading` /within/ a level 1 heading called `Heading
+    Name`. This search is descending in terms of nesting, in other words, you /cannot/ do
+    `{*** Heading3 : * Heading1}`.
+
+    This scoping is not limited to any item type. You are free to perform searches like
+    `{$ Definition : $ Nested Definition : ^ Footnote}`, which searches for a footnote within a
+    definition called `Nested Definition` within a definition called `Definition`.
 
 ** Link Description
    Link descriptions are denoted by square brackets: `[]`. They contain the description for either a
@@ -1718,7 +1737,7 @@ version: 1.0
 ** Layer 4
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
-   - Support for {**** extendable links (`?`)}
+   - Support for {**** extendable links (`?`)} and {*** scoping}
    - {*** Standard Ranged Tags} (`|comment`, etc.)
    - {*** Table cells}
    - {** Free-form Attached Modifiers}
