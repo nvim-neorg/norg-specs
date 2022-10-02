@@ -984,13 +984,22 @@ version: 1.0
     and this part blue again, since the weak carryover tag does not affect this segment.
     |end
 
-** ( ) Infirm Tag
+** Infirm Tag
+   The infirm tag is the simplest form of executing a macro. It is a single-line, embeddable macro
+   invocation with the ability to supply parameters. It is denoted with the `.` character.
 
-   %TODO: explain the infirm tag sytnax for single-line, embeddable macro invocation%
-
+   Below is an example:
    |example
-   This is a paragraph.
-   .some_macro
+   =LoremIpsum
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+   labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+   nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+   velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+   proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+   =end
+
+   This is a paragraph, and below you will find the lorem ipsum text:
+   .LoremIpsum
    This is still the same paragraph (assuming the macro invocation only inserted text).
    |end
 
