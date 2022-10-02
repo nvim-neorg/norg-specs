@@ -179,13 +179,6 @@ version: 1.0
   : > : Attributes
   :: >
      - Nestable
-     - Logical
-  ::
-  : _ : `&`
-  : > : Variables
-  :: >
-     - Range-able
-     - Logical
   ::
 
 ** Structural Detached Modifiers
@@ -349,16 +342,11 @@ version: 1.0
      - `none` - no limits
      - `verbatim` - can be used only for the \`verbatim\` attached modifier
      - `math` - can be only used on the mathematics attached modifier
-     - `variables` - can only be used on the variable modifier
      - `links` - can only be used on links (this includes anchors)
      - `non-verbatim` - for all the other non-verbatim attached modifiers (bold, italic, subscript,
        superscript, underline, comments etc.)
 
      These limits can be chained, i.e. `#attribute-limits links non-verbatim`.
-
-**** Logical Detached Modifiers
-     {*** Attributes} are the first kind of *logical* detached modifiers which we encounter here.
-     These detached modifier types can:*not* be linked to using {* linkables}.
 
 *** Invalid Nestable Detached Modifier Examples
     |example
@@ -407,8 +395,7 @@ version: 1.0
 
 *** Footnotes
     Footnotes allow the user to give supplementary information related to some text without
-    polluting the paragraph itself. Footnotes can be linked to using {* linkables} (just like any
-    other non-{**** logical detached modifiers}).
+    polluting the paragraph itself. Footnotes can be linked to using {* linkables}.
 
     |example
     ^ Single Footnote
@@ -1434,9 +1421,6 @@ version: 1.0
     definition you would still use `{$ Text}`, there is no reason to make a distinction between a
     ranged and non-ranged detached modifier as both have the same meaning, one just allows more
     content to exist within itself.
-
-    /NOTE/: You can:*NOT* link to a logical modifier using {* linkables}. Objects like
-    {*** attributes} and {*** variables} are out of the equation.
 
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
