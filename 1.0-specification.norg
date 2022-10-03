@@ -76,18 +76,19 @@ version: 1.0
     Blank lines are irrelevant in Norg because standalone whitespace has no semantic relevance.
 
 *** Punctuation
-    A {** characters}[character] is considered to be *punctuation* if it is any of the following:
-    - A standard ASCII punctuation character: `| !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ |`
+    A {** characters}[character] is considered *punctuation* if it is any of the following:
+    - A standard ASCII punctuation character: `|!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~|`
     - Anything in the general Unicode categories `Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po` or `Ps`.
 
 *** Escaping
     A single {** characters}[character] can be escaped if it is immediately preceded by a backslash,
     `|\|` (`U+005C`). Any {** characters}[character] may be escaped /apart from/ {** characters}
-    within free-form verbatim segments (see {** free-form attached modifiers}).
+    within free-form and ranged verbatim segments (see {** free-form attached modifiers} and
+    {*** verbatim ranged tags}).
     For more information about precedence, take a look at the {* precedence} section.
 
 *** Regular Characters
-    Any other character not described by the previous sections is treated as a generic code
+    Any other character not described by the preceding sections is treated as a generic code
     point/character.
 
 ** Words
@@ -115,7 +116,7 @@ version: 1.0
 
 ** Paragraphs
    Paragraphs are then formed of consecutive {** paragraph segments}. A paragraph is terminated by:
-   - A <paragraph break> (which equals two consecutive {# line ending}s)
+   - A <paragraph break> (two consecutive {# line ending}s)
    - Any of the {* detached modifiers}
    - Any of the {** delimiting modifiers}
    - Any of the {** ranged tags}
@@ -130,8 +131,8 @@ version: 1.0
     (but nothing else!) may precede it)
   - A detached modifier must be immediately followed by {*** whitespace}, another detached modifier
     of the same type or by any of the {# detached modifier extensions}
-  -- Note, that in general a {# line ending} is *not* allowed as the whitespace following a detached
-     modifier. The only case where this is valid, is for the /closing/ modifier of the
+  -- /NOTE/: in general a {# line ending} is *not* allowed as the whitespace following a detached
+     modifier. The only case where this is valid is for the /closing/ modifier of the
      {** range-able detached modifiers}.
 
   The following list outlines all valid *detached modifiers*. The list also adds various possible
@@ -377,13 +378,13 @@ version: 1.0
    Range-able detached modifiers can occur in two forms:
    - As a single detached modifier in which case they affect:
    -- The next `paragraph_segment` which becomes the /title/
-   -- Any following paragraph which becomes the /content/ .
+   -- Any following paragraph which becomes the /content/
    - As a pair of two detached modifiers in which case:
-   -- The next `paragraph_segment` still becomes the /title/
+   -- The next `paragraph_segment` also becomes the /title/
    -- The content continues until the "closing" detached modifier is found
 
    The closing modifier has the same rules as an opening detached modifier except it /must/ be
-   directly succeeded by a {# line ending} in contrast to the whitespace character which follows the
+   directly succeeded by a {# line ending} in contrast to the whitespace character which must follow the
    opening modifier.
 
 *** Definitions
@@ -475,10 +476,11 @@ version: 1.0
      (but nothing else!) may precede it)
    - A delimiting modifier must consist of three or more consecutive modifiers of the same
      type (see also {^ disambiguating delimiting modifiers})
-   - It must be followed by an immediate {# line ending} (without any extra {*** whitespace})
+   - A delimiting modifier must be followed by an immediate {# line ending} (without any extra
+     {*** whitespace})
 
    ^^ Disambiguating delimiting modifiers
-   In order to make delimiting modifiers unambiguous the three character rule/no succeeding
+   In order to make delimiting modifiers unambiguous the three character/no succeeding
    whitespace rules were put into place:
    - Using three modifiers helps to disambiguate the endings of {** range-able detached modifiers}
      (e.g. `==`).
