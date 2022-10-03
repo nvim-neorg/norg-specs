@@ -1411,7 +1411,7 @@ version: 1.0
 *** Custom Detached Modifiers
     Apart from linking to the detached modifiers outlined above, you can also link to a set of
     custom modifiers specifically designed for links. These are the `#` (magic), `/` (file), `@`
-    (timestamp), `!` (wiki link) and `?` (extended) linkable locations.
+    (timestamp), `?` (wiki link) and `=` (extended) linkable locations.
 
 **** The Magic Char (`#`)
      Sometimes you simply want to be lazy, or you want to link to an {# inline linkables}[inline
@@ -1443,7 +1443,7 @@ version: 1.0
      Frank's birthday is on {@ Mon 5th May}.
      |end
 
-**** Wiki Links (`!`)
+**** Wiki Links (`?`)
      When building large knowledge bases it's sensible to want to quickly create links between files
      without worrying about the location of said file. The *wiki link* allows you to link to any
      heading in any file in the current workspace. You don't specify any filepaths within the link,
@@ -1451,7 +1451,7 @@ version: 1.0
 
      Syntax:
      |example
-     Cats are {! mammals}, they make for great {! house pets} too!
+     Cats are {? mammals}, they make for great {? house pets} too!
      |end
 
      For developers implementing this behavior: there are no restrictions in which order you parse
@@ -1465,7 +1465,7 @@ version: 1.0
       as a "heading catchall" operator as mentioned in the previous section - it will match all
       headings regardless of nesting level in the file provided.
 
-**** Extendable Links (`?`)
+**** Extendable Links (`=`)
      Apart from having links with set behaviours Norg also features an extendable link marked with
      the `?` character. This link has its behaviours governed by {** attached modifier extensions}
      supplied to the link and by the software running the Norg format (e.g. [Neorg]).
@@ -1475,7 +1475,7 @@ version: 1.0
      +bibliography ./myreferences.bib
      % my_bibliography
 
-     This is a reference to a bibliography: {? Neorg2022}(my_bibliography).
+     This is a reference to a bibliography: {= Neorg2022}(my_bibliography).
      |end
 
      For a more detailed explanation of the behaviour of this link consult the
@@ -1720,7 +1720,7 @@ version: 1.0
    - {** Nestable Detached Modifiers} (only quotes, lists)
    - {*** Headings}
    - {* Linkables} (broader support for {** links} (minus {**** timestamps (`@`)},
-     {**** wiki links (`!`)} and {**** extendable links (`?`)}), {** anchors})
+     {**** wiki links (`?`)} and {**** extendable links (`=`)}), {** anchors})
    - {*** Verbatim Ranged Tags} (`@code`, etc.)
    - {** Delimiting Modifiers}
 
@@ -1737,7 +1737,7 @@ version: 1.0
 ** Layer 4
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
-   - Support for {**** extendable links (`?`)} and {*** scoping}
+   - Support for {**** extendable links (`=`)} and {*** scoping}
    - {*** Standard Ranged Tags} (`|comment`, etc.)
    - {*** Table cells}
    - {** Free-form Attached Modifiers}
