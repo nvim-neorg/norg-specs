@@ -470,8 +470,8 @@ version: 1.0
     |end
 
 ** Delimiting Modifiers
-   In Norg, {** structural detached modifiers} may be terminated by a delimiting modifier. This kind
-   of modifier must abide by the following rules:
+   In Norg, {** structural detached modifiers} and {**** indent segment}s may be terminated by a
+   delimiting modifier. This kind of modifier must abide by the following rules:
    - A delimiting modifier can _only_ occur at the beginning of the line (arbitrary {*** whitespace}
      (but nothing else!) may precede it)
    - A delimiting modifier must consist of three or more consecutive modifiers of the same
@@ -489,7 +489,7 @@ version: 1.0
    ^^
 
 *** Weak Delimiting Modifier
-    This modifier uses the `-` character and immediately closes the /current/ heading level
+    This modifier uses the `-` character and immediately closes the /current/ nesting level
     (decreases the current nesting level by one).
     |example
     * Heading level 1
@@ -503,7 +503,7 @@ version: 1.0
     |end
 
 *** Strong Delimiting Modifier
-    This modifier uses the `=` character and immediately closes all heading levels.
+    This modifier uses the `=` character and immediately closes all nesting levels.
     |example
     * Heading level 1
       Text under first level heading.
@@ -512,7 +512,7 @@ version: 1.0
        Text under second level heading.
        ===
 
-    Text belonging to no heading level (i.e. to the document's root).
+    Text belonging to no heading level (i.e. belonging to the document's root).
     |end
 
 *** Horizontal Rule
@@ -527,31 +527,51 @@ version: 1.0
     |end
 
 ** Detached Modifier Extensions
-   {# Detached modifiers} support extensions which must immediately follow the detached modifier
-   (or another extension).
+   {* Detached modifiers} support extensions which must immediately follow the detached modifier
+   (or another extension). Note that {* detached modifiers} must be succeeded with {# whitespace},
+   therefore by "immediately" followed we mean after the whitespace character in the detached
+   modifier, e.g. `- (x) List item`(lang:norg).
+
+   The syntax is as follows:
+   - An extension starts with a `(` char
+   - Immediately a special character must follow. This character determines the type of extension.
+   - Some extensions can support parameters - if this the case, the special character must be
+     followed with {# whitespace}, after which the parameters ensue.
+   - A `|` character may be matched, which allows the user to chain many extensions together, e.g.
+     `(x|# A)`(lang:norg) (done with a priority of A).
+   - Finally a `)` char closes the extension.
+
+   NOTE: The whole detached modifier extension /must/ be followed by whitespace (excluding {# line
+   ending}s).
 
 *** TODO Status Extension
     The TODO item extension assigns a task status to a certain modifier. You probably know this
     concept from Org where unordered lists can become tasks. In Norg we take this concept to
     the next level because any detached modifier can be assigned a task status. This can for
     example be useful for the author of a document to keep track of the status of certain sections.
-    The syntax is the following:
-    - A TODO status extension starts with a `(` char
-    - Immediately a single status indicator character must follow. The following statuses are
-      supported:
-    -- `| |`: undone (a literal space)
-    -- `x`: done
-    -- `?`: needs further input/clarification
-    -- `!`: urgent
-    -- `+`: recurring (with an optional {**** timestamp extension}[timestamp])
-    -- `-`: in-progress/pending
-    -- `=`: on hold
-    -- `_`: put down/cancelled
-    - Finally another `)` char closes the todo status extension.
 
-   NOTE: The TODO status extension /must/ be followed by whitespace (excluding {# line ending}s).
+    The following characters are reserved for the TODO status extension:
+   -- `| |`: undone (a literal space)
+   -- `x`: done
+   -- `?`: needs further input/clarification
+   -- `!`: urgent
+   -- `+`: recurring (with an optional {**** timestamp extension}[timestamp])
+   -- `-`: in-progress/pending
+   -- `=`: on hold
+   -- `_`: put down/cancelled
+
+    Some examples include:
+    |example
+    - ( ) Undone
+    - (x) Done
+
+    - (# B| ) Undone with a priority of B
+    - (+) Recurring
+    - (+ 5th Jan) Recurring every 5th of january
+    |end
 
 *** Advanced Detached Modifier Extensions
+    %TODO: update this now%
     Apart from just being able to assign a TODO state it is also possible to apply more complex
     states with parameters to certain indicators. Such examples are the {**** timestamp extension}
     or the {**** priority extension}.
