@@ -1351,9 +1351,9 @@ version: 1.0
    - A {**** Timestamps (`@`)}[timestamp]
 
 *** File Location
-    The file location is a construct that allows you to specify the /target file/ into which you want
-    to make a link inside of. This allows you to *link to targets within other files* or just link
-    to other Norg files entirely.
+    The file location is a construct that allows you to specify the /target file/ into which you
+    want to link inside of. This allows you to *link to targets within other files* or just link to
+    other Norg files entirely.
 
     When standalone, the link syntax will simply point to another `.norg` file relative to the
     current file the link is contained in:
@@ -1493,7 +1493,7 @@ version: 1.0
 
 **** Extendable Links (`=`)
      Apart from having links with set behaviors Norg also features an extendable link marked with
-     the `?` character. This link has its behaviors governed by {** attached modifier extensions}
+     the `=` character. This link has its behaviors governed by {** attached modifier extensions}
      supplied to the link and by the software running the Norg format (e.g. [Neorg]).
 
      Syntax:
