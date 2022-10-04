@@ -719,8 +719,7 @@ version: 1.0
   data and extensions for the format. Norg allows for you to extend its syntax and define data
   within clear boundaries - it does this using tags.
 
-  Tags are Norg's official way of extending its own syntax. It's the /only/ way that extensions
-  may be made to the format.
+  *NOTE*: Tags are the /only/ way that extensions may be made to the format.
 
   There are 6 different tag types, each with their own way of changing the way text in Norg is
   interpreted. Before we discuss those, however, we should discuss the syntax rules for tags:
@@ -888,7 +887,7 @@ version: 1.0
      implementation.
 
 *** Verbatim Ranged Tags
-    In other cases you may be more interested in an isolated block with:*OUT* Norg markup (i.e. a
+    In other cases you may be more interested in an isolated block /without/ Norg markup (i.e. a
     /verbatim/ block). A prime example of this is `@code`, which creates a code block - you
     obviously don't want nested Norg syntax within that! Note how in the following example the
     `@MyAnnotation` would clash with Norg's verbatim ranged tag syntax, but doesn't as no nested
@@ -918,7 +917,7 @@ version: 1.0
     The weak carryover tag affects the next element and next element /only/. It does not work with
     whole collections of elements (see {*** strong carryover tags}).
 
-    Weak carryover tags only apply to the next element; the behaviours are as follows:
+    Weak carryover tags only apply to the next element; their behaviour is as follows:
     - When the element has children, the weak carryover tag only applies to the single item (it does
       not carry over to its children).
     - When the element is part of an {# object}, no other items other than the item below the weak
@@ -1034,9 +1033,11 @@ version: 1.0
    |end
 
 * Attached Modifiers
-  We can now discuss attached modifiers (which originally gave rise to the name of
-  {* detached modifiers} as their natural counter-parts). Here are the general rules for attached
-  modifiers:
+  This section discusses attached modifiers (which originally gave rise to the name of {* detached
+  modifiers} as their natural counter-parts). Attached modifiers encapsulate some text within a
+  {** paragraphs}(!s) and change the way it is displayed in the document.
+
+  Below are the general rules for attached modifiers:
   - An opening modifier may only be preceded by {# whitespace} or {# punctuation}
   - An opening modifier may _NOT_ be succeeded by {# whitespace}
   - A closing modifier may _NOT_ be preceded by {# whitespace}
@@ -1065,8 +1066,8 @@ version: 1.0
     instantly "disqualified" and parsed as raw text in /all/ circumstances and without any
     exceptions.
 
-  Their name should be rather self explanatory - both the opening and closing modifier are attached
-  to one another.
+  Their name should be rather self explanatory - both the opening and closing modifier are
+  /attached/ to one another.
 
   The following attached modifiers exist and have respective meaning:
   - \*bold\*: *bold*
@@ -1202,7 +1203,7 @@ version: 1.0
 ** Attached Modifier Extensions
    Similarly to {** detached modifier extensions}, attached modifier extensions serve as a way
    to attach metadata to {* attached modifiers}.
-   The metadata that you can attach however, differs from {** detached modifier extensions}, as they
+   The metadata that you can attach, however, differs from {** detached modifier extensions}, as they
    serve different usecases.
 
    The content of attached modifier extensions consists of a set of references to many
@@ -1226,7 +1227,8 @@ version: 1.0
   {*** standard ranged tags} and {** free-form attached modifiers}, the pipe symbol is also used as
   a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier
   Extensions}[attached] modifier extensions. Even though it's used 3 times for different purposes,
-  the contexts in which they are used in allows for them to be unambiguous.
+  the contexts in which they are used in allows for them to be unambiguous. It also keeps intent
+  consistent across the format.
 
 * Intersecting Modifiers
   Norg is a syntax designed to be used by many - this includes many styles and preferences. Although
