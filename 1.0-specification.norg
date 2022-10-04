@@ -1335,7 +1335,7 @@ version: 1.0
 ** Link Location
    The link location is defined through curly braces (`{}`) and contains the physical location
    that the user would like to link to. Inside of these curly braces you can find one (or more; with
-   limitied inter-compatibility) of the following types of data:
+   limited inter-compatibility) of the following types of data:
    - A {# file location}
    - A {# line number}
    - A {# URL} (most commonly to an external resource)
@@ -1343,7 +1343,7 @@ version: 1.0
    -- {# nestable detached modifiers} can:*NOT* be linked to
    - A {# custom detached modifiers}[custom detached modifier] specifically made for links (`/`,
      `#`, `?`)
-   - {**** Timestamps (`@`)}
+   - A {**** Timestamps (`@`)}[timestamp]
 
 *** File Location
     The file location is a construct that allows you to specify the /target file/ in which you want
@@ -1502,12 +1502,11 @@ version: 1.0
      For a more detailed explanation of the behaviour of this link consult the
      {:1.0-semantics:}[semantics] document.
 
-
 *** Inline Linkables
     Although most linkable items are either {# structural detached modifiers}[structural] or
     {# range-able detached modifiers}[range-able], there are also syntax elements in Norg that
     are inline - these are the `#name` {# Carryover Tags}[carryover tag] and the
-    {# Inline Link Targets}[inline link target]. Both of these can be linked to through the
+    {# Inline Link Targets}[inline link target]. Both of these can only be linked to through the
     {# The Magic Char (`#`)}[the magic char].
 
 *** Differences Between File Linkables
@@ -1530,7 +1529,7 @@ version: 1.0
 *** Scoping
     Within linkables it is possible to narrow down the search of the link via the `| : |` scoping
     modifier. This modifier can exist because under normal circumstances when parsing e.g. the title
-    of a heading a `| : |` sequence of characters would be considered a {* intersecting modifiers}(!s).
+    of a heading a `| : |` sequence of characters would be considered an {* intersecting modifiers}(!s).
 
     Below is an example of the scoping modifier in use:
     |example
@@ -1547,9 +1546,10 @@ version: 1.0
 
 ** Link Description
    Link descriptions are denoted by square brackets: `[]`. They contain the description for either a
-   {# link location} (by placing the description after the link location), an {# anchors}[anchor]
-   definition (by placing the description before the link location) or an anchor declaration (where
-   the /only/ syntax item *is* the link description). Anchors are described {# anchors}[later on].
+   {# link location} (by placing the description after the link location or an anchor declaration),
+   an {# anchors}[anchor] definition (by placing the description before the link location) or an
+   anchor declaration (where the /only/ syntax item *is* the link description). Anchors are
+   described {# anchors}[later on].
 
 ** Links
    Links in Norg can exist as a standalone {# link location} in which case their text is used as
@@ -1691,12 +1691,12 @@ version: 1.0
   Here's the full list ordered by decreasing precedence:
   ~ {# Tags} (`#infecting`, `+carryover`, `.infirm`, `|standard`, `@verbatim` and `=macro`)
   ~ {# Structural detached modifiers}
-  ~ {# Nestable detached modifiers} and {# range-able detached modifiers}
-  -- (there isn't a case where these can overlap)
+  ~ {# Nestable detached modifiers} and {# range-able detached modifiers} (there no such case where
+    these could overlap)
   ~ {# Detached modifier extensions}
   ~ {# Linkables} (`{}`, `[]`, `<>`)
   ~ Verbatim {# free-form attached modifiers} (`\|``|`, `\|``|`)
-  ~ {# Escaping}[escape character] (`\`)
+  ~ {# Escaping}[The escape character] (`\`)
   ~ Verbatim {# attached modifiers}
   ~ Standard (non-verbatim) {# free-form attached modifiers} (`|**|`, `|//|` etc.)
   ~ Standard (non-verbatim) {# attached modifiers}
