@@ -470,7 +470,7 @@ version: 1.0
     |end
 
 ** Delimiting Modifiers
-   In Norg, {** structural detached modifiers} and {**** indent segment}s may be terminated by a
+   In Norg, {** structural detached modifiers} and {*** indent segment}s may be terminated by a
    delimiting modifier. This kind of modifier must abide by the following rules:
    - A delimiting modifier can _only_ occur at the beginning of the line (arbitrary {*** whitespace}
      (but nothing else!) may precede it)
@@ -656,63 +656,63 @@ version: 1.0
      - (> Tue 5th Feb) This task starts after the 5th of February.
      |end
 
-*** Indent Segment Extension
-    Since {# nestable detached modifiers} can only contain a {# paragraphs}[paragraph] this can
-    cause severe limitations because the insertion of e.g. code blocks is not possible. To alleviate
-    this deficiency, the {# indent segment extension} exists, which temporarily increases the
-    current indentation level to allow complex nested items within.
+** Detached Modifier Suffix
+   Since {# nestable detached modifiers} can only contain a {# paragraphs}[paragraph] this can
+   cause severe limitations because the insertion of e.g. code blocks is not possible. To alleviate
+   this deficiency, the {** detached modifier suffix} exists, which temporarily increases the
+   current indentation level to allow complex nested items within.
 
-    There are two variations of the indent segment, the {# slide} and the actual {# indent segment}.
-    *NOTE*: After an indent segment extension is matched (either `:` or `::`) a {# line endin} must
-    follow /instantly/.
+   There are two variations of the indent segment, the {# slide} and the {# indent segment}.
+   *NOTE*: After a detached modifier suffix is matched (either `:` or `::`) a {# line ending} must
+   follow /instantly/.
 
-**** Slide
-     The slide, denoted with a single `:`, allows for a *single* /complex item/ below:
-     |example
-     - :
-       $ Term
-         This is the term's definition.
-     |end
- 
-     This complex item may be any *non-{** structural detached modifiers}[structural]* detached
-     modifier, {* tags}[tag] or paragraph.
+*** Slide
+    The slide, denoted with a single `:`, allows for a *single* /complex item/ below:
+    |example
+    - :
+      $ Term
+        This is the term's definition.
+    |end
 
-**** Indent Segment
-     The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
-     This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
-     the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
-     in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
-     `unordered_list_level_2` item.
+    This complex item may be any *non-{** structural detached modifiers}[structural]* detached
+    modifier, {* tags}[tag] or paragraph.
 
-     The indent segment can contain a set of /complex items/, which are described in the
-     {**** slide} section.
+*** Indent Segment
+    The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
+    This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
+    the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
+    in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
+    `unordered_list_level_2` item.
 
-     Examples:
-     |example
-     - ::
-       This is some content.
+    The indent segment can contain a set of /complex items/, which are described in the
+    {**** slide} section.
 
-       $ Term
-         Definition.
-     - This is the second item of the list.
-       The indent segment did not need to be terminated.
+    Examples:
+    |example
+    - ::
+      This is some content.
 
-     - ::
-       This is another list.
+      $ Term
+        Definition.
+    - This is the second item of the list.
+      The indent segment did not need to be terminated.
 
-       |details
-       *hello* world!
-       |end
+    - ::
+      This is another list.
 
-       -- This is a nested item in the indent segment
-       -- And so is this.
+      |details
+      *hello* world!
+      |end
 
-       But you can still continue your content here.
-       ---
+      -- This is a nested item in the indent segment
+      -- And so is this.
 
-     Since there was no other item of the same type after the indent segment
-     it must be closed with `---` or `===`.
-     |end
+      But you can still continue your content here.
+      ---
+
+    Since there was no other item of the same type after the indent segment
+    it must be closed with `---` or `===`.
+    |end
 
 * Tags
   The main differentiator from simple markup formats and more complex ones is the ability to define
