@@ -667,7 +667,7 @@ version: 1.0
     follow /instantly/.
 
 **** Slide
-     The slide, denoted with a single `:`, allows for a *single* complex item below:
+     The slide, denoted with a single `:`, allows for a *single* /complex item/ below:
      |example
      - :
        $ Term
@@ -683,6 +683,9 @@ version: 1.0
      the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
      in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
      `unordered_list_level_2` item.
+
+     The indent segment can contain a set of /complex items/, which are described in the
+     {**** slide} section.
 
      Examples:
      |example
