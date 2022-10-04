@@ -129,13 +129,13 @@ version: 1.0
   All detached modifiers must abide by the following rules:
   - A detached modifier can _only_ occur at the beginning of the line (arbitrary {*** whitespace}
     (but nothing else!) may precede it)
-  - A detached modifier must be immediately followed by {*** whitespace}, another detached modifier
-    of the same type or by any of the {# detached modifier extensions}
+  - A detached modifier must be immediately followed by {*** whitespace} or another detached modifier
+    of the same type
   -- /NOTE/: in general a {# line ending} is *not* allowed as the whitespace following a detached
      modifier. The only case where this is valid is for the /closing/ modifier of the
      {** range-able detached modifiers}.
 
-  The following list outlines all valid *detached modifiers*. The list also adds various possible
+  The following table outlines all valid *detached modifiers*. It also adds various possible
   properties to each category which will be explained in more detail below.
   : . : Character
   : > : Name
@@ -184,7 +184,7 @@ version: 1.0
 
 ** Structural Detached Modifiers
    The first detached modifier type is the /structural/ modifier type. As the name suggests,
-   modifiers under this category *structure* the Neorg document in some form or another.
+   modifiers under this category *structure* the Norg document in some form or another.
 
    After a structural modifier, one {# paragraph segments}[paragraph segment] is consumed as the
    /title/ of the modifier.
@@ -353,7 +353,8 @@ version: 1.0
      parameters:
      - `none` - no limits
      - `verbatim` - can be used only for the \`verbatim\` attached modifier
-     - `math` - can be only used on the mathematics attached modifier
+     - `math` - can be only used on the \$mathematics\$ attached modifier
+     - `macro` - can be only used on the inline \&macro\& attached modifier
      - `links` - can only be used on links (this includes anchors)
      - `non-verbatim` - for all the other non-verbatim attached modifiers (bold, italic, subscript,
        superscript, underline, comments etc.)
@@ -595,7 +596,7 @@ version: 1.0
           could satisfy the input.
      - The `,?` expression means that a `,` character may optionally exist in that location.
      - The `<day-of-month>` value is simply a numeric value with at most 3 digits (to disambiguate
-       it with the `<year>` value).
+       it from the `<year>` value).
      - The `<month>` value is a word-based representation of the current month (i.e. `October`,
        `January` etc.) dependent on the current locale. The same shorthand rules apply as in the
        `<day>` value.
@@ -606,7 +607,7 @@ version: 1.0
      Obviously, you're not required to type the whole syntax out every time. Any of the elements in
      angled brackets (`<>`) can be dropped/ignored, but the order of those values may not change!
      Some examples of valid timestamps include:
-     - `Sat, 29 Oct 1994 19:43:31 GMT`
+     - `Sat, 29 Oct 1994 19:43.31 GMT`
      - `Thu 12th Jan 2022`
 
      Apart from just being able to supply a timestamp, you are also permitted to provide a <range>.
@@ -615,15 +616,20 @@ version: 1.0
      {@ 5th Aug 2022 - 20th August 2022}
      {@ 5th Aug 2022-20th August 2022} <- Also valid
      |end
+     You can even omit some fields from either one of the sides like so:
+     |example
+     {@ 5th - 20th August 2022}
+     |end
+     The matching fields will be automatically completed based on the information of the other half.
 
      ^ Note to parser developers
      It should be mentioned that a parser of the Norg format is not required to perform any
      timestamp analysis further than detecting what set of characters contain a timestamp.
      The actual interpretation of its internal fields and the interpretation of a {# range} are the
-     responsibility of the *semantic analyzer* (see also {:1.0-semantics:}).
+     responsibility of the *semantic analyzer* (see also the [semantics document]{:1.0-semantics:}).
 
 **** Priority Extension
-     This extension allows for you to specify a priority of your detached modifier extension.
+     This extension allows you to specify a priority of your detached modifier extension.
 
      Syntax:
      |example
@@ -750,9 +756,9 @@ version: 1.0
     in other words, such a scenario would entail a difficult to resolve ambiguity.
 
   Norg provides several inbuilt tag names that are reserved, but their details are not explained
-  in this specification - this document strictly covers syntax - see {:1.0-semantics:} for a list of
-  the builtin tags. There is no restriction in regards to the length of a tag name, nor are there
-  any disallowed names that a parser should omit (unless they don't adhere to the above rules
+  in this specification - this document strictly covers syntax - see the [semantics document] for a
+  list of the builtin tags. There is no restriction in regards to the length of a tag name, nor are
+  there any disallowed names that a parser should omit (unless they don't adhere to the above rules
   regarding tag names).
 
 ** Ranged Tags
@@ -860,10 +866,10 @@ version: 1.0
 
 **** Edge Cases and Semantic Interpretation
      A commonly arising question is "how are these interpreted at parse time?" - can you link to
-     elements within `|comment` tags? What governs the behaviour of these differing tags?
+     elements within `|comment` tags? What governs the behavior of these differing tags?
 
-     The answer may be illustrated simply by showing how both of these tags are implemented.
-     As mentioned in the {*** macro tags} section, all tag types apart from the macro tag are a
+     The answer may be illustrated simply by showing how these tags are implemented.
+     As mentioned in the {*** macro tags} section, all tag types (apart from the macro tag) are a
      macro invocation under the hood. Below are the implementations for `|comment` and `|group`,
      respectively:
      - :
@@ -883,8 +889,8 @@ version: 1.0
      link to elements within comment tags. The `|group` tag returns back everything that you give
      it, because of this it *is* possible to freely link to any element within a `|group`.
 
-     To summarize - the behaviour of each individual standard ranged tag is fully governed by its
-     implementation.
+     To summarize - the behavior of each individual standard ranged tag is fully governed by its
+     implementation - see the [semantics document] for more details.
 
 *** Verbatim Ranged Tags
     In other cases you may be more interested in an isolated block /without/ Norg markup (i.e. a
@@ -907,8 +913,7 @@ version: 1.0
    {# objects}[object].
 
    /Note/: Internally, they are a type of {** macro tags}[macro tag], where the next element is given
-   as the last parameter to the macro. For more info see {*** macro tags} and the
-   {:1.0-semantics:}[semantics document].
+   as the last parameter to the macro. For more info see {*** macro tags} and the [semantics document].
 
    There are two types of carryover tag, the {*** weak carryover tags}[weak carryover tag] and the
    {*** strong carryover tags}[strong variant].
@@ -917,13 +922,13 @@ version: 1.0
     The weak carryover tag affects the next element and next element /only/. It does not work with
     whole collections of elements (see {*** strong carryover tags}).
 
-    Weak carryover tags only apply to the next element; their behaviour is as follows:
+    Weak carryover tags only apply to the next element; their behavior is as follows:
     - When the element has children, the weak carryover tag only applies to the single item (it does
       not carry over to its children).
-    - When the element is part of an {# object}, no other items other than the item below the weak
+    - When the element is part of an {# object}, no items other than the one below the weak
       carryover tag is affected.
     - An exception is made when a weak carryover tag is applied to an {# indent segment} or a
-      {** ranged tags}(!s), in which case the whole node (including its children) is affected.
+      {** ranged tags}[ranged tag], in which case the whole node (including its children) is affected.
 
 **** Examples
      Only the second item is affected:
@@ -979,7 +984,7 @@ version: 1.0
      |end
 
      Here, both the level 1 heading and the level 2 heading along with their contents will be
-     coloured red:
+     colored red:
      |example
      #color red
      * Heading 1
@@ -998,7 +1003,7 @@ version: 1.0
     |example
     #color blue
     This entire paragraph
-    will not appear in blue
+    will now appear in blue
     color.
 
     This next paragraph is normal-colored.
@@ -1007,7 +1012,7 @@ version: 1.0
     whereas this line is normal-colored again.
 
     #color blue
-    This part if blue,
+    This part is blue,
     +color red
     but the later defined carryover tag takes precedence, making this part red,
     and this part blue again, since the weak carryover tag does not affect this segment.
@@ -1029,13 +1034,14 @@ version: 1.0
 
    This is a paragraph, and below you will find the lorem ipsum text:
    .LoremIpsum
-   This is still the same paragraph (assuming the macro invocation only inserted text).
+   This is still the same paragraph (assuming the macro invocation only inserted text; which it did
+   in this specific example).
    |end
 
 * Attached Modifiers
   This section discusses attached modifiers (which originally gave rise to the name of {* detached
   modifiers} as their natural counter-parts). Attached modifiers encapsulate some text within a
-  {** paragraphs}(!s) and change the way it is displayed in the document.
+  {** paragraphs}[paragraph] and change the way it is displayed in the document.
 
   Below are the general rules for attached modifiers:
   - An opening modifier may only be preceded by {# whitespace} or {# punctuation}
@@ -1053,8 +1059,7 @@ version: 1.0
 
     text*
     |end
-
-    Will *not* result in any bold text, as it's divided by a {# paragraph break}.
+    will *not* result in any bold text, as it's divided by a {# paragraph break}.
     However, this:
     |example
     *this
@@ -1129,7 +1134,7 @@ version: 1.0
 ** Variables
    Variables are a {** layer 5} attached modifier that allow a user to invoke a macro without any
    parameters and place the result inside of e.g. a paragraph. For more information on their
-   behaviours see the {:1.0-semantics:}[semantics] document.
+   behavior see the [semantics document].
 
 ** Free-form Attached Modifiers
    Even with all the rules described in the above sections there are still some evident limitations
@@ -1196,7 +1201,7 @@ version: 1.0
 
    In the case that the link modifier is closing (the attached modifier appears on the left):
    - The link modifier may only be preceded by a closing attached modifier.
-   - The link modifier may only be succeeded by an {# regular characters}[regular character].
+   - The link modifier may only be succeeded by a {# regular characters}[regular character].
 
    If the above conditions are not met, then the character should be treated as a literal `:`.
 
@@ -1210,7 +1215,7 @@ version: 1.0
    {*** attributes}. These attributes are delimited by the {* contextual `|` delimiter}.
    If the attribute is part of a hierarchy (see {*** attributes}), you may use the `:`
    character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies
-   (a comprehensive list can be found in the {:1.0-semantics:}[semantics document]).
+   (a comprehensive list can be found in the [semantics document]).
 
 *** Examples
     |example
@@ -1223,7 +1228,7 @@ version: 1.0
 
 * Contextual `|` Delimiter
   The pipe (`|`) character is a really nice character - it can be applied to many different problems
-  and expressively represent certain behaviors, specifically delimiting. While also used for
+  and expressively represent certain behaviors, specifically /delimiting/. While also used for
   {*** standard ranged tags} and {** free-form attached modifiers}, the pipe symbol is also used as
   a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier
   Extensions}[attached] modifier extensions. Even though it's used 3 times for different purposes,
@@ -1330,7 +1335,7 @@ version: 1.0
   the topmost part of the document should be chosen as the target.
 
   Linkables are comprised of many segments, and can change meaning depending on the order those
-  segments were defined:
+  segments were defined in.
 
 ** Link Location
    The link location is defined through curly braces (`{}`) and contains the physical location
@@ -1342,13 +1347,13 @@ version: 1.0
    - A {# detached modifier} followed by the name of the linkable
    -- {# nestable detached modifiers} can:*NOT* be linked to
    - A {# custom detached modifiers}[custom detached modifier] specifically made for links (`/`,
-     `#`, `?`)
+     `#`, `?`, `=`)
    - A {**** Timestamps (`@`)}[timestamp]
 
 *** File Location
-    The file location is a construct that allows you to specify the /target file/ in which you want
+    The file location is a construct that allows you to specify the /target file/ into which you want
     to make a link inside of. This allows you to *link to targets within other files* or just link
-    to other norg files entirely.
+    to other Norg files entirely.
 
     When standalone, the link syntax will simply point to another `.norg` file relative to the
     current file the link is contained in:
@@ -1461,7 +1466,7 @@ version: 1.0
 
      Example:
      |example
-     Frank's birthday is on {@ Mon 5th May}.
+     Frank's birthday is on {@ 5th May}.
      |end
 
 **** Wiki Links (`?`)
@@ -1487,8 +1492,8 @@ version: 1.0
       headings regardless of nesting level in the file provided.
 
 **** Extendable Links (`=`)
-     Apart from having links with set behaviours Norg also features an extendable link marked with
-     the `?` character. This link has its behaviours governed by {** attached modifier extensions}
+     Apart from having links with set behaviors Norg also features an extendable link marked with
+     the `?` character. This link has its behaviors governed by {** attached modifier extensions}
      supplied to the link and by the software running the Norg format (e.g. [Neorg]).
 
      Syntax:
@@ -1499,8 +1504,7 @@ version: 1.0
      This is a reference to a bibliography: {= Neorg2022}(my_bibliography).
      |end
 
-     For a more detailed explanation of the behaviour of this link consult the
-     {:1.0-semantics:}[semantics] document.
+     For a more detailed explanation of the behavior of this link consult the [semantics document].
 
 *** Inline Linkables
     Although most linkable items are either {# structural detached modifiers}[structural] or
@@ -1529,7 +1533,8 @@ version: 1.0
 *** Scoping
     Within linkables it is possible to narrow down the search of the link via the `| : |` scoping
     modifier. This modifier can exist because under normal circumstances when parsing e.g. the title
-    of a heading a `| : |` sequence of characters would be considered an {* intersecting modifiers}(!s).
+    of a heading a `| : |` sequence of characters would be considered an {* intersecting
+    modifiers}[intersecting modifier].
 
     Below is an example of the scoping modifier in use:
     |example
@@ -1680,7 +1685,7 @@ version: 1.0
 
 * Standard Library
   Norg comes loaded with a predetermined set of {*** attributes} and {** macro tags} for
-  different {* layers} of the syntax. These are defined in the {:1.0-semantics:}[semantics document].
+  different {* layers} of the syntax. These are defined in the [semantics document].
 
 * Precedence
   Precedence in Norg is rather simple and intuitive.
@@ -1691,8 +1696,8 @@ version: 1.0
   Here's the full list ordered by decreasing precedence:
   ~ {# Tags} (`#infecting`, `+carryover`, `.infirm`, `|standard`, `@verbatim` and `=macro`)
   ~ {# Structural detached modifiers}
-  ~ {# Nestable detached modifiers} and {# range-able detached modifiers} (there no such case where
-    these could overlap)
+  ~ {# Nestable detached modifiers} and {# range-able detached modifiers} (there is no such case
+    where these could overlap)
   ~ {# Detached modifier extensions}
   ~ {# Linkables} (`{}`, `[]`, `<>`)
   ~ Verbatim {# free-form attached modifiers} (`\|``|`, `\|``|`)
@@ -1751,6 +1756,7 @@ version: 1.0
    - {** Inline Link Targets}
    - {** Carryover Tags} (`#name`, `#color`/`+name`, `+color` etc.)
    - {** Detached Modifier Extensions}
+   - {** Detached Modifier Suffix}
    - {** Range-able Detached Modifiers} (excluding {*** table cells}))
    - {* Trailing Modifiers}
    - {** Link Modifier}
