@@ -536,7 +536,11 @@ version: 1.0
    - An extension starts with a `(` char
    - Immediately a special character must follow. This character determines the type of extension.
    - Some extensions can support parameters - if this the case, the special character must be
-     followed with {# whitespace}, after which the parameters ensue.
+     followed with {# whitespace} after which the parameters (a sequence of {** words} and/or
+     newlines) ensue.
+     Not all extensions support parameters and for good reason. There is no need to attach extra
+     metadata to a done or undone state for instance. Many extensions should be delimited with the
+     {* contextual `|` delimiter}.
    - A `|` character may be matched, which allows the user to chain many extensions together, e.g.
      `(x|# A)`(lang:norg) (done with a priority of A).
    - Finally a `)` char closes the extension.
@@ -571,24 +575,11 @@ version: 1.0
     |end
 
 *** Advanced Detached Modifier Extensions
-    %TODO: update this now%
     Apart from just being able to assign a TODO state it is also possible to apply more complex
     states with parameters to certain indicators. Such examples are the {**** timestamp extension}
-    or the {**** priority extension}.
-    The syntax is very simple - an indicator char (e.g. the `+` indicator described above) may be
-    succeeded by a single {*** whitespace} character and then a set of {** words} (without newlines)
-    follow. This set of {** words} then becomes the parameters for the indicator.
-
-    For example:
-    |example
-    - (+ 5th July) This task recurs every 5th of July.
-    - (# A|@ 3rd feb) This task has a priority `A` and is assigned to the 3rd of February.
-    |end
-    Not all {** detached modifier extensions} support parameters and for good reason. There is no
-    need to attach extra metadata to a done or undone state for instance. Many extensions should
-    be delimited with the {* contextual `|` delimiter}.
-
-    Below are descriptions for a few other extensions that may be used.
+    and the {**** priority extension}.
+    In the following sections you will find descriptions for a few other extensions supported within
+    Norg.
 
 **** Timestamp Extension
      The timestamp extension allows you to associate a {* detached modifiers}[detached modifier]
@@ -626,15 +617,15 @@ version: 1.0
      |end
 
      ^ Note to parser developers
-     It should be mentioned, that a parser of the Norg format is not required to perform any
-     timestamp analysis further than detecting what set of characters contains a timestamp.
+     It should be mentioned that a parser of the Norg format is not required to perform any
+     timestamp analysis further than detecting what set of characters contain a timestamp.
      The actual interpretation of its internal fields and the interpretation of a {# range} are the
      responsibility of the *semantic analyzer* (see also {:1.0-semantics:}).
 
 **** Priority Extension
      This extension allows for you to specify a priority of your detached modifier extension.
 
-     The syntax is as follows:
+     Syntax:
      |example
      * (# A) This heading has priority A (highest priority)
      |end
@@ -676,46 +667,49 @@ version: 1.0
     follow /instantly/.
 
 **** Slide
-    The slide, denoted with a single `:`, allows for a *single* complex item below:
-    |example
-    - :
-      $ Term
-        This is the term's definition.
-    |end
+     The slide, denoted with a single `:`, allows for a *single* complex item below:
+     |example
+     - :
+       $ Term
+         This is the term's definition.
+     |end
+ 
+     This complex item may be any *non-{** structural detached modifiers}[structural]* detached
+     modifier, {* tags}[tag] or paragraph.
 
 **** Indent Segment
-    The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
-    This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
-    the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
-    in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
-    `unordered_list_level_2` item.
+     The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
+     This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
+     the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
+     in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
+     `unordered_list_level_2` item.
 
-    Examples:
-    |example
-    - ::
-      This is some content.
+     Examples:
+     |example
+     - ::
+       This is some content.
 
-      $ Term
-        Definition.
-    - This is the second item of the list.
-      The indent segment did not need to be terminated.
+       $ Term
+         Definition.
+     - This is the second item of the list.
+       The indent segment did not need to be terminated.
 
-    - ::
-      This is another list.
+     - ::
+       This is another list.
 
-      |details
-      *hello* world!
-      |end
+       |details
+       *hello* world!
+       |end
 
-      -- This is a nested item in the indent segment
-      -- And so is this.
+       -- This is a nested item in the indent segment
+       -- And so is this.
 
-      But you can still continue your content here.
-      ---
+       But you can still continue your content here.
+       ---
 
-    Since there was no other item of the same type after the indent segment
-    it must be closed with `---` or `===`.
-    |end
+     Since there was no other item of the same type after the indent segment
+     it must be closed with `---` or `===`.
+     |end
 
 * Tags
   The main differentiator from simple markup formats and more complex ones is the ability to define
