@@ -322,11 +322,11 @@ version: 1.0
 *** Attributes
     |example
     % attrib1
-    %% atrrib2
-    %%% atrrib3
-    %%%% atrrib4
-    %%%%% atrrib5
-    %%%%%% atrrib6
+    %% attrib2
+    %%% attrib3
+    %%%% attrib4
+    %%%%% attrib5
+    %%%%%% attrib6
     |end
 
     Attributes are detached modifiers that exist solely for the purpose of having altered behavior
