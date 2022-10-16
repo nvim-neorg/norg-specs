@@ -77,7 +77,7 @@ version: 1.0
 
 *** Punctuation
     A {** characters}[character] is considered *punctuation* if it is any of the following:
-    - A standard ASCII punctuation character: `|!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~|`
+    - A standard ASCII punctuation character: `|!"#$%&'()*+,-./:;<=>?@[\\]^_\`{|}~|`
     - Anything in the general Unicode categories `Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po` or `Ps`.
 
 *** Escaping
