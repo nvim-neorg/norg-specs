@@ -50,7 +50,8 @@ version: 1.0
 
 ** Characters
    A Norg file is made up of /characters/.
-   A <character> is any Unicode [code point]{https://en.wikipedia.org/wiki/Code_point}.
+   A <character> is any Unicode [code point]{https://en.wikipedia.org/wiki/Code_point} or
+   [grapheme]{https://www.unicode.org/glossary/#grapheme}.
 
 *** Whitespace
     A {** characters}[character] is considered *whitespace* if it is any of the following:
