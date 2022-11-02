@@ -55,13 +55,10 @@ version: 1.0
 
 *** Whitespace
     A {** characters}[character] is considered *whitespace* if it is any of the following:
+    - The regular space `U+0020`
     - A tab `U+0009`
-    - A line feed `U+000A`
-    - A form feed `U+000C`
-    - A carriage return `U+000D`
     - Any code point in the
       [Unicode Zs general category]{https://www.fileformat.info/info/unicode/category/Zs/list.htm}
-      (includes the normal space `U+0020`)
 
     Any combination of the above is also considered whitespace.
 
@@ -69,12 +66,22 @@ version: 1.0
     to define a default tab stop. However, if a parser must (for implementation reasons) define a
     tab stop, we suggest to set it to 4 spaces.
 
-    The following whitespace combinations are a <line ending>:
+    Blank lines are irrelevant in Norg because standalone whitespace has no semantic relevance.
+
+*** Line Endings
+    Line endings in Norg serve as a termination character. They are used e.g. to terminate
+    {** paragraph segments}, {** paragraphs} and other elements like the endings of {** range-able
+    detached modifiers}. They are not considered {*** whitespace}.
+
+    The following chars are considered line endings:
+    - A line feed `U+000A`
+    - A form feed `U+000C`
+    - A carriage return `U+000D`
+
+    The following line ending combinations are permitted:
     - A single line feed
     - A single carriage return
     - A carriage return immediately followed by a line feed
-
-    Blank lines are irrelevant in Norg because standalone whitespace has no semantic relevance.
 
 *** Punctuation
     A {** characters}[character] is considered *punctuation* if it is any of the following:
@@ -107,7 +114,7 @@ version: 1.0
    - {* attached modifiers}
    - {* linkables}
 
-   A {# line ending} terminates the paragraph segment. This means that a paragraph segment is
+   A {*** line endings}[line ending] terminates the paragraph segment. This means that a paragraph segment is
    essentially just a line of text:
    |example
    I am a paragraph segment.
@@ -117,7 +124,7 @@ version: 1.0
 
 ** Paragraphs
    Paragraphs are then formed of consecutive {** paragraph segments}. A paragraph is terminated by:
-   - A <paragraph break> (two consecutive {# line ending}s)
+   - A <paragraph break> (two consecutive {*** line endings})
    - Any of the {* detached modifiers}
    - Any of the {** delimiting modifiers}
    - Any of the {** ranged tags}
@@ -132,7 +139,7 @@ version: 1.0
     (but nothing else!) may precede it)
   - A detached modifier must be immediately followed by {*** whitespace} or another detached modifier
     of the same type
-  -- /NOTE/: in general a {# line ending} is *not* allowed as the whitespace following a detached
+  -- /NOTE/: in general a {*** line endings}[line ending] is *not* allowed as the whitespace following a detached
      modifier. The only case where this is valid is for the /closing/ modifier of the
      {** range-able detached modifiers}.
 
@@ -229,7 +236,7 @@ version: 1.0
    type has /no/ title, and affects the following `paragraph` instead of only the next
    {# paragraph segments}[paragraph segment]. Said paragraph then becomes the modifier's /content/.
    This means that in order to terminate the detached modifier contents, you need two consecutive
-   {# line ending}s (see {# paragraph break}).
+   {*** line endings} (see {# paragraph break}).
 
    Below you will find some examples of nestable detached modifiers.
 
@@ -386,7 +393,7 @@ version: 1.0
    -- The content continues until the "closing" detached modifier is found
 
    The closing modifier has the same rules as an opening detached modifier except it /must/ be
-   directly succeeded by a {# line ending} in contrast to the whitespace character which must follow the
+   directly succeeded by a {*** line endings}[line ending] in contrast to the whitespace character which must follow the
    opening modifier.
 
 *** Definitions
@@ -478,7 +485,7 @@ version: 1.0
      (but nothing else!) may precede it)
    - A delimiting modifier must consist of three or more consecutive modifiers of the same
      type (see also {^ disambiguating delimiting modifiers})
-   - A delimiting modifier must be followed by an immediate {# line ending} (without any extra
+   - A delimiting modifier must be followed by an immediate {*** line endings}[line ending] (without any extra
      {*** whitespace})
 
    ^^ Disambiguating delimiting modifiers
@@ -670,7 +677,7 @@ version: 1.0
    current indentation level to allow complex nested items within.
 
    There are two variations of the indent segment, the {# slide} and the {# indent segment}.
-   *NOTE*: After a detached modifier suffix is matched (either `:` or `::`) a {# line ending} must
+   *NOTE*: After a detached modifier suffix is matched (either `:` or `::`) a {*** line endings}[line ending] must
    follow /instantly/.
 
 *** Slide
@@ -748,7 +755,7 @@ version: 1.0
     |example
     #tag-name.subtag parameter1\ with\ spaces parameter2
     |end
-    Parameters may consist of any character (apart from a {# line ending}, of course).
+    Parameters may consist of any character (apart from a {*** line endings}[line ending], of course).
     ---
 
   ^ Disambiguating tags and attached modifiers
@@ -770,7 +777,7 @@ version: 1.0
    - Must be at the start of a line, may be preceded by any {*** whitespace} (but nothing else)
    - Must use the same prefix as its parent (in the case of standard ranged tags: `|`; in the case
      of verbatim tags: `@`; for macro tags: `=`)
-   - Must *immediately* be succeeded by a {# line ending}.
+   - Must *immediately* be succeeded by a {*** line endings}[line ending].
 
 *** Macro Tags
     Macro tags (also known as /macro definitions/) are a tag type designed to declare and define
@@ -1290,7 +1297,7 @@ version: 1.0
    Note, that the `~`-trailing modifier will concatenate the two lines with a single separating
    whitespace. In other words it transforms a line ending, `\n`, into a single white space, `| |`.
 
-   It completely swallows the next {# line ending}, allowing for things like this:
+   It completely swallows the next {*** line endings}[line ending], allowing for things like this:
    |example
    - I am a list item~
 
@@ -1298,7 +1305,7 @@ version: 1.0
    |end
 
    Without the trailing modifier those two items would have been treated as two separate lists, but
-   since the `~` char swallows the {# line ending} it makes the parser actually see:
+   since the `~` char swallows the {*** line endings}[line ending] it makes the parser actually see:
    |example
    - I am a list item
    - And I am still part of the same list
