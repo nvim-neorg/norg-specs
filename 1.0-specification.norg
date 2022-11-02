@@ -1792,7 +1792,7 @@ version: 1.0
    Layer five can be seen as the ultimate boss - it features the dynamic elements of Norg
    documents, including macros, variables and parsing of eval blocks.
    - Interpretation/Execution of {** macro tags}
-   - Semantic understanding/execution of {** carryover tags}
+   - Semantic understanding/execution of all other tag types
    - Evaluation of `@code` blocks for the {:1.0-semantics:* NIP}[NIP] language (if they are marked
      with `#eval`).
 
