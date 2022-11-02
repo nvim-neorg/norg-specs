@@ -550,7 +550,7 @@ version: 1.0
      Not all extensions support parameters and for good reason. There is no need to attach extra
      metadata to a done or undone state for instance. Many extensions should be delimited with the
      {* contextual `|` delimiter}.
-   - A `|` character may be matched, which allows the user to chain many extensions together, e.g.
+   - A `\|` character may be matched, which allows the user to chain many extensions together, e.g.
      `(x|# A)`(lang:norg) (done with a priority of A).
    - Finally a `)` char closes the extension.
 
@@ -1702,7 +1702,7 @@ version: 1.0
   - Verbatim elements have greater priority than non-verbatim elements.
 
   Here's the full list ordered by decreasing precedence:
-  ~ {# Tags} (`#infecting`, `+carryover`, `.infirm`, `|standard`, `@verbatim` and `=macro`)
+  ~ {# Tags} (`#infecting`, `+carryover`, `.infirm`, `\|standard`, `@verbatim` and `=macro`)
   ~ {# Structural detached modifiers}
   ~ {# Nestable detached modifiers} and {# range-able detached modifiers} (there is no such case
     where these could overlap)
@@ -1773,7 +1773,7 @@ version: 1.0
    The fourth layer supports 80% of the most commonly used features for writing high level and
    typeset Norg documents.
    - Support for {**** extendable links (`=`)} and {*** scoping}
-   - {*** Standard Ranged Tags} (`|comment`, etc.)
+   - {*** Standard Ranged Tags} (`\|comment`, etc.)
    - {*** Table cells}
    - {** Free-form Attached Modifiers}
    - {* Intersecting modifiers}
