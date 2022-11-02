@@ -114,12 +114,20 @@ version: 1.0
    - {* attached modifiers}
    - {* linkables}
 
-   A {*** line endings}[line ending] terminates the paragraph segment. This means that a paragraph segment is
-   essentially just a line of text:
+   Usually, a {*** line endings}[line ending] terminates the paragraph segment.
+   This means that a paragraph segment is for the most part just a line of text:
    |example
    I am a paragraph segment.
    I am another paragraph segment.
    Together we form a paragraph.
+   |end
+
+   The exception to the rule is whenever a linkable or attached modifier within the paragraph
+   segment spans more than a single line, in which case the paragraph segment also spans that
+   distance. For example:
+   |example
+   I *am
+   a long paragraph segment!*
    |end
 
 ** Paragraphs
