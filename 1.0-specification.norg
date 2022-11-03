@@ -1353,6 +1353,23 @@ version: 1.0
   Linkables are comprised of many segments, and can change meaning depending on the order those
   segments were defined in.
 
+  One rule that is universal amongst all of these linkable types is that their beginning and end
+  characters may not exist standalone on a single line. In other words, the following examples are
+  invalid:
+  |example
+  this is not a {
+  * linkable}
+
+  nor is this a [linkable
+  ]
+
+  <
+  this certainly isn't a linkable
+  >
+  |end
+
+  *An unclosed linkable may be treated as an error in the resulting syntax tree*.
+
 ** Link Location
    The link location is defined through curly braces (`{}`) and contains the physical location
    that the user would like to link to. Inside of these curly braces you can find one (or more; with
@@ -1638,6 +1655,14 @@ version: 1.0
     |example
     {link}
 
+    {* 
+    text}
+
+    {* text }
+
+    {* some
+    text   }
+
     {:link:}
 
     {:link:20}
@@ -1648,6 +1673,7 @@ version: 1.0
     {* a link
     to a heading}
 
+    {* text}[content ]
     {* a
     link to a heading}[with
     a description]
@@ -1666,16 +1692,8 @@ version: 1.0
     {:file:/ file.txt}
     {:file:@ Wednesday 30th Jan}
 
-    {* 
-    text}
-
-    {* text }
-
     {
     * text}
-
-    {* some
-    text   }
 
     {
         * text
@@ -1695,8 +1713,6 @@ version: 1.0
 
     {* text}[
     text]
-
-    {* text}[content ]
     |end
 
 * Standard Library
