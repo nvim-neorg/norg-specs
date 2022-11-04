@@ -1396,7 +1396,8 @@ version: 1.0
     |end
 
     Note that you do *not* provide the `.norg` extension within the path.
-    You can use traditional modifiers in your path, like `/` (in e.g. `/my/file`) to signify the
+    +name path modifiers
+    You may use traditional modifiers in your path, like `/` (in e.g. `/my/file`) to signify the
     root of your filesystem, `~` (in e.g. `~/Documents/my-file`) to signify the current user's home
     directory, /or/ you can use the [Neorg]-specific `$` (in e.g. `$/my/file`) to signify the _root_
     of the [Neorg] workspace.
@@ -1490,8 +1491,9 @@ version: 1.0
      {/ my-file.txt:123} <- This is a link to `my-file.txt` at line 123
      |end
 
-     As with the {# file location} syntax, the file linkable also supports the special `$` character
-     to denote the root of the current workspace.
+     As with the {*** file location : # path modifiers}[path modifier] syntax, the file linkable
+     also supports special characters like `~` for the user's home directory and the special `$`
+     character to denote the root of the current workspace.
 
 **** Timestamps (`@`)
      The syntax for timestamps within links is the same as the syntax used in the
