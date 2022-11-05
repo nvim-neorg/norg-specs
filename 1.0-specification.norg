@@ -1648,7 +1648,7 @@ version: 1.0
 
    An important thing to note is that since inline link targets are - well - inline, they cannot be
    directly linked to with a dedicated char in the link syntax. To link to these syntax elements you
-   can /only/ use {# the magic char (`#`)}[the magic char].
+   may /only/ use {# the magic char (`#`)}[the magic char].
 
    Unlike {** links} and {** anchors}, {# inline link targets} may /not/ have a description.
 
@@ -1676,6 +1676,10 @@ version: 1.0
     to a heading}
 
     {* text}[content ]
+
+    {/ ~
+    myfile.txt}[the `~` character is /not/ treated as a trailing modifier] (see precedence section
+    for more info)
     {* a
     link to a heading}[with
     a description]
