@@ -1778,6 +1778,7 @@ version: 1.0
    messaging application. This includes:
    - {* Attached Modifiers} (excluding variables, inline mathematics and comments)
    - {** Links} (only the {*** URL} type)
+   - The {*** escaping}[escape sequence char (`\\`)]
 
 ** Layer 2
    The second layer outlines the basic structure for a document:
