@@ -1353,9 +1353,13 @@ version: 1.0
   Linkables are comprised of many segments, and can change meaning depending on the order those
   segments were defined in.
 
-  One rule that is universal amongst all of these linkable types is that their beginning and end
-  characters may not exist standalone on a single line. In other words, the following examples are
-  invalid:
+  Linkables are essentially a more lenient version of the {* attached
+  modifiers}[attached modifier] syntax. Below are the rules for linkables:
+  - An opening modifier may be instantly succeeded with anything /but/ a {#
+    line endings}[line ending].
+  - A closing modifier may *not* be preceded by a {# line endings}[line ending].
+
+  Below are a few examples of invalid linkables:
   |example
   this is not a {
   * linkable}
