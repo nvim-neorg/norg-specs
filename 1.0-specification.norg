@@ -635,7 +635,7 @@ version: 1.0
      |end
      The matching fields will be automatically completed based on the information of the other half.
 
-     ^ Note to parser developers
+     ^ Note to Parser Developers
      It should be mentioned that a parser of the Norg format is not required to perform any
      timestamp analysis further than detecting what set of characters contain a timestamp.
      The actual interpretation of its internal fields and the interpretation of a {# range} are the
@@ -693,7 +693,7 @@ version: 1.0
         This is the term's definition.
     |end
 
-    This complex item may be any *non-{** structural detached modifiers}[structural]* detached
+    This <complex item> may be any *non-{** structural detached modifiers}[structural]* detached
     modifier, {* tags}[tag] or paragraph.
 
 **** Carryover Tags in Slides
@@ -724,8 +724,7 @@ version: 1.0
     in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
     `unordered_list_level_2` item.
 
-    The indent segment can contain a set of /complex items/, which are described in the
-    {**** slide} section.
+    The indent segment may contain a set of {# complex item}[complex items].
 
     Examples:
     |example
