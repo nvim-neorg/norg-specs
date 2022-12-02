@@ -66,8 +66,6 @@ version: 1.0
     to define a default tab stop. However, if a parser must (for implementation reasons) define a
     tab stop, we suggest to set it to 4 spaces.
 
-    Blank lines are irrelevant in Norg because standalone whitespace has no semantic relevance.
-
 *** Line Endings
     Line endings in Norg serve as a termination character. They are used e.g. to terminate
     {** paragraph segments}, {** paragraphs} and other elements like the endings of {** range-able
