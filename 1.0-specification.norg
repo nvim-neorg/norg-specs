@@ -598,7 +598,7 @@ version: 1.0
 **** Timestamp Extension
      The timestamp extension allows you to associate a {* detached modifiers}[detached modifier]
      with a date/time.
-     The syntax for a timestamp is as follows {^ Note to parser developers}:
+     The syntax for a timestamp is as {^ note to parser developers}[follows]:
      `<day>,? <day-of-month> <month> <year> <time> <timezone>`
      - ::
        The `<day>` value is reliant on the current locale, but the following alterations of that
