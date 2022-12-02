@@ -544,7 +544,7 @@ version: 1.0
 ** Detached Modifier Extensions
    {* Detached modifiers} support extensions which must immediately follow the detached modifier
    (or another extension). Note that {* detached modifiers} must be succeeded with {# whitespace},
-   therefore by "immediately" followed we mean after the whitespace character in the detached
+   therefore by "immediately followed" we mean /after/ the whitespace character in the detached
    modifier, e.g. `- (x) List item`(lang:norg).
 
    The syntax is as follows:
@@ -554,8 +554,8 @@ version: 1.0
      followed with {# whitespace} after which the parameters (a sequence of {** words} and/or
      newlines) ensue.
      Not all extensions support parameters and for good reason. There is no need to attach extra
-     metadata to a done or undone state for instance. Many extensions should be delimited with the
-     {* contextual `|` delimiter}.
+     metadata to a done or undone state for instance. Several extensions should be delimited with
+     the {* contextual `|` delimiter}.
    - A `\|` character may be matched, which allows the user to chain many extensions together, e.g.
      `(x|# A)`(lang:norg) (done with a priority of A).
    - Finally a `)` char closes the extension.
