@@ -373,7 +373,7 @@ version: 1.0
      - `macro` - can be only used on the inline \&macro\& attached modifier
      - `links` - can only be used on links (this includes anchors)
      - `non-verbatim` - for all the other non-verbatim attached modifiers (bold, italic, subscript,
-       superscript, underline, comments etc.)
+       superscript, underline, the null modifier etc.)
 
      These limits can be chained, i.e. `#attribute-limits links non-verbatim`.
 
@@ -830,8 +830,8 @@ version: 1.0
     To do this you may use the standard ranged tag, which uses the `|` character.
 
     Currently it is only used for four tags, `comment`, `example`, `details` and `group`:
-    - The `comment` ranged tag is used for long strings of comments (versus the `%` attached modifier,
-      which is mostly used for short comments).
+    - The `comment` ranged tag is used for long strings of comments (versus the `%` null attached
+      modifier, which is mostly used for short comments).
     - The `example` tag is a simple way to show an example of some Norg markup without it being
       rendered and treated as physical markup (most commonly used throughout this very document to
       show unrendered examples of Norg syntax).
@@ -1099,9 +1099,27 @@ version: 1.0
   - \^superscript\^: ^superscript^ (cannot be nested into `subscript`)
   - \,subscript\,: ,subscript, (cannot be nested into `superscript`)
   - \`inline code\`: `inline code` (disables any nested markup - verbatim)
-  - \%inline comment\%: %inline comment%
+  - \%{** Null Modifier}[null modifier]\%: %null modifier%
   - \$inline math\$: $f(x) = y$ (verbatim)
   - \&variable\&: &variable& (verbatim)
+
+** Null Modifier
+   This section expands a bit on the concept of the `%null modifier%` in order to understand
+   some of its use cases.
+
+   When used in a standalone fashion, the null modifier nullifies (removes) all of the text inside.
+   This means that on its own it behaves like a comment, which is never rendered:
+   |example
+   Cats %TODO: create section about cats% are very cute animals.
+   |end
+
+   In higher {* layers}, this modifier can have its behaviour extended with the {** attached modifier
+   extensions}[attached modifier extension] syntax, which essentially makes it a configurable
+   modifier suit for many occasions. For example, if you wanted to make an arbitrary part of your
+   text red, you may do:
+   |example
+   This part of the text is %colored red%(color:red)!
+   |end
 
 ** Valid Examples
    |example
@@ -1722,7 +1740,7 @@ version: 1.0
 ** Layer 1
    The first layers contains a very low level implementation of Norg's markup for use in e.g. a
    messaging application. This includes:
-   - {* Attached Modifiers} (excluding variables, inline mathematics and comments)
+   - {* Attached Modifiers} (excluding variables, inline mathematics and the null detached modifier)
    - {** Links} (only the {*** URL} type)
    - The {*** escaping}[escape sequence char (`\\`)]
 
