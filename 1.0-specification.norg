@@ -1288,60 +1288,6 @@ version: 1.0
   Content of the cell at A2
   |end
 
-* Trailing Modifiers
-  Trailing modifiers are another separate kind of modifier in the Norg syntax. They have one very
-  simple rule: they may only exist at the end of a line and may not be followed by any characters
-  after themselves.
-
-** Line Continuation
-   The `~`-trailing modifier will concatenate the line which it ends with the following one.
-   This allows you to do something like the following:
-
-   |example
-   * I am a very long heading title~
-     which did not end here because of the trailing modifier
-   |end
-
-   Note, that the `~`-trailing modifier will concatenate the two lines with a single separating
-   whitespace. In other words it transforms a line ending, `\n`, into a single white space, `| |`.
-
-   It completely swallows the next {*** line endings}[line ending], allowing for things like this:
-   |example
-   - I am a list item~
-
-   - And I am still part of the same list
-   |end
-
-   Without the trailing modifier those two items would have been treated as two separate lists, but
-   since the `~` char swallows the {*** line endings}[line ending] it makes the parser actually see:
-   |example
-   - I am a list item
-   - And I am still part of the same list
-   |end
-
-   Note that trailing modifiers may also exist on a separate line:
-   |example
-   - I am a list item
-   ~
-   - And I am still part of the same list
-   |end
-
-   Be aware however that detached modifiers take {* precedence} over trailing modifiers. Thus, in the
-   following, you will still be obtaining a list item, despite the trailing modifer ending the
-   previous paragraph:
-   |example
-   That's when she opened the box~
-   - she couldn't believe what she saw.
-   |end
-
-   If you want to change this, you need to escape the detached modifier in order to make it part of
-   the paragraph, treating this specific example like a sentence with a hyphen between its two
-   parts:
-   |example
-   That's when she opened the box~
-   \- she couldn't believe what she saw.
-   |end
-
 * Linkables
   Finally, there is one more kind of inline syntax which is the {# linkables} kind.
   Linkables can link to any element /anywhere/ in the document.
@@ -1681,9 +1627,6 @@ version: 1.0
 
     {* text}[content ]
 
-    {/ ~
-    myfile.txt}[the `~` character is /not/ treated as a trailing modifier] (see precedence section
-    for more info)
     {* a
     link to a heading}[with
     a description]
@@ -1747,7 +1690,6 @@ version: 1.0
   ~ Verbatim {# attached modifiers}
   ~ Standard (non-verbatim) {# free-form attached modifiers} (`|**|`, `|//|` etc.)
   ~ Standard (non-verbatim) {# attached modifiers}
-  ~ {# Trailing modifiers} (`~`)
 
   Should any extra precedence problems arise (let us know if you find any) they can be disambiguated
   through a simple left-to-right precedence approach.
@@ -1802,7 +1744,6 @@ version: 1.0
    - {** Detached Modifier Extensions}
    - {** Detached Modifier Suffix}
    - {** Range-able Detached Modifiers} (excluding {*** table cells}))
-   - {* Trailing Modifiers}
    - {** Link Modifier}
 
 ** Layer 4
