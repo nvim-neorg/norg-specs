@@ -560,8 +560,7 @@ version: 1.0
      `(x|# A)`(lang:norg) (done with a priority of A).
    - Finally a `)` char closes the extension.
 
-   NOTE: The whole detached modifier extension /must/ be followed by whitespace (excluding {# line
-   ending}s).
+   NOTE: The whole detached modifier extension /must/ be followed by whitespace.
 
 *** TODO Status Extension
     The TODO item extension assigns a task status to a certain modifier. You probably know this
