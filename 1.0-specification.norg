@@ -498,7 +498,7 @@ version: 1.0
    In order to make delimiting modifiers unambiguous the three character/no succeeding
    whitespace rules were put into place:
    - Using three modifiers helps to disambiguate the endings of {** range-able detached modifiers}
-     (e.g. `==`).
+     (e.g. `==`) %TODO: discuss%.
    - If succeeding whitespace were allowed ambiguity would arise between nested unordered list items
      and the `---` delimiting modifier.
    ^^
