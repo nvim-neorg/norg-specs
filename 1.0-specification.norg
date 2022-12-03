@@ -13,18 +13,18 @@ version: 1.0
   This document is written in the Norg format in its original form and, thus, attempts to be
   self-documenting.
 
-  Please note that this is *not* a reference implementation - this is an established ruleset that
+  Please note that this is *not* a reference implementation - this is an established rule set that
   should be strictly followed.
 
 * Introduction
   Before diving into the details we will start with an introduction. The Norg file format was
   designed as part of the [Neorg]{https://github.com/nvim-neorg/neorg} plugin for Neovim which was
-  started by /Vhyrro (@vhyrro)/ in April of 2021. Soon after starting this work, /Max Rossmannek
+  started by /Vhyrro (@vhyrro)/ in April 2021. Soon after starting this work, /Max Rossmannek
   (@mrossinek)/ joined the development team, and, with the help of the [Neorg] community, the two
   have shaped the Norg syntax to what it has become today.
 
 ** What is Norg?
-   The Norg syntax is a /structured/ plain-text file format which aims to be human readable when
+   The Norg syntax is a /structured/ plain-text file format which aims to be human-readable when
    viewed standalone while also providing a suite of markup utilities for typesetting structured
    documents. Compared to other plain-text file formats like e.g. Markdown, Org, RST or AsciiDoc, it
    sets itself apart most notably by following a strict philosophy to abide by the following simple
@@ -42,7 +42,7 @@ version: 1.0
      whitespace-indentation to carry meaning.
 
    Although built with [Neorg] in mind, Norg can be utilized in a wide range of applications,
-   from external note taking plugins to even messaging applications. Thanks to its {* layers}[layer]
+   from external note-taking plugins to even messaging applications. Thanks to its {* layers}[layer]
    system one can choose the feature set they'd like to support and can ignore the higher levels.
 
 * Preliminaries
@@ -64,7 +64,7 @@ version: 1.0
 
     Tabs are not expanded to spaces and since whitespace has no semantic meaning there is no need
     to define a default tab stop. However, if a parser must (for implementation reasons) define a
-    tab stop, we suggest to set it to 4 spaces.
+    tab stop, we suggest setting it to 4 spaces.
 
 *** Line Endings
     Line endings in Norg serve as a termination character. They are used e.g. to terminate
@@ -551,7 +551,7 @@ version: 1.0
    The syntax is as follows:
    - An extension starts with a `(` char
    - Immediately a special character must follow. This character determines the type of extension.
-   - Some extensions can support parameters - if this the case, the special character must be
+   - Some extensions can support parameters - if this is the case, the special character must be
      followed with {# whitespace} after which the parameters (a sequence of {** words} and/or
      newlines) ensue.
      Not all extensions support parameters and for good reason. There is no need to attach extra
@@ -586,7 +586,7 @@ version: 1.0
 
     - (# B| ) Undone with a priority of B
     - (+) Recurring
-    - (+ 5th Jan) Recurring every 5th of january
+    - (+ 5th Jan) Recurring every 5th of January
     |end
 
 *** Advanced Detached Modifier Extensions
@@ -606,7 +606,7 @@ version: 1.0
        value are permitted:
        -- Full version (e.g. `Tuesday`, `Wednesday`)
        -- An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
-          `M` (monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
+          `M` (Monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
           could satisfy the input.
      - The `,?` expression means that a `,` character may optionally exist in that location.
      - The `<day-of-month>` value is simply a numeric value with at most 3 digits (to disambiguate
@@ -649,7 +649,7 @@ version: 1.0
      |example
      * (# A) This heading has priority A (highest priority)
      |end
-     Note that Norg does not specify strict semantics for this detached modifer extension, and as
+     Note that Norg does not specify strict semantics for this detached modifier extension, and as
      such there is no set-in-stone way to specify priorities. The most common (and recommended) way
      to specify priorities is to go from `A-Z`, but many also prefer `0-9` or even named priorities
      like `LOW`\/`MEDIUM`\/`HIGH`.
@@ -785,13 +785,13 @@ version: 1.0
     ---
 
   ^ Disambiguating tags and attached modifiers
-    If tag characters were attached modifier openers there would be no way to know whether or not the
+    If tag characters were attached modifier openers there would be no way to know whether the
     character is an attached modifier opener or a tag opener until the whole line has been parsed;
     in other words, such a scenario would entail a difficult to resolve ambiguity.
 
   Norg provides several inbuilt tag names that are reserved, but their details are not explained
   in this specification - this document strictly covers syntax - see the [semantics document] for a
-  list of the builtin tags. There is no restriction in regards to the length of a tag name, nor are
+  list of the built-in tags. There is no restriction in regard to the length of a tag name, nor are
   there any disallowed names that a parser should omit (unless they don't adhere to the above rules
   regarding tag names).
 
@@ -799,7 +799,7 @@ version: 1.0
    Ranged tags are a way to express custom information within a range.
    They begin with the traditional tag declaration and are ended with an `end` statement.
 
-   The `end` statement has a simple ruleset:
+   The `end` statement has a simple rule set:
    - Must be at the start of a line, may be preceded by any {*** whitespace} (but nothing else)
    - Must use the same prefix as its parent (in the case of standard ranged tags: `|`; in the case
      of verbatim tags: `@`; for macro tags: `=`)
@@ -844,10 +844,10 @@ version: 1.0
     |end
 
 *** Standard Ranged Tags
-    There are times where you may want to create an isolated block of Norg markup.
+    There are times when you may want to create an isolated block of Norg markup.
     To do this you may use the standard ranged tag, which uses the `|` character.
 
-    Currently it is only used for four tags, `comment`, `example`, `details` and `group`:
+    Currently, it is only used for four tags, `comment`, `example`, `details` and `group`:
     - The `comment` ranged tag is used for long strings of comments (versus the `%` null attached
       modifier, which is mostly used for short comments).
     - The `example` tag is a simple way to show an example of some Norg markup without it being
@@ -920,7 +920,7 @@ version: 1.0
 
      The `|comment` tag evaluates to /no value/. Anything that is placed within a comment during
      invocation (the `...` parameter) is simply dropped. Because of this it is *not* possible to
-     link to elements within comment tags. The `|group` tag returns back everything that you give
+     link to elements within comment tags. The `|group` tag returns everything that you give
      it, because of this it *is* possible to freely link to any element within a `|group`.
 
      To summarize - the behavior of each individual standard ranged tag is fully governed by its
@@ -940,7 +940,7 @@ version: 1.0
     @end
     This ranged tag type is the most commonly used one as it has the widest range of applications.
     The {*** standard ranged tags}[standard ranged tag] is a much more niche syntax element targeted
-    at specific usecases.
+    at specific use cases.
 
 ** Carryover Tags
    Carryover tags are a construct used to assign certain properties to the next item or whole
@@ -1007,7 +1007,7 @@ version: 1.0
     - When the element is part of an {# object}, all items in the object are affected.
 
 **** Examples
-     A nice usecase is the `#choice` carryover tag, which converts all items in a list into a
+     A nice use case is the `#choice` carryover tag, which converts all items in a list into a
      single-choice question with right/wrong answers:
      |example
      What is your favorite activity? Hint: there's only one correct answer :)
@@ -1106,14 +1106,14 @@ version: 1.0
     instantly "disqualified" and parsed as raw text in /all/ circumstances and without any
     exceptions.
 
-  Their name should be rather self explanatory - both the opening and closing modifier are
+  Their name should be rather self-explanatory - both the opening and closing modifier are
   /attached/ to one another.
 
   The following attached modifiers exist and have respective meaning:
   - \*bold\*: *bold*
   - \/italic\/: /italic/
   - \_underline\_: _underline_
-  - \-strikethrough\-: -strikethrough-
+  - \-strike-through\-: -strike-through-
   - \!spoiler\!: !spoiler!
   - \^superscript\^: ^superscript^ (cannot be nested into `subscript`)
   - \,subscript\,: ,subscript, (cannot be nested into `superscript`)
@@ -1186,7 +1186,7 @@ version: 1.0
 
 ** Variables
    Variables are a {** layer 5} attached modifier that allow a user to invoke a macro without any
-   parameters and place the result inside of e.g. a paragraph. For more information on their
+   parameters and place the result inside e.g. a paragraph. For more information on their
    behavior see the [semantics document].
 
 ** Free-form Attached Modifiers
@@ -1204,7 +1204,7 @@ version: 1.0
    Here, I can write `| leading and trailing whitespace (with a ` char)  |` within a verbatim block
    without accidentally terminating it.
 
-   Here, I can use a literal `$` inside of inline math: $| 10$ + 10$ = 20$ |$.
+   Here, I can use a literal `$` inside inline math: $| 10$ + 10$ = 20$ |$.
    |end
 
    The use of pipes is special because the position of the pipe (i.e. whether it's before or after the
@@ -1222,7 +1222,7 @@ version: 1.0
    modifier rules - in fact, it's the polar opposite.
 
    As described in the {* attached modifiers} section, attached modifier types may not exist
-   inbetween words like so:
+   in between words like so:
    |example
    abso/freaking/lutely!
    |end
@@ -1262,7 +1262,7 @@ version: 1.0
    Similarly to {** detached modifier extensions}, attached modifier extensions serve as a way
    to attach metadata to {* attached modifiers}.
    The metadata that you can attach, however, differs from {** detached modifier extensions}, as they
-   serve different usecases.
+   serve different use cases.
 
    The content of attached modifier extensions consists of a set of references to many
    {*** attributes}. These attributes are delimited by the {* contextual `|` delimiter}.
@@ -1300,7 +1300,7 @@ version: 1.0
   - Next, the actual modifier (currently only `:`) must be matched.
   - The token ends with another {*** whitespace} character.
 
-  The usecase for the intersecting modifier is best illustrated by example:
+  The use case for the intersecting modifier is best illustrated by example:
   |example
   $ Term
     This is a definition of that term.
@@ -1372,8 +1372,8 @@ version: 1.0
 
 *** File Location
     The file location is a construct that allows you to specify the /target file/ into which you
-    want to link inside of. This allows you to *link to targets within other files* or just link to
-    other Norg files entirely.
+    want to link to. This allows you to *link to targets within other files* or just link to other
+    Norg files entirely.
 
     When standalone, the link syntax will simply point to another `.norg` file relative to the
     current file the link is contained in:
@@ -1385,12 +1385,12 @@ version: 1.0
     Note that you do *not* provide the `.norg` extension within the path.
     +name path modifiers
     You may use traditional modifiers in your path, like `/` (in e.g. `/my/file`) to signify the
-    root of your filesystem, `~` (in e.g. `~/Documents/my-file`) to signify the current user's home
+    root of your file system, `~` (in e.g. `~/Documents/my-file`) to signify the current user's home
     directory, /or/ you can use the [Neorg]-specific `$` (in e.g. `$/my/file`) to signify the _root_
     of the [Neorg] workspace.
     Since not all Norg files will be used strictly by [Neorg], the workspace root can be
     implementation-specific - for git repos the workspace root could be simply the root of the
-    repository, and for other note taking apps it could simply be the root of the directory where
+    repository, and for other note-taking apps it could simply be the root of the directory where
     all the notes are stored.
 
     A file location may /only/ be accompanied by a {# detached modifier}, {# line number} or {# the
@@ -1494,7 +1494,7 @@ version: 1.0
 **** Wiki Links (`?`)
      When building large knowledge bases it's sensible to want to quickly create links between files
      without worrying about the location of said file. The *wiki link* allows you to link to any
-     heading in any file in the current workspace. You don't specify any filepaths within the link,
+     heading in any file in the current workspace. You don't specify any file paths within the link,
      just the title of the heading you want to search for.
 
      Syntax:
@@ -1536,7 +1536,7 @@ version: 1.0
     {# The Magic Char (`#`)}[the magic char].
 
 *** Differences Between File Linkables
-    You may have realized that there are many different ways to reference a file:
+    You may have realized that there are many ways to reference a file:
     - `{:my/file:}`
     - `{/ my/file.norg}`
     - `{file://my/file.norg}`
@@ -1620,9 +1620,9 @@ version: 1.0
    like this: `[anchor name][anchor description]`.
 
 ** Inline Link Targets
-   Finally, Norg also has the possibility of placing link targets at arbitrary inline positions
-   in your document. We call these {# inline link targets} which are formatted inside of angled
-   brackets: `<>`.
+   Finally, Norg also has the possibility of placing link targets at arbitrary inline positions in
+   your document. We call these {# inline link targets} which are formatted inside angled brackets:
+   `<>`.
 
    |example
    One thing to mention is <inline link targets> - they allow you to link to any location in a
@@ -1752,9 +1752,9 @@ version: 1.0
 
   It's recommended to stick to these layers when implementing Norg in your own application (as it's
   easy to tell end users that an application supports e.g. "layer 2" of the Norg specification), but
-  of course these can't apply to every possible usecase. In such case you can use a /custom layer/
+  of course these can't apply to every possible use case. In such case you can use a /custom layer/
   and pick and choose what you want to support. Just make sure to let your users know which features
-  you've implemented so so they don't get confused!
+  you've implemented so they don't get confused!
 
 ** Layer 1
    The first layers contains a very low level implementation of Norg's markup for use in e.g. a
