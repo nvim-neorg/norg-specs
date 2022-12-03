@@ -209,7 +209,7 @@ version: 1.0
 
    To manually terminate a structural detached modifier (like a heading) you must use a
    {** delimiting modifiers}[delimiting modifier]. Structural detached modifiers are automatically
-   closed when you use another structural modifier of the same or higher level.
+   closed when you use another structural modifier of the same or lower level.
 
 *** Headings
     |example
@@ -465,7 +465,8 @@ version: 1.0
 
 *** Examples
     |example
-    The following items naturally group because they are range-able, forming a definition list:
+    The following items naturally group because they are range-able, for example forming a
+    definition list:
     $ Term 1
       Definition 1!
     $ Term 2
@@ -621,7 +622,7 @@ version: 1.0
      angled brackets (`<>`) can be dropped/ignored, but the order of those values may not change!
      Some examples of valid timestamps include:
      - `Sat, 29 Oct 1994 19:43.31 GMT`
-     - `Thu 12th Jan 2022`
+     - `We 12th Jan 2022`
 
      Apart from just being able to supply a timestamp, you are also permitted to provide a <range>.
      The syntax is simple, and is contained within the extension:
@@ -721,10 +722,10 @@ version: 1.0
     The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
     This indent segment must be closed with any of the {** delimiting modifiers}, or an element of
     the same type with the same or lower nesting level. By "lower" nesting level we mean higher up
-    in the hierarchy of nodes, or in other words `unordered_list_level_1` is higher than an
-    `unordered_list_level_2` item.
+    in the hierarchy of nodes, or in other words `unordered_list_level_1` is "lower" than an
+    `unordered_list_level_2` item, because it is nested less.
 
-    The indent segment may contain a set of {# complex item}[complex items].
+    The indent segment may contain a arbitrary amount of {# complex item}[complex items].
 
     Examples:
     |example
@@ -809,7 +810,7 @@ version: 1.0
     macros. Macros are templates that can be executed with parameters in order to place some
     structured text into the document.
 
-    The content of the macro tag is /any/ norg markup - this includes {** structural detached
+    The content of the macro tag is /any/ Norg markup - this includes {** structural detached
     modifiers} and nested {* tags}. The macro tag is closed with the `=end` statement.
 
     Under the hood, all other {* tags}[tag] types are implemented as macros with special parameters
@@ -961,7 +962,7 @@ version: 1.0
     - When the element is part of an {# object}, no items other than the one below the weak
       carryover tag is affected.
     - An exception is made when a weak carryover tag is applied to an {# indent segment} or a
-      {** ranged tags}[ranged tag], in which case the whole node (including its children) is affected.
+      {** ranged tags}[ranged tag], in which case everything within that segment/tag is affected.
 
 **** Examples
      Only the second item is affected:
@@ -1047,7 +1048,7 @@ version: 1.0
     #color blue
     This part is blue,
     +color red
-    but the later defined carryover tag takes precedence, making this part red,
+    but the latter carryover tag takes precedence, making this part red,
     and this part blue again, since the weak carryover tag does not affect this segment.
     |end
 
@@ -1075,6 +1076,7 @@ version: 1.0
   This section discusses attached modifiers (which originally gave rise to the name of {* detached
   modifiers} as their natural counter-parts). Attached modifiers encapsulate some text within a
   {** paragraphs}[paragraph] and change the way it is displayed in the document.
+  An attached modifier consists of two parts: the /opening modifier/ and the /closing modifier/.
 
   Below are the general rules for attached modifiers:
   - An opening modifier may only be preceded by {# whitespace} or {# punctuation}
@@ -1120,24 +1122,6 @@ version: 1.0
   - \$inline math\$: $f(x) = y$ (verbatim)
   - \&variable\&: &variable& (verbatim)
 
-** Null Modifier
-   This section expands a bit on the concept of the `%null modifier%` in order to understand
-   some of its use cases.
-
-   When used in a standalone fashion, the null modifier nullifies (removes) all of the text inside.
-   This means that on its own it behaves like a comment, which is never rendered:
-   |example
-   Cats %TODO: create section about cats% are very cute animals.
-   |end
-
-   In higher {* layers}, this modifier can have its behaviour extended with the {** attached modifier
-   extensions}[attached modifier extension] syntax, which essentially makes it a configurable
-   modifier suit for many occasions. For example, if you wanted to make an arbitrary part of your
-   text red, you may do:
-   |example
-   This part of the text is %colored red%(color:red)!
-   |end
-
 ** Valid Examples
    |example
    *Bold text*
@@ -1182,6 +1166,24 @@ version: 1.0
    */Bold and italic* and only italic/
    |end
 
+** Null Modifier
+   This section expands a bit on the concept of the `%null modifier%` in order to understand
+   some of its use cases.
+
+   When used in a standalone fashion, the null modifier nullifies (removes) all of the text inside.
+   This means that on its own it behaves like a comment, which is never rendered:
+   |example
+   Cats %TODO: create section about cats% are very cute animals.
+   |end
+
+   In higher {* layers}, this modifier can have its behaviour extended with the {** attached modifier
+   extensions}[attached modifier extension] syntax, which essentially makes it a configurable
+   modifier suit for many occasions. For example, if you wanted to make an arbitrary part of your
+   text red, you may do:
+   |example
+   This part of the text is %colored red%(color:red)!
+   |end
+
 ** Variables
    Variables are a {** layer 5} attached modifier that allow a user to invoke a macro without any
    parameters and place the result inside of e.g. a paragraph. For more information on their
@@ -1193,7 +1195,7 @@ version: 1.0
    - Arbitrary {*** whitespace} within {* attached modifiers} is not permitted: `*  bold  *` is
      invalid and thus not bold.
    - Representing verbatim attached modifier chars within the corresponding verbatim blocks is not
-     possible: `|I cannot place a (`) char inside here without accidentally terminating the
+     possible: `|`I cannot place a (`) char inside here without accidentally terminating the
      block.|`.
 
    Free-form modifiers fix this with a special syntax to specify the beginning and end of a ranged
@@ -1465,7 +1467,7 @@ version: 1.0
      the other modifiers: `{# My Location}`.
 
 **** The File Linkable (`/`)
-     Sometimes you may want to link to an external file that is not an Norg file.
+     Sometimes you may want to link to an external file that is not a Norg file.
      In that case you may use `{/ /path/to/my/file.txt}` (notice the mandatory space after the `/`
      char, just like with the {# detached modifier}s). Paths are relative to the Norg file that
      contains the link unless started with a `/` to denote your file system root.
@@ -1501,7 +1503,7 @@ version: 1.0
      |end
 
      For developers implementing this behavior: there are no restrictions in which order you parse
-     your files to hop between wiki links, as long as the following coniditions are met:
+     your files to hop between wiki links, as long as the following conditions are met:
      - The current file is the first file that is searched (this allows for `?` to also work as a
        generic catchall link for all heading levels)
      - All files in the current workspace are parsed/enumerated (including subdirectories)
