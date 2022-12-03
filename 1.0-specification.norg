@@ -659,8 +659,7 @@ version: 1.0
 
 **** Due Date Extension
      As the name suggests, this extension marks something as "due before x", where x is a
-     {**** timestamp extension}[timestamp]. Especially useful in [GTD] and other forms of note
-     taking and time management applications.
+     {**** timestamp extension}[timestamp]. Especially useful in [GTD] and other forms of note-taking and time management applications.
 
      Syntax:
      |example
@@ -668,7 +667,7 @@ version: 1.0
      |end
 
 **** Start Date Extension
-     A counterpart to the {**** due date extension} - defines when a task *begins*. Also useful in
+     A counterpart to the {**** due date extension} - defines when a task *begins*, also useful in
      [GTD].
 
      Syntax:
@@ -725,7 +724,7 @@ version: 1.0
     in the hierarchy of nodes, or in other words `unordered_list_level_1` is "lower" than an
     `unordered_list_level_2` item, because it is nested less.
 
-    The indent segment may contain a arbitrary amount of {# complex item}[complex items].
+    The indent segment may contain an arbitrary amount of {# complex item}[complex items].
 
     Examples:
     |example
@@ -856,7 +855,7 @@ version: 1.0
     - The `details` tag is a way to hide away markup (just like
       {https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details}[`<details>`] in HTML).
       - The `group` tag may be used to group together many elements and apply a global {*** strong
-        carryover tags}[strong carryover tag] to each and every one of them.
+        carryover tags}[strong carryover tag] to each one of them.
 
 **** Examples
      `|example`:
@@ -1280,7 +1279,7 @@ version: 1.0
     |end
 
 * Contextual `|` Delimiter
-  The pipe (`|`) character is a really nice character - it can be applied to many different problems
+  The pipe (`|`) character is a really nice character - it can be applied to many problems
   and expressively represent certain behaviors, specifically /delimiting/. While also used for
   {*** standard ranged tags} and {** free-form attached modifiers}, the pipe symbol is also used as
   a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier
@@ -1306,7 +1305,7 @@ version: 1.0
     This is a definition of that term.
   |end
   This is perfectly normal syntax that you would write day to day in Norg. But what if you're more
-  of a fan of one liners? The `| : |` intersecting modifier (currently the only modifier of this
+  of a fan of one-liners? The `| : |` intersecting modifier (currently the only modifier of this
   type) can be used to do just this:
   |example
   $ Term : This is a definition of that term.
@@ -1359,7 +1358,7 @@ version: 1.0
 
 ** Link Location
    The link location is defined through curly braces (`{}`) and contains the physical location
-   that the user would like to link to. Inside of these curly braces you can find one (or more; with
+   that the user would like to link to. Inside these curly braces you can find one (or more; with
    limited inter-compatibility) of the following types of data:
    - A {# file location}
    - A {# line number}
@@ -1754,7 +1753,7 @@ version: 1.0
   easy to tell end users that an application supports e.g. "layer 2" of the Norg specification), but
   of course these can't apply to every possible use case. In such case you can use a /custom layer/
   and pick and choose what you want to support. Just make sure to let your users know which features
-  you've implemented so they don't get confused!
+  you've implemented, so they don't get confused!
 
 ** Layer 1
    The first layers contains a very low level implementation of Norg's markup for use in e.g. a
@@ -1780,7 +1779,7 @@ version: 1.0
    - {** Carryover Tags} (`#name`, `#color`/`+name`, `+color` etc.)
    - {** Detached Modifier Extensions}
    - {** Detached Modifier Suffix}
-   - {** Range-able Detached Modifiers} (excluding {*** table cells}))
+   - {** Range-able Detached Modifiers} (excluding {*** table cells})
    - {** Link Modifier}
 
 ** Layer 4
