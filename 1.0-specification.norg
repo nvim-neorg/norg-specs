@@ -490,19 +490,12 @@ version: 1.0
    delimiting modifier. This kind of modifier must abide by the following rules:
    - A delimiting modifier can _only_ occur at the beginning of the line (arbitrary {*** whitespace}
      (but nothing else!) may precede it)
-   - A delimiting modifier must consist of three or more consecutive modifiers of the same
-     type (see also {^ disambiguating delimiting modifiers})
+   - A delimiting modifier must consist of two or more consecutive modifiers of the same
+     type (a single character cannot be used to avoid false-positives /during/ the typing process;
+     plus a single character can look quite confusing/ugly when used like this...)
    - A delimiting modifier must be followed by an immediate {*** line endings}[line ending] (without any extra
-     {*** whitespace})
-
-   ^^ Disambiguating delimiting modifiers
-   In order to make delimiting modifiers unambiguous the three character/no succeeding
-   whitespace rules were put into place:
-   - Using three modifiers helps to disambiguate the endings of {** range-able detached modifiers}
-     (e.g. `==`) %TODO: discuss%.
-   - If succeeding whitespace were allowed ambiguity would arise between nested unordered list items
-     and the `---` delimiting modifier.
-   ^^
+     {*** whitespace}; this disambiguates them from nestable detached modifiers like for example an
+     unordered list item vs. the `--` delimiting modifier)
 
 *** Weak Delimiting Modifier
     This modifier uses the `-` character and immediately closes the /current/ nesting level
