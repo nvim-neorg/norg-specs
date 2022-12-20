@@ -1275,8 +1275,7 @@ version: 1.0
   The pipe (`|`) character is a really nice character - it can be applied to many problems
   and expressively represent certain behaviors, specifically /delimiting/. While also used for
   {*** standard ranged tags} and {** free-form attached modifiers}, the pipe symbol is also used as
-  a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier
-  Extensions}[attached] modifier extensions. Even though it's used 3 times for different purposes,
+  a delimiter for {** Detached Modifier Extensions}[detached] and {** Attached Modifier Extensions} modifier extensions. Even though it's used 3 times for different purposes,
   the contexts in which they are used in allows for them to be unambiguous. It also keeps intent
   consistent across the format.
 
