@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/nvim-neorg/norg-specs/compare/v1.0.0...v1.1.0) (2023-02-24)
+
+
+### Features
+
+* **spec:** extend the abilities of the slide (`:`) ([d5c3127](https://github.com/nvim-neorg/norg-specs/commit/d5c3127f7e708f0aca0806f7eb26d24ccca161d8))
+
 ## 1.0.0 (2023-02-24)
 
 
