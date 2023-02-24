@@ -684,36 +684,47 @@ version: 1.0
    follow /instantly/.
 
 *** Slide
-    The slide, denoted with a single `:`, allows for a *single* /complex item/ below:
+    The slide, denoted with a single `:`, allows for a set of contiguous /complex items/ below:
     |example
     - :
+      This is some text.
       $ Term
-        This is the term's definition.
+        And this is the term's definition.
     |end
 
-    This <complex item> may be any *non-{** structural detached modifiers}[structural]* detached
+    These <complex item>s may be any *non-{** structural detached modifiers}[structural]* detached
     modifier, {* tags}[tag] or paragraph.
 
-**** Carryover Tags in Slides
-     Due to greatly increased parser complexity in common LR/GLR parsers carryover tags beneath slides
-     are /disallowed/. Apply a carryover tag to the parent item to achieve the same behaviour
-     instead.
+    To terminate a slide, one of two conditions must be met:
+    - A {$ paragraph break} is encountered.
+    - If the slide is part of a {** nestable detached modifiers}[nestable detached modifier], when
+      an item of the same or lower level is encountered below.
 
-     Disallowed:
-     |example
-     - :
-       #example-tag
-       $ Term
-         Definition
-     |end
+**** Examples
+***** Terminating via a {$ Paragraph Break}
+      |example
+      - :
+        This is part of the list item.
+        @code lua
+        print("This is also a part of the list item")
 
-     Preferred alternative:
-     |example
-     +example-tag
-     - :
-       $ Term
-         Definition
-     |end
+        -- Despite the fact that there is a double newline dividing the `print` statement and this
+        -- comment, it is not a paragraph break, therefore it does not terminate the slide.
+        @end
+        $ Term
+        Here is a definition!
+
+      Now that there is a {$ paragraph break} between this paragraph and the previous item
+      this paragraph no longer belongs to the slide.
+      |end
+
+***** Terminating as Part of a Nestable Detached Modifier
+      |example
+      -- :
+         Content of the slide.
+      - Because this item is a level lower than the item containing the slide above
+        the slide is terminated.
+      |end
 
 *** Indent Segment
     The indent segment, denoted with two colons (`::`), creates a ranged version of the slide.
