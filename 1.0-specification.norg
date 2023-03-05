@@ -867,14 +867,14 @@ version: 1.0
         carryover tags}[strong carryover tag] to each one of them.
 
 **** Examples
-     `|example`:
+     `||example|`:
      |example
      |example
      * This is an example heading.
      |end
      |end
 
-     `|comment`:
+     `||comment|`:
      |example
      |comment
      This is a very long comment with some content
@@ -885,7 +885,7 @@ version: 1.0
      |end
      |end
 
-     `|details`:
+     `||details|`:
      |example
      |details
      * Here is some hidden markup!
@@ -893,7 +893,7 @@ version: 1.0
      |end
      |end
 
-     `|group`:
+     `||group|`:
      |example
      #color red
      |group
