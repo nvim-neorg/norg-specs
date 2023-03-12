@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/nvim-neorg/norg-specs/compare/v1.1.0...v1.1.1) (2023-03-12)
+
+
+### Bug Fixes
+
+* standard ranged tags examples ([#12](https://github.com/nvim-neorg/norg-specs/issues/12)) ([edefad6](https://github.com/nvim-neorg/norg-specs/commit/edefad624635bfda078b4eb6767f8b18dfed006f))
+
 ## [1.1.0](https://github.com/nvim-neorg/norg-specs/compare/v1.0.0...v1.1.0) (2023-02-24)
 
 
