@@ -867,14 +867,14 @@ version: 1.0
         carryover tags}[strong carryover tag] to each one of them.
 
 **** Examples
-     `||example|`:
+     `\|example`:
      |example
      |example
      * This is an example heading.
      |end
      |end
 
-     `||comment|`:
+     `\|comment`:
      |example
      |comment
      This is a very long comment with some content
@@ -885,7 +885,7 @@ version: 1.0
      |end
      |end
 
-     `||details|`:
+     `\|details`:
      |example
      |details
      * Here is some hidden markup!
@@ -893,7 +893,7 @@ version: 1.0
      |end
      |end
 
-     `||group|`:
+     `\|group`:
      |example
      #color red
      |group
@@ -908,11 +908,11 @@ version: 1.0
 
 **** Edge Cases and Semantic Interpretation
      A commonly arising question is "how are these interpreted at parse time?" - can you link to
-     elements within `|comment` tags? What governs the behavior of these differing tags?
+     elements within `\|comment` tags? What governs the behavior of these differing tags?
 
      The answer may be illustrated simply by showing how these tags are implemented.
      As mentioned in the {*** macro tags} section, all tag types (apart from the macro tag) are a
-     macro invocation under the hood. Below are the implementations for `|comment` and `|group`,
+     macro invocation under the hood. Below are the implementations for `\|comment` and `\|group`,
      respectively:
      - :
        |example
@@ -926,10 +926,10 @@ version: 1.0
        =end
        |end
 
-     The `|comment` tag evaluates to /no value/. Anything that is placed within a comment during
+     The `\|comment` tag evaluates to /no value/. Anything that is placed within a comment during
      invocation (the `...` parameter) is simply dropped. Because of this it is *not* possible to
-     link to elements within comment tags. The `|group` tag returns everything that you give
-     it, because of this it *is* possible to freely link to any element within a `|group`.
+     link to elements within comment tags. The `\|group` tag returns everything that you give
+     it, because of this it *is* possible to freely link to any element within a `\|group`.
 
      To summarize - the behavior of each individual standard ranged tag is fully governed by its
      implementation - see the [semantics document] for more details.
