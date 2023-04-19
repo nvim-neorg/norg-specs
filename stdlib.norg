@@ -6,7 +6,7 @@ This includes all carryover tags, ranged tags and their behaviours.
 This defines the entry point for the Neorg standard library:
 .stdlib stdlib.janet
 
-== color color_name next
+=color color_name next
 #eval
 @code janet
 (defn- parse-color [str]
@@ -160,15 +160,15 @@ This defines the entry point for the Neorg standard library:
 
 (neorg/set-property next {:color (parse-color color_name)})
 @end
-==
+=end
 
-== name custom_name next
+=name custom_name next
 #eval
 @code janet
 (neorg/set-property next {:name custom_name})
 @end
-==
+=end
 
 %Yup, this is the implementation of `comment`%
-== comment ...
-==
+=comment ...
+=end
