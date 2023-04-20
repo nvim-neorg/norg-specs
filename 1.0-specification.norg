@@ -1536,6 +1536,9 @@ version: 1.0
 
      For a more detailed explanation of the behavior of this link consult the [semantics document].
 
+**** Citation Links (`cite`)
+     <To Be Devised>
+
 *** Inline Linkables
     Although most linkable items are either {# structural detached modifiers}[structural] or
     {# range-able detached modifiers}[range-able], there are also syntax elements in Norg that
