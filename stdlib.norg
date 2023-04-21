@@ -187,6 +187,10 @@ This defines the entry point for the Neorg standard library:
 
 #macro code language? @next
 @code janet
+(neorg/abstract-object
+ {:bind next
+  :data {:language language}
+  :export |(neorg/export/code-block $)})
 @end
 
 %Yup, this is the implementation of `comment`%
