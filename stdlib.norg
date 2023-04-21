@@ -22,7 +22,7 @@ This defines the entry point for the Neorg standard library:
 @end
 =end
 
-#macro color color_name >next
+#macro color color-name >next
 @code janet
 (import spork/regex)
 
@@ -176,13 +176,13 @@ This defines the entry point for the Neorg standard library:
         (regex/match `\#[0-9a-fA-F]{6}` str) str
         (error (string "Invalid parameter '" str "' - expected hex value or valid colour name! Perhaps you made a typo?")))))
 
-(neorg/set-property next {:color (parse-color color_name)})
+(neorg/set-property next {:color (parse-color color-name)})
 @end
 =end
 
-#macro name custom_name next
+#macro name custom-name next
 @code janet
-(neorg/set-property next {:name custom_name})
+(neorg/set-property next {:name custom-name})
 @end
 
 #macro code language? @next
