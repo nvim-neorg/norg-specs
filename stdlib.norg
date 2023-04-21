@@ -6,9 +6,26 @@ This includes all carryover tags, ranged tags and their behaviours.
 This defines the entry point for the Neorg standard library:
 .stdlib stdlib.janet
 
-=color color_name next
+=macro name params* >next
 #eval
 @code janet
+(def wrong-next-object "`macro` requires that the next object be a `@code` tag!")
+
+(assert (neorg/ts/ranged-verbatim-tag? next) wrong-next-object)
+
+(let [next-tag (neorg/ts/ranged-verbatim-tag next)]
+ (assert (= (get next-tag :name) "code") wrong-next-object))
+
+# TODO: Ensure that the language used in the `@code` tag is supported?
+
+(string "=" name " " ;params "\n#eval\n" (neorg/ts/node-text next :join) "\n=end")
+@end
+=end
+
+#macro color color_name >next
+@code janet
+(import spork/regex)
+
 (defn- parse-color [str]
  "Parses a colour (e.g. `blue`, `green`) into a hex value."
  (let [lookup { :indianred "#cd5c5c"
@@ -154,20 +171,23 @@ This defines the entry point for the Neorg standard library:
                 :slategray "#708090"
                 :darkslategray "#2f4f4f"
                 :black "#000000"}]
-     (if (def found-value (lookup (keyword (string/ascii-lower str))))
-      found-value
-      str)))
+     (cond
+        (def found-value (lookup (keyword (string/ascii-lower str)))) found-value
+        (regex/match `\#[0-9a-fA-F]{6}` str) str
+        (error (string "Invalid parameter '" str "' - expected hex value or valid colour name! Perhaps you made a typo?")))))
 
 (neorg/set-property next {:color (parse-color color_name)})
 @end
 =end
 
-=name custom_name next
-#eval
+#macro name custom_name next
 @code janet
 (neorg/set-property next {:name custom_name})
 @end
-=end
+
+#macro code language? @next
+@code janet
+@end
 
 %Yup, this is the implementation of `comment`%
 =comment ...
