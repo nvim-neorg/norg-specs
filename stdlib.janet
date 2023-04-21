@@ -15,7 +15,7 @@
  (def binding (get object :bind))
  (and (truthy? binding) (neorg/ts/node? binding)))
 
-(defn neorg/abstracto-object/unbind [abstract-object]
+(defn neorg/abstract-object/unbind [abstract-object]
   "Unbinds an abstract object into its bound value and data.
   
   Arguments:
