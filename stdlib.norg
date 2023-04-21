@@ -189,8 +189,9 @@ This defines the entry point for the Neorg standard library:
 @code janet
 (neorg/abstract-object
  {:bind next
-  :data {:language language}
-  :export |(neorg/export/code-block $)})
+  :export |(neorg/export/code-block
+            :content (neorg/ts/node-text next)
+            :language language)})
 @end
 
 %Yup, this is the implementation of `comment`%
