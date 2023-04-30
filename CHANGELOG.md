@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/nvim-neorg/norg-specs/compare/v1.1.1...v1.2.0) (2023-04-30)
+
+
+### Features
+
+* **spec:** allow links across workspaces with `$workspace_name` ([32cb723](https://github.com/nvim-neorg/norg-specs/commit/32cb723f04df50e4a098c754e0579c3aeb7edd73))
+* **stdlib:** implement `[@code](https://github.com/code)` tag ([95ffa8e](https://github.com/nvim-neorg/norg-specs/commit/95ffa8ee6af3e7387e5b89fa8d50d851ce5af085))
+
+
+### Bug Fixes
+
+* **stdlib:** typo, `abstracto` -&gt; `abstract` ([c65f152](https://github.com/nvim-neorg/norg-specs/commit/c65f15226c52984b0b7d94688c341b3a2adfbc96))
+
 ## [1.1.1](https://github.com/nvim-neorg/norg-specs/compare/v1.1.0...v1.1.1) (2023-03-12)
 
 
