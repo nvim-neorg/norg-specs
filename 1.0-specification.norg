@@ -1395,11 +1395,14 @@ version: 1.0
     You may use traditional modifiers in your path, like `/` (in e.g. `/my/file`) to signify the
     root of your file system, `~` (in e.g. `~/Documents/my-file`) to signify the current user's home
     directory, /or/ you can use the [Neorg]-specific `$` (in e.g. `$/my/file`) to signify the _root_
-    of the [Neorg] workspace.
-    Since not all Norg files will be used strictly by [Neorg], the workspace root can be
-    implementation-specific - for git repos the workspace root could be simply the root of the
-    repository, and for other note-taking apps it could simply be the root of the directory where
-    all the notes are stored.
+    of the [Neorg] workspace. Since not all Norg files will be used strictly by [Neorg], the
+    workspace root can be implementation-specific - for git repos the workspace root could be simply
+    the root of the repository, and for other note-taking apps it could simply be the root of the
+    directory where all the notes are stored.
+    When multiple workspaces are present, the `$name` syntax may be used (e.g. `$notes/my/file`) to
+    link to a file from another workspace (in the example case named `notes`). When only a single
+    workspace is supported by the application running Neorg or the workspace is not found the user
+    should be met with an error.
 
     A file location may /only/ be accompanied by a {# detached modifier}, {# line number} or {# the
     magic char (`#`)}[the magic char], in which case the links look like so:
