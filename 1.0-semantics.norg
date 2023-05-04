@@ -9,8 +9,11 @@ version: 0.0.13
 
 - ( ) Document stdlib macros/carryover tags/ranged tags
 - ( ) Describe how tags are evaluated
-- ( ) Document Norg's special NIP language used to manipulate the document with macros.
 - ( ) Document inbuilt attached modifier extensions and their behaviours
+- ( ) When evaluating macros for attributes (inline elements w/ attached mod ext) and
+      the `&var&` syntax they should be placed on a new line and /then/ expanded.
+      This prevents user error.
+- ( ) Explain how extendable links are macros under the hood.
 
 Table syntax:
 - ( ) New motions: `>`, `v`, `^`, `<`
@@ -40,15 +43,118 @@ Table syntax:
   ---
 
 * Introduction
-  This file contains a formal description of the semantics of the Norg file format. For an
-  introduction of what the Norg file format is, it is recommended that you read the
-  [specification] first. When writing a syntax parser, it's not necessary for
-  you to understand exactly how Norg is intended to behave - however, when writing a more
-  sophisticated tool like {https://github.com/nvim-neorg/neorg}[neorg], understanding how various
-  tags and elements behave is quite crucial. This document also covers the {* NIP} language, which
-  is a functional Norg DSL specifically used to manipulate and query information from any document.
 
-* ( ) NIP
+  This file contains a formal description of the semantics of the Norg file format. For an
+  introduction of what the Norg file format is, it is recommended that you read the [specification]
+  first. When writing a syntax parser, it's not necessary for you to understand exactly how Norg is
+  intended to behave - however, when writing a more sophisticated tool like
+  [Neorg]{https://github.com/nvim-neorg/neorg}, understanding how various tags and dynamic elements
+  behave is quite crucial.
+
+  This specification, in contrast to the syntax specification, reads more like a book, with
+  recommendations and requirements written out as they are applicable.
+
+* Tags
+
+  All dynamic/extendable parts of Norg are centered around tags and macros.
+  The single {# macro tag} defines macros, and all of the other tag types
+  execute a macro in some specific way.
+
+** Common Definitions
+
+   $ Macro Expansion
+   The process of expanding a macro involves supplying it with the correct parameters,
+   then replacing the macro invocation with the result, expanding any other macros that
+   may be present in said result.
+
+   $ Variable
+   A variable is a macro that takes no parameters as input and always produces the same output
+   regardless of context.
+
+** Macro Tag
+
+   The base form, the [macro tag]{:1.0-specification:*** Macro Tags} can be seen as a function
+   definition - it defines the name of the macro, its parameters, and also what the macro evaluates
+   to.
+   
+   An example implementation of a macro may look like such:
+   |example
+   =greet name
+   Hello, &name&!
+   =end
+   |end
+   
+   We define a macro called `greet`, which takes in a mandatory parameter called `name`.
+   When this macro is invoked, it evaluates to `Hello, &name&!`
+   where the `&name&` variable is replaced with whatever we provided to the macro (see: {# macro
+   expansion}, {# inline macro expansion}).
+   
+*** Macro Redefinitions
+
+    Redefining a macro is permitted. One may have many reasons to redefine macros, it is most
+    notably used however when redefining {$ variable}s (see {# parameters as macros}).
+
+*** Parameters as Macros
+
+    Since {$ variable}s are officially just macros without parameters, parameters supplied to
+    macros are also themselves macros (hence they can be expanded with the `&inline macro
+    expansion&` syntax).
+
+*** Supplying Parameters to Macros
+
+    By default, every parameter that a macro expects must be supplied, else an error should be
+    thrown. If excess values are supplied, then the supplied parameters should be highlighted
+    in some form in your editor or interpreter and a warning should be issued. Upon execution
+    excess values should be discarded.
+
+*** Parameter Modifiers (suffixes)
+
+    There are three suffixes that may be applied to a macro to express some properties about the
+    object. These are: `?` (optional variable), `*` (optional vararg), `+` (vararg with at least one
+    element).
+
+    To illustrate via an example:
+
+    |example
+    =mymacro variable?
+    Where did my &variable& go.
+    =end
+    |end
+
+    Now, it is possible to not supply the variable and not get an error. When expanding a "null"
+    object, it should evaluate to an empty string, or in other words, to nothing.
+
+    NOTE: Norg does not actually have a notion of null values. Instead, the null value is
+    represented as an empty {* abstract objects}[abstract object]. See that section for more
+    details.
+
+    For the vararg variations, they exist to store an arbitrary amount of parameters within a single
+    value, which may be thought of as a list of objects. Yet again, Norg does not have a notion of
+    lists in their traditional sense, it simply encodes the list as a macro that, when expanded,
+    evaluates to the contents of the list (space separated). For example:
+
+    |example
+    =vararg.expand args+
+    Here are my args: &args&
+    =end
+    |end
+
+    Given the input `test-arg1 test-arg2` the macro will evaluate to `Here are my args: test-arg1
+    test-arg2`.
+
+* Inline Macro Expansion
+
+* Extendable Links
+
+* The `#eval` Carryover Tag
+
+* The Standard Library
+** The uhhh
+
+* Abstract Objects
+** "Null" Objects
+
+** `&...&` expansion overrides
 
   ===
 %| vim: set tw=100 :|%
