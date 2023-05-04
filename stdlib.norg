@@ -11,14 +11,14 @@ This defines the entry point for the Neorg standard library:
 @code janet
 (def wrong-next-object "`macro` requires that the next object be a `@code` tag!")
 
-(assert (neorg/ts/ranged-verbatim-tag? next) wrong-next-object)
+(assert (neorg/ast/ranged-verbatim-tag? next) wrong-next-object)
 
-(let [next-tag (neorg/ts/ranged-verbatim-tag next)]
+(let [next-tag (neorg/ast/ranged-verbatim-tag next)]
  (assert (= (get next-tag :name) "code") wrong-next-object))
 
 # TODO: Ensure that the language used in the `@code` tag is supported?
 
-(string "=" name " " ;params "\n#eval\n" (neorg/ts/node-text next :join) "\n=end")
+(string "=" name " " ;params "\n#eval\n" (neorg/ast/node-text next :join) "\n=end")
 @end
 =end
 
@@ -190,7 +190,7 @@ This defines the entry point for the Neorg standard library:
 (neorg/abstract-object
  {:bind next
   :export |(neorg/export/code-block
-            :content (neorg/ts/node-text next)
+            :content (neorg/ast/node-text next)
             :language language)})
 @end
 
