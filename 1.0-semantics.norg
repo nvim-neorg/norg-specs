@@ -156,5 +156,7 @@ Table syntax:
 
 ** `&...&` expansion overrides
 
+* Janet
+
   ===
 %| vim: set tw=100 :|%

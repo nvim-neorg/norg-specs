@@ -1810,8 +1810,8 @@ version: 1.0
    documents, including macros, variables and parsing of eval blocks.
    - Interpretation/Execution of {*** macro tags}
    - Semantic understanding/execution of all other tag types
-   - Evaluation of `@code` blocks for the {:1.0-semantics:* NIP}[NIP] language (if they are marked
-     with `#eval`).
+   - Evaluation of `@code` blocks for the {:1.0-semantics:* Janet}[Janet] language (if they are marked
+     with `#eval`) and full support for the janet standard library.
 
    ===
 
