@@ -142,21 +142,73 @@ Table syntax:
     Given the input `test-arg1 test-arg2` the macro will evaluate to `Here are my args: test-arg1
     test-arg2`.
 
+** Ranged Tags
+
 * Inline Macro Expansion
+
+  Inline macro expansion is the process of expanding the content of a macro in-line via the
+  `&` attached modifiers.
+  There is no way to supply parameters to an inline macro expansion and, therefore by definition,
+  only {# variable}s may be expanded through this syntax.
+
+  When performing inline expansion, first the expansion must be isolated onto its own separate line,
+  this involves prefixing and postfixing the inline macro expansion with newlines. This means that
+  given the input `Hello, &name&!` (like in our [greet example]{# macro tag}), the macro should be
+  isolated like this:
+
+  @code norg
+
+  Hello,
+  &name&
+  !
+
+  @end
+
+  And only then should `&name&` be expanded to its underlying value.
+
+  Such a rule allows these variables to expand to complex data types like headings, footnotes and
+  other detached modifiers without unintentionally breaking.
 
 * Extendable Links
 
 * The `#eval` Carryover Tag
 
 * The Standard Library
-** The uhhh
 
 * Abstract Objects
+
+  Abstract Objects (AOs) are an opaque data type within Norg. They serve as a way to represent some
+  intermediate information about an object without having concrete Norg markup backing it.
+
+  Abstract Objects have a few builtin properties - some must be provided, whereas others are left as
+  optional:
+  - The {# AST Node} that the abstract object would like to bind itself to (*optional*)
+  - A translation function to convert the intermediate representation of the AO to any given target
+    format (markdown, asciidoc etc.). The target may also be Norg itself. Returning `nil` tells
+    Neorg that said object does not have a representation for the given target. (*required*)
+  - Custom data that the AO would like to keep for future reference (*optional*)
+
+  A prime example of AOs in use are `@code` blocks. There is no Norg syntax that `@code` blocks
+  could possibly evaluate to, as Norg does not have a built-in code block syntax. Instead,
+  when the `@code` macro is evaluated, it gets translated into an abstract object with some
+  properties. Now, when the user wants to export their Norg document into markdown, the translation
+  function is invoked, and the `@code` block is converted into a markdown fenced code block
+  (`|```|`).
+
 ** "Null" Objects
+
+   Null objects are a special type of AO, which form when the {# AST Node} is left as
+   `nil`, and whose translation function simply always return an empty string (`""`).
+
+   To produce a null AO, you may use the `(neorg/null-abstract-object)` function (see {* janet}[this
+   section] on janet support).
 
 ** `&...&` expansion overrides
 
 * Janet
 
+** AST Nodes
+
   ===
+
 %| vim: set tw=100 :|%
