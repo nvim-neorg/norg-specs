@@ -142,6 +142,27 @@ Table syntax:
     Given the input `test-arg1 test-arg2` the macro will evaluate to `Here are my args: test-arg1
     test-arg2`.
 
+    When referencing the arguments, you do not include the succeeding modifier.
+
+*** Parameter Filters (prefixes)
+
+    Apart from being able to supply a modifier to a parameter, you may also choose to filter
+    out/support only certain kinds of parameters supplied from different sources. For example,
+    you may only want your macro to be used in the context of a ranged verbatim tag, or you
+    may only want your function to be usable when ran through an {# extendable links}[extendable
+    link].
+
+    Norg recognizes the following set of filters:
+    - `=` - the content of an extendable link
+    - `@` - content of a ranged verbatim tag
+    - `\|` - content of a standard ranged tag
+    - `>` the next object (content of all carryover tag types - there is no way to differentiate
+      between a `#` and `+` invocation, as both have consistent behaviours and return the same
+      types of data)
+
+    When referencing the arguments through e.g. the {# inline macro expansion}, you do not include
+    the preceding modifier in the parameter name.
+
 *** Macro Return Values
 
     Macros may return only one of three values:
@@ -158,6 +179,7 @@ Table syntax:
     a `(neorg/await-abstract-object)`, then an appropriate error should be raised.
 
 ** Ranged Tags
+   %TODO%
 
 * Inline Macro Expansion
 
@@ -184,7 +206,46 @@ Table syntax:
   Such a rule allows these variables to expand to complex data types like headings, footnotes and
   other detached modifiers without unintentionally breaking.
 
+  This rule also carries over to {* extendable links}.
+
+* (=) Attributes
+
+  Attributes are a special data type in Norg as they serve as a way to retain a function invocation
+  for later use, and allow for combinatoric logic by chaining macro calls. If a carryover tag is
+  applied to an attribute, then the carryover tag should /not/ be invoked on the attribute, but
+  should instead be stored in the attribute's metadata internally in your application through the
+  standard library function .
+
+* Null Attached Modifier
+
+  The null attached modifier serves two purposes - when used standalone, all text inbetween the two
+  `%` modifiers gets removed. This means that, on its own, `%this%` acts as an inline comment
+  syntax. When paired with attached modifier extensions, the attached modifier extensions determine
+  how the text is displayed. For example, `%blue text%(color:blue)` renders the text as blue,
+  without any further modifications. This allows for easy inline styling of objects or words, as `%`
+  is non-verbatim (other markup can exist within it).
+
 * Extendable Links
+
+  Apart from the traditional inbuilt links, extendable links exist to allow custom search behaviour
+  to be implemented within Norg. The extendable link is prefixed with a `=`, and has its behaviour
+  governed by an succeeding attached modifier extension.
+
+  The extendable link is simply a fancy macro invocation with two parameters, the second being
+  optional: the content of the link, and the content of the link description (if any).
+
+  This means that the following:
+  @code norg
+  {= some text}[a description](macro-name)
+  @end
+
+  Is equivalent to:
+  @code norg
+  .macro-name some\ text a\ description
+  @end
+
+  To explicitly capture extendable links, you may use the {# parameter filters (prefixes)}[`=`
+  prefix] before your parameter name.
 
 * The `#eval` Carryover Tag
 
