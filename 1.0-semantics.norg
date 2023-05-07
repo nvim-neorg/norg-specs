@@ -142,6 +142,21 @@ Table syntax:
     Given the input `test-arg1 test-arg2` the macro will evaluate to `Here are my args: test-arg1
     test-arg2`.
 
+*** Macro Return Values
+
+    Macros may return only one of three values:
+    - Raw Norg Markup
+    - An {# Abstract Objects}[abstract object]
+    - An abstract object future
+
+    When dealing with raw norg macros, one may only return raw norg markup.
+    When invoking {* janet} from within the macro via {* the `eval` carryover tag},
+    then the return value is determined by the last expression in the eval block.
+
+    If the return value is not a {https://janet-lang.org/docs/strings.html}[long-string literal]
+    (strings delimited with backticks), a `(neorg/abstract-object)` nor
+    a `(neorg/await-abstract-object)`, then an appropriate error should be raised.
+
 ** Ranged Tags
 
 * Inline Macro Expansion
