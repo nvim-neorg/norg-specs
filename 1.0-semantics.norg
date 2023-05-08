@@ -14,6 +14,8 @@ version: 0.0.13
       the `&var&` syntax they should be placed on a new line and /then/ expanded.
       This prevents user error.
 - ( ) Explain how extendable links are macros under the hood.
+- (?) Force `#eval` to take in a vararg of variable names to transfer to the janet side?
+      How does `#eval` know the parameters passed to the current function?
 
 Table syntax:
 - ( ) New motions: `>`, `v`, `^`, `<`
@@ -124,7 +126,7 @@ Table syntax:
     Now, it is possible to not supply the variable and not get an error. When expanding a "null"
     object, it should evaluate to an empty string, or in other words, to nothing.
 
-    NOTE: Norg does not actually have a notion of null values. Instead, the null value is
+    *NOTE:* Norg does not actually have a notion of null values. Instead, the null value is
     represented as an empty {* abstract objects}[abstract object]. See that section for more
     details.
 
@@ -174,12 +176,74 @@ Table syntax:
     When invoking {* janet} from within the macro via {* the `eval` carryover tag},
     then the return value is determined by the last expression in the eval block.
 
-    If the return value is not a {https://janet-lang.org/docs/strings.html}[long-string literal]
-    (strings delimited with backticks), a `(neorg/abstract-object)` nor
-    a `(neorg/await-abstract-object)`, then an appropriate error should be raised.
+    If the return value is not a {https://janet-lang.org/docs/strings.html}[string] , a
+    `(neorg/abstract-object)` nor a `(neorg/await-abstract-object)`, then an appropriate error
+    should be raised.
+
+** Infirm Tags
+
+   The simplest way to invoke a macro is via the infirm tag. It does not auto-supply any parameters
+   like the rest do.
+
+   An example usage looks like so:
+
+   @code norg
+
+   =greet name
+   Hello, &name&!
+   =end
+
+   We then invoke the macro with the `.` prefix:
+
+   .greet Vhyrro
+
+   @end
+   
+   When expanding the macro, you get:
+   @code norg
+
+   Hello,
+   Vhyrro
+   \!
+
+   @end
+
+   Which, after an automatic reformatting, converts to `Hello, Vhyrro!`.
+   See {# inline macro expansion} rules for more information.
 
 ** Ranged Tags
-   %TODO%
+
+   Ranged tags are a special type of macro invocation. They take in arbitrary parameters, and then
+   also consume some content until an end marker is reached. This content may be norg markup, in
+   which case the tag in question is a /standard ranged tag/, otherwise the tag takes in verbatim
+   markup and is a /verbatim ranged tag/.
+
+   To create a macro that specifically targets a ranged tag, you may use one of the prefixes
+   described {# parameter filters (prefixes)}[here]. Below is an example for the verbatim ranged
+   tag that takes in a string and slices it by some amount:
+   @code norg
+
+   =slice start end? @content
+   .eval janet (string/slice content start end)
+   =end
+
+   @end
+
+   *NOTE:* When invoking the macro using the `@` tag syntax, the `content` variable should be auto-supplied
+   by Norg. The content should always target the last parameter.
+
+   The example uses {* janet} to perform the actual slicing logic. To invoke the macro, we use the
+   ranged tag syntax:
+   |example
+
+   @slice 0 5
+   hello world!
+   @end
+
+   |end
+
+   When the macro is expanded, it evaluates to the norg markup `hello`. This is because the `.eval`
+   call returns a string (see {# macro return values}).
 
 * Inline Macro Expansion
 
@@ -188,16 +252,17 @@ Table syntax:
   There is no way to supply parameters to an inline macro expansion and, therefore by definition,
   only {# variable}s may be expanded through this syntax.
 
-  When performing inline expansion, first the expansion must be isolated onto its own separate line,
-  this involves prefixing and postfixing the inline macro expansion with newlines. This means that
-  given the input `Hello, &name&!` (like in our [greet example]{# macro tag}), the macro should be
-  isolated like this:
+  When performing inline expansion, the expansion must be isolated onto its own separate line,
+  this involves prefixing and postfixing the inline macro expansion with newlines /and/ postfixing
+  the expansion with an escape character (this is to prevent punctuation that may occur after the
+  macro expansion to be treated as a detached modifier). This means that given the input `Hello,
+  &name&!` (like in our [greet example]{# macro tag}), the macro should be isolated like this:
 
   @code norg
 
   Hello,
   &name&
-  !
+  \!
 
   @end
 
@@ -207,6 +272,32 @@ Table syntax:
   other detached modifiers without unintentionally breaking.
 
   This rule also carries over to {* extendable links}.
+
+** Compressing Expanded Results
+
+   After the result has been expanded, your application may want to automatically reformat the
+   output of the macro. Several lines for what could be a single line is unpleasant to look at,
+   not to mention the extraneous escape character that the expansion might generate.
+
+   Once the expansion is complete, an inbuilt formatter may choose to stitch the text back together
+   in a coherent fashion, if the output of the macro does not begin with a detached modifier or tag.
+   Following up with the example in the previous section:
+
+   @code norg
+
+   Hello,
+   Vhyrro,
+   \!
+
+   @end
+
+   May be compressed back to:
+
+   @code norg
+
+   Hello, Vhyrro!
+
+   @end
 
 * (=) Attributes
 
