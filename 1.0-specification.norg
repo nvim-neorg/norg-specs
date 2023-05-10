@@ -598,7 +598,7 @@ version: 1.0
      The timestamp extension allows you to associate a {* detached modifiers}[detached modifier]
      with a date/time.
      The syntax for a timestamp is as {^ note to parser developers}[follows]:
-     `<day>,? <day-of-month> <month> <year> <time> <timezone>`
+     `<day>?,? <day-of-month> <month> -?<year> <time> <timezone>`
      - ::
        The `<day>` value is reliant on the current locale, but the following alterations of that
        value are permitted:
@@ -606,13 +606,18 @@ version: 1.0
        -- An unambiguous shorthand (a shorthand that can uniquely identify the day), e.g. `Tue`, `We`,
           `M` (Monday), `Frid`. Something like `T` is not allowed, as both `Tuesday` and `Thursday`
           could satisfy the input.
+
+       The value may also be omitted if one chooses.
      - The `,?` expression means that a `,` character may optionally exist in that location.
      - The `<day-of-month>` value is simply a numeric value with at most 3 digits (to disambiguate
        it from the `<year>` value).
      - The `<month>` value is a word-based representation of the current month (i.e. `October`,
        `January` etc.) dependent on the current locale. The same shorthand rules apply as in the
        `<day>` value.
-     - The `<year>` value must be a numeric value with at least 4 digits.
+     - The `<year>` value must be a numeric value with at least 4 digits (for dates before `1000`,
+       prefix the year with the appropriate amount of zeroes, so for example the year `200` should
+       be written as `0200`). The `<year>` value may also be prefixed with a `-` (negative) sign to
+       differentiate `B.C` from the default `A.D`.
      - The `<time>` value must consist of this format (in regex): `|\d{1,2}:\d{2}(\.\d{1,2})?|`.
        Some examples would be: `18:00`, `5:32`, `00:12.32`.
 
