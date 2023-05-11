@@ -144,7 +144,8 @@ Table syntax:
     Given the input `test-arg1 test-arg2` the macro will evaluate to `Here are my args: test-arg1
     test-arg2`.
 
-    When referencing the arguments, you do not include the succeeding modifier.
+    When referencing the parameters in e.g. `&variable&` expansions you do not include the
+    succeeding modifier.
 
 *** Parameter Filters (prefixes)
 
@@ -158,9 +159,14 @@ Table syntax:
     - `=` - the content of an extendable link
     - `@` - content of a ranged verbatim tag
     - `\|` - content of a standard ranged tag
-    - `>` the next object (content of all carryover tag types - there is no way to differentiate
-      between a `#` and `+` invocation, as both have consistent behaviours and return the same
-      types of data)
+    - `>` - the next object (content of all carryover tag types). There is no way to differentiate
+      between a `#` and `+` invocation, as both have consistent behaviours and return the same types
+      of data
+    - `&` - the "variable reference". Used seldom, but this prefix ensures that the value you
+      provide as a string is a name of a variable that exists in the current scope. When paired with
+      the `*` vararg and if no values are provided by the user, all variables in the current scope
+      should be supplied as the content of the variable (see {# parameter filters (prefixes)}).
+      Expanding the parameter reference should expand the variable the reference is pointing to.
 
     When referencing the arguments through e.g. the {# inline macro expansion}, you do not include
     the preceding modifier in the parameter name.
@@ -338,9 +344,37 @@ Table syntax:
   To explicitly capture extendable links, you may use the {# parameter filters (prefixes)}[`=`
   prefix] before your parameter name.
 
+* The Standard Library
+
+  Norg implements a cross-platform standard library that any [Neorg]-like implementation may use.
+  It is never recommended to roll your own standard library.
+
+  Despite this, a single macro is /required/ to be implemented by every client that implements Norg
+  macros - this is the `.invoke-janet` macro. Its syntax looks like so:
+  @code norg
+
+  .invoke-janet code+
+
+  @end
+
+  Where `code` is a vararg of strings that get stitched together with a single space char before
+  executing the code. Code should be executed in a janet {# sandboxing}[sandbox]. It forms the baseline for the
+  `#eval` carryover tag.
+
+  The `stdlib.norg` file can be found {/ stdlib.norg}[here].
+
 * The `#eval` Carryover Tag
 
-* The Standard Library
+  Complex macros and their behaviours are only possible with a scripting language backing it.
+  {* Janet} is our language of choice, and there must be some way to execute it and return its
+  result.
+
+  For this, the `#eval` carryover tag exists, which is a wrapper around `invoke-janet`, ensuring
+  every variable captured is valid. The `#eval` tag delegates the rest of the invocation logic to
+  `(neorg/execute)` (see {# norg-janet standard library}), which also allows for execution of code
+  in different programming languages.
+
+  `#eval` always expects a `@code` block to follow itself containing the code to execute.
 
 * Abstract Objects
 
@@ -373,6 +407,8 @@ Table syntax:
 ** `&...&` expansion overrides
 
 * Janet
+
+**** Norg-Janet Standard Library
 
 ** AST Nodes
 
