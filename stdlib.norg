@@ -3,9 +3,6 @@ This document is a real implementation of the Norg standard library.
 This includes all carryover tags, ranged tags and their behaviours.
 |end
 
-This defines the entry point for the Neorg standard library:
-.stdlib stdlib.janet
-
 =macro name params* >next
 #eval
 @code janet
@@ -196,4 +193,8 @@ This defines the entry point for the Neorg standard library:
 
 %Yup, this is the implementation of `comment`%
 =comment ...
+=end
+
+=eval language-name? &captures* >code
+.invoke-janet (neorg/execute (or &language-name& (neorg/ast/ranged-verbatim-tag/parameter &code& 0) (error "Language type to execute could not be inferred!")) \[&captures&\] (or (neorg/ast/ranged-verbatim-tag? &code& "code") (error "Expected code block to follow `#eval` block!")))
 =end
