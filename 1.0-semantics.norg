@@ -365,9 +365,9 @@ Table syntax:
 
 * The `#eval` Carryover Tag
 
-  Complex macros and their behaviours are only possible with a scripting language backing it.
-  {* Janet} is our language of choice, and there must be some way to execute it and return its
-  result.
+  Complex macros and their behaviours are only possible with a scripting language backing it. {*
+  Janet} is our first class citizen language of choice, and there must be some way to execute it and
+  return its result.
 
   For this, the `#eval` carryover tag exists, which is a wrapper around `invoke-janet`, ensuring
   every variable captured is valid. The `#eval` tag delegates the rest of the invocation logic to
@@ -405,6 +405,29 @@ Table syntax:
    section] on janet support).
 
 ** `&...&` expansion overrides
+
+   When attempting to expand a {$ variable} through the inline macro expansion syntax (`&this&`),
+   Norg should look at a few factors:
+
+   ~ If the variable contains raw norg markup, paste the contents of the raw markup within the
+     document, respecting the {# inline macro expansion} rules.
+   ~ If the variable is an abstract object, then execute the translation function with the target
+     language set to `norg`. If the returned result is raw norg markup, then perform step 1. If the
+     translation function returns `nil`, then the macro is considered {# Bakeability}[unbakeable].
+     When this is the case, issue a warning to your user letting them know that baking the macro is
+     not possible.
+
+* Bakeability
+
+  "Baking" refers to the process of expanding a macro permanently and irreversibly by pasting its
+  expanded form in place of the original macro invocation. Most macros can be baked, but not all.
+
+  Baking is a process manually triggered by the user (with a keybind or command in your
+  application). Not all macros can be baked, however.
+
+  Baking of an object boils down to invoking the translation function of an {# Abstract
+  Objects}[abstract object] with the target set to `norg`. If the function returns `nil`, then the
+  macro is not bakeable.
 
 * Janet
 
