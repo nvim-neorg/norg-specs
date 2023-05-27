@@ -14,16 +14,9 @@ version: 0.0.13
       the `&var&` syntax they should be placed on a new line and /then/ expanded.
       This prevents user error.
 - ( ) Explain how extendable links are macros under the hood.
-- (?) Force `#eval` to take in a vararg of variable names to transfer to the janet side?
+- (x) Force `#eval` to take in a vararg of variable names to transfer to the janet side?
       How does `#eval` know the parameters passed to the current function?
 
-Table syntax:
-- ( ) New motions: `>`, `v`, `^`, `<`
-- ( ) Floor motion (go fully left and down): `_`
-- ( ) Ceiling motion (go fully up and right): `/`
-- ( ) Root of table (A1): `.`
-- ( ) Allow the combination of motions with numerical values (`13>`/`2_`)
-- ( ) Allow underflowing via `<` (B1 -> A3 if A has 3 occupied cells)
 - ::
   Example:
 @code norg
@@ -428,6 +421,101 @@ Table syntax:
   Baking of an object boils down to invoking the translation function of an {# Abstract
   Objects}[abstract object] with the target set to `norg`. If the function returns `nil`, then the
   macro is not bakeable.
+
+* Tables
+
+  Tables in Norg are rather alien. Instead of opting for a visual approach of defining a table,
+  Norg's syntax serves as a way to "program" a table moreso than it is to create one on the spot.
+  For a visual approach, one may use the `@table` tag, which evaluates to the official table syntax.
+
+  In usual table implementations, tables start at the root (0, 0)\/A1. Afterwards, the user visually
+  populates the table with entries in a dynamic fashion - new cells grow the table as they are
+  encountered. In norg you are initially provided with an /infinite spreadsheet/ to act as a canvas,
+  with a root (A1). Then, you define /cells/ which exist at some position in this canvas, i.e. A5,
+  and the content of that cell gets placed at the specified position. You build tables by defining
+  *both the what and the where*, instead of just the *what*.
+
+  As stated previously, tables are defined by individual /cells/. Each `:` part of a table is
+  considered a cell:
+  @code norg
+  : A1
+    Cell one.
+  : A2
+    Cell two.
+  @end
+
+  The title portion of the `:` detached modifier determines /where to place the content of the
+  cell/. Absolute positions are marked with a `[A-Z]+[0-9]+` syntax. For example, `A3` means "first
+  row, third column". More crazy examples include: `AA230`,
+  `B032` (preceding zeroes are trimmed, leaving `B32` as the final cell location).
+
+** Motions
+
+  Apart from absolute positions, one may opt for /relative positions/, using a combination of the
+  following *motions*:
+
+  - *Root motion*: `.` - this motion is a shorthand alternative to writing `A1`. It denotes the root
+    of the table.
+  - *General motions*: `<`, `>`, `^`, `v` - these define a single movement left, right, up and down
+    relative to the previous cell, respectively.
+  - *Floor motion*: `_` - moves down once and continues moving left until the leftmost /populated/
+    cell is encountered. This allows for easy creation of left-to-right tables, as you may choose a
+    starting position for your table, use the `>` motion to populate entries to the right, and then
+    slide back to the left with the `_` operator as if you were sliding back the paper bail of a
+    typewriter - your "cell cursor" is now back at the beginning, just a row lower.
+  - *Ceiling motion*: `/` - another paradigm for creating tables that isn't left-to-right is
+    top-to-bottom. In this case, you define a starting position and use the `v` motion to move down
+    and populate cells, after which you use the `/` operator to move one cell to the right and to
+    move back to the top. The `/` operator should continue searching upwards for the upmost
+    /populated/ cell, and consider that the "ceiling".
+
+*** Motion Repetition
+
+    Motions may be prefixed with a count to repeat the motion `n` amount of times.
+    Different motions may also be combined.
+
+    Examples include:
+    - `3>`  - move to the right three times
+    - `2_`  - perform two floor motions
+    - `2>v` - move to the right twice, then down a single cell
+
+*** Left-side Underflow
+
+    Norg allows a semantic edge case for the `<` motion - when the motion is at column `1` and the
+    left motion is used the motion underflows to the row above, occupying the position of the
+    rightmost /populated/ cell. It may be considered the inverse (or the undoing) of the floor
+    motion (`_`).
+
+** Intersecting Modifiers
+
+   Commonly you'll see the intersecting modifier used to make tables appear simpler.
+   Instead of writing out the full syntax:
+   @code norg
+   : A1
+   Content.
+   @end
+
+   When the cell only contains text users will commonly write:
+   @code norg
+   : A1 : Content.
+   @end
+   for brevity.
+
+** Dynamic Positioning
+
+   A unique side effect of Norg allowing cells to exist at arbitrary positions in an infinite canvas
+   includes /being able to place cells at dynamic positions using macros/:
+   @code norg
+   : &position&
+   Content.
+   @end
+
+   The `position` variable may depend on parameters or other data within the current table,
+   yielding complex behaviours.
+
+** ( ) Examples
+
+   TODO
 
 * Janet
 
