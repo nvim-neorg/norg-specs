@@ -117,7 +117,7 @@ version: 0.0.13
     |end
 
     Now, it is possible to not supply the variable and not get an error. When expanding a "null"
-    object, it should evaluate to an empty string, or in other words, to nothing.
+    object, it should evaluate to an empty string, or in other words, do nothing.
 
     *NOTE:* Norg does not actually have a notion of null values. Instead, the null value is
     represented as an empty {* abstract objects}[abstract object]. See that section for more
