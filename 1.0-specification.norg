@@ -150,8 +150,7 @@ version: 1.0
     (but nothing else!) may precede it)
   - A detached modifier must be immediately followed by {*** whitespace} or another detached modifier
     of the same type
-  -- /NOTE/: in general a {*** line endings}[line ending] is *not* allowed as the whitespace following a detached
-     modifier. The only case where this is valid is for the /closing/ modifier of the
+  -- /NOTE/: The only exception to this is for the /closing/ modifier of the
      {** range-able detached modifiers}.
 
   The following table outlines all valid *detached modifiers*. It also adds various possible
