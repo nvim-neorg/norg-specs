@@ -440,7 +440,7 @@ version: 0.0.13
   @code norg
   : A1
     Cell one.
-  : A2
+  : B1
     Cell two.
   @end
 
@@ -485,6 +485,11 @@ version: 0.0.13
     left motion is used the motion underflows to the row above, occupying the position of the
     rightmost /populated/ cell. It may be considered the inverse (or the undoing) of the floor
     motion (`_`).
+
+** Cell Notation
+
+   The notation for a cell is the same as the notation used in spreadsheet applications like excel.
+   Letters determine the column whereas numbers determine the row (e.g. `C2` is column 3 row 2).
 
 ** Intersecting Modifiers
 
