@@ -10,7 +10,7 @@ version: 0.0.13
 - ( ) Document stdlib macros/carryover tags/ranged tags
 - ( ) Describe how tags are evaluated
 - ( ) Document inbuilt attached modifier extensions and their behaviours
-- ( ) When evaluating macros for attributes (inline elements w/ attached mod ext) and
+- (x) When evaluating macros for attributes (inline elements w/ attached mod ext) and
       the `&var&` syntax they should be placed on a new line and /then/ expanded.
       This prevents user error.
 - ( ) Explain how extendable links are macros under the hood.
