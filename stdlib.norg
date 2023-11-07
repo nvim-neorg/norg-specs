@@ -177,7 +177,7 @@ This includes all carryover tags, ranged tags and their behaviours.
 @end
 =end
 
-#macro name custom-name next
+#macro name custom-name >next
 @code janet
 (neorg/set-property next {:name custom-name})
 @end
@@ -191,7 +191,7 @@ This includes all carryover tags, ranged tags and their behaviours.
             :language language)})
 @end
 
-%Yup, this is the implementation of `comment`%
+%Yes, this is the implementation of `comment`%
 =comment ...
 =end
 
