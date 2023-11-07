@@ -1,0 +1,506 @@
+@document.meta
+title: Norg's Design Decisions
+description: An explanation of every feature in Norg.
+authors: vhyrro
+categories: [
+    non-spec
+]
+created: 2023-08-06
+updated: 2023-11-07T18:53:39+0100
+version: 1.1.1
+@end
+
+* Introduction
+
+  Oftentimes you may encounter some new or alien syntax within Norg and ask yourself "What on earth is this? Why did
+  this thing get implemented in this way specifically?". This document aims to cover all of the things Norg does better
+  (and sometimes worse) than other file formats.
+
+  First of all, what is Norg? Norg is a modern attempt at a markup format, taking the best parts from all of the older
+  markup languages we could find, and generalizing and standardizing all of it in a single package. Norg is simple
+  enough to be a markdown alternative, but also expressive enough such that it even beats the `org` file format
+  feature-wise.
+
+* Rule 1: Indentation = Bad
+
+  On the surface, indentation sounds like a fantastic idea. It's great for human eyes,
+  our eyes love indents! They nicely segregate information and require no clunky syntax to
+  operate - want to nest a list? Just indent it!
+
+  Almost ironically, markdown was amongst the first to introduce this as a feature. In the [commonmark
+  specification]{https://spec.commonmark.org/0.30/} you will find the following quote:
+
+  > What distinguishes Markdown from many other lightweight markup syntaxes, which are often easier to write, is its
+    readability. As Gruber writes:
+  >> The overriding design goal for Markdown’s formatting syntax is to make it as readable as possible. The idea is
+     that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been
+     marked up with tags or formatting instructions.
+
+  However indentation has some faults, and these faults are not only annoying for the parser implementer but also for
+  the user - they make output unpredictable and as a result make the document feel "unstable". Indent an object two
+  characters too many and watch how the next three paragraphs of your text now look terrible when rendered.
+
+  On the parsing side, indentation is a difficult topic. Tree-sitter is essentially the defacto parsing library
+  nowadays, it supports LR and GLR parsing strategies with a single character of lookahead. For the person who doesn't
+  do parsing for a living (lucky you) this means that the parser only has a single/the next character as its context,
+  which means it can't backtrack in the document nor can it look ahead into the document - it feels like parsing things
+  this way should be impossible, but as it turns out people are smart and GLR works with almost any language, even
+  highly complicated/ambiguous ones. One thing you will notice if you ever read the source code of tree-sitter parsers
+  is that for markup formats (markdown, org) as well as programming languages (python, haskell) that utilize
+  indentation a custom lexer written in C/C++ is ALWAYS used to track said indentation levels within a dynamic array. Defining
+  how indented objects behave using just a grammar is simply infeasible and in most cases - impossible.
+
+  Indentation is also difficult for formatters and auto-fix tools. There is no unambiguous way to determine what the
+  indentation level should be for any given line. Take for example the following markdown snippet:
+
+  @code markdown
+
+  - Text
+  Here.
+
+  @end
+
+  Given that the second line is not indented, it should not belong to the list item, right? But if we apply an indent, suddenly the text does
+  become a part of the unordered list:
+
+  @code markdown
+
+  - Text
+    Here.
+
+  @end
+
+  Hence, a formatter has to assume that the indentation level you assigned initially is the /expected/ indentation
+  level. It cannot catch what is quite literally a bug in your document, nor can it issue any sort of warning. You will
+  have to find out that your document is ill-formatted when it's already too late. The only possible way to discover if
+  your document is ill-formatted (without painstakingly proofreading your document and your indents) is by rendering
+  the document and viewing the output, which paradoxically goes against the philosophy of your document being readable
+  and parsable without rendering being a requirement. It is safe to argue that for most cases it does not matter if
+  your eyes see something slightly dedented or not, but for a *machine* it absolutely does - and since publishing
+  markup documents is a process of communicating to a *machine* how you would like your content rendered, this simple
+  problem is exponentially worse than it otherwise would be.
+
+** The Solution
+
+   It is possible to maintain readability-at-a-glance while eliminating indentation, and that includes /special characters/ and /implied boundaries/.
+   Special characters are self explanatory - you may have a special character that denotes the beginning or end of a section, like where the content
+   of a footnote starts and ends or when to begin a new heading. This however needs to be used effectively and sparingly to prevent high amounts of verbosity
+   and unnecessary extra characters.
+
+   Implied boundaries exist in Norg thanks to our heavy use of {** Rule 2: Generalize, Generalize,
+   Generalize...}[generalizations]. For example we specify that every object that is considered a nestable detached modifier has by default
+   a single paragraph that follows it. Since lists are a nestable detached modifier, this solves our ambiguity problem:
+   @code norg
+
+   - Text
+   Here.
+
+   @end
+
+   Since lists must have a paragraph that follows them the second line is also consumed as part of the list, regardless of indentation.
+   To make the text separate, apply a paragraph break (two newlines):
+   @code norg
+
+   - Text
+
+   Here.
+
+   @end
+
+   This enforces consistency and allows a formatter to unambiguously determine that a segment should be indented a specific way.
+   Such implied boundaries are present all over Norg, and are easy to spot and understand!
+
+* Rule 2: Generalize, Generalize, Generalize...
+
+  Features that almost all modern markup formats suffer from include scattered syntax. So much syntax is reserved for
+  so many different purposes, and as such developers of these formats have difficulties making memorable and coherent
+  constructs. As it turns out, it is essentially impossible to make a perfectly coherent system without sacrificing
+  /something/ with regards to the functionality or usability, but I would personally say that Norg has succeeded in
+  structural consistency. The specification lays out a set of ground "axioms" (concepts) like detached modifiers,
+  attached modifiers, then derives new constructs from these initial axioms. Detached modifiers change into Structural
+  Detached Modifiers, Rangeable Detached Modifiers and Nestable Detached Modifiers; Attached Modifiers can be basic or
+  free-form, and constructs that can be present in many places (e.g. the detached modifier extension) have consistent
+  behaviours no matter where they are used.
+
+  This sounds very easy to achieve when you say it out loud, however there are quite a lot of problems at play.
+
+** Rule 2.1: Keywords = Bad
+
+   Norg strays from using keywords (i.e. reserved words) for any of its syntax. Everything is done solely through punctuation, which gives an immediate indication
+   to the reader that said character has some special function. Given that markup languages /obviously/ can contain
+   any word from the English language, it's a very bad idea to introduce keywords.
+
+   Keywords like `org`'s `TODO`/`CANCELLED`/etc. invite platform-specific implementations as their meanings and values
+   are fully configurable at runtime. Norg always opts for an approach where user-customizable functionality is parsed
+   inside of a well-defined construct. That way the parser parses whatever is in the construct as normal text, and then
+   semantic analysis tools may kick in to understand more about the meaning of the document. This is, in our opinion,
+   the "best of both worlds" approach.
+
+** Rule 2.2: No Character Repetition
+
+   Characters should never be repeated to create or derive new syntax (and in Norg are only used to signify nesting
+   levels). This might seem like a rather arbitrary rule, but there's a little more depth to it than you may think. For
+   starters, the obvious reason - since the syntax-to-semantics mapping should be as 1:1 as possible, arbitrarily
+   repeating characters to derive completely new syntax breaks the mapping entirely. In layman's terms, this means that
+   you want one bit of syntax to map to one bit of behaviour. Imagine if `[this]` were an anchor and then `[[this]]`
+   were a wiki link, where's the common baseline between the two? What do they have in common? Nothing really. Their
+   syntax is similar, but the behaviour (semantics) are all over the place. Sure, you can memorize that this is the
+   syntax and just roll with it, but that's precisely /all/ you can do, just sit, stare and copy. You can't logically
+   deduct "ah if I have `[this]` and I double the characters I'll logically get a wiki link".
+
+   Another reason is syntactical ambiguity - Norg treads on a very thin line ambiguity wise. Our attempt of playing
+   with ambiguity is about the closest you can get before wreaking havoc. By enforcing singular characters it's
+   possible to use contextual information with a single character of lookahead. Take for example the closing attached
+   modifier, which requires that it is followed by a whitespace; let's also assume that this closing modifier is the
+   `$` (inline maths) symbol. When parsing, you can encounter a `$` char then advance the parser and go "of course,
+   there's no whitespace character afterwards, this should simply be considered a PUNCTUATION node". With a double
+   character, you'd have to parse the first `$`, then look out in case you encounter /another/ `$` and then see if
+   there's whitespace after - if there is, you succeeded, great. But what if there isn't? You are forced to return a
+   single PUNCTUATION node whose content is both of the `$` chars, since you cannot backtrack. Ideally you'd like to
+   return two separate `$` nodes, as the second `$` node could potentially be an opening modifier for another inline
+   maths segment... oh yeah, what happens *in that case*?
+
+   Yeah, this happens...
+
+   @code norg
+
+   $hello$$world$
+
+   $$hello$$world$
+
+   @end
+   /*Oh no*/. Now we need to track states of opening and closing modifiers to figure out which modifier is which.
+   Great.
+
+   So, preventing double modifiers also prevents ambiguities with regular starting/closing modifiers, but how do you
+   fix the following case?:
+
+   @code norg
+
+   *hello**world*
+
+   @end
+
+   Your eyes are probably telling you that this is a simple solution - a bold followed by another bold. But one thing
+   you quickly learn when developing markup languages is that your eyes like to deceive you /a lot/. Simple visual
+   problems become not so simple when you actually have to tell a computer to do the solving. However, there is a trick
+   up our sleeve, and it's /only possible with non-duplicated characters/ - the trick is to disqualify the problem,
+   literally. When parsing, if an attached modifier is repeated twice or more consecutively, then that whole set of
+   characters (no matter the context) should be treated as regular text and should be "disqualified" from becoming an
+   attached modifier. What this means is that `*hello**world*` is actually treated a /single bold/ with `hello**world`
+   as its content. Pretty nifty, why have a problem when you can just delete the problem, right?
+
+   ===
+
+* Attached Modifiers and Escape Character Shenanigans
+
+  One place where Norg diverges a little is with the behaviour and constraints of inline markup, like `*this*`. This section will specifically
+  focus on the way we eliminated an entire category of ambiguities related to parsing of attached modifiers.
+
+** Huddle Up
+
+   Norg requires that opening and closing modifiers are huddled to the text they belong to.
+
+   TODO.
+
+* Divergence from `org-mode`
+
+  Norg syntax diverges from both markdown and org-mode syntax only when there is a better or more consistent way to
+  represent the same concept.
+
+  A specification describing `org`'s markup syntax may be found {https://orgmode.org/worg/org-syntax.html}[here].
+
+  An important note to make is that the `org` specification may not always translate 1:1 to the parser within Emacs's
+  `org-mode`. The specification is an attempt /after the fact/ to create a standard for the `org` file format.
+
+** Dropped Features
+
+   There are several features that we never decided to "port"/recreate from `org` due to ambiguity/inconsistency/lack of
+   necessity.
+
+*** Zero-column Headers
+
+    In `org` headers must be defined at column zero of a new line. This may be a parser or ambiguity limitation that
+    we are simply unaware of. What we do know is that there is no ambiguity limitation within Norg, and as such
+    headings can be defined after any amount of preceding spaces.
+
+*** Statistics Cookies
+
+    Statistics cookies are objects that you can attach to e.g. headings or lists to display progress.
+    These aren't things that we believe need to be physically placed in the document and can be displayed virtually
+    by something like Neorg.
+
+    Their main problem is that they clash with other syntax elements that make use of `[]` characters, especially so
+    in a syntax like Norg.
+
+*** Radio Links
+
+    Radio links (`<<<this>>>` in `org`) are in our opinion simply bad design. The use of three of the same characters to
+    open and close the radio link can be a nightmare to parse. Not only is the syntax bad, the semantics are not great
+    either.
+
+    Below is an example of how radio links are used:
+
+    @code org
+
+    This is some <<<*important* information>>> which we refer to lots.
+    Make sure you remember the *important* information.
+
+    @end
+
+    Identifying what plain text is part of what radio link makes for a computationally intensive problem to solve.
+    This is not the right idea. This feature exists in the form of anchors within Norg.
+
+*** Inlinetasks
+
+    We have looked at this syntax element over 20 times by now and we still have no clue what the idea behind this was.
+
+    @code org
+
+    *************** TODO some small task
+                     DEADLINE: <2009-03-30 Mon>
+                     :PROPERTIES:
+                       :SOMETHING: or other
+                     :END:
+                     And here is some extra text
+    *************** END
+
+    @end
+
+    If you indent a heading far enough (past `org-inlinetask-min-level` which is an `org-mode` specific configuration
+    option) that heading ends up becoming an inline task and has to then be closed with `END`... peculiar. Needless to
+    say this feature does not exist in any capacity within Norg.
+
+*** Fixed Width Areas
+
+    Fixed width areas are a waste of a syntax element which could theoretically be implemented using regular `#+begin_*`
+    blocks if the right semantics were put in place. This is enabled via ranged tags in Norg.
+
+*** Zero-width Space as Escape Character
+
+    We were really torn on this idea. On one hand it's somewhat genius, on the other hand it is completely atrocious. To
+    escape a character (i.e. to treat it as raw text) you would usually use a backslash in any programming language or
+    markup language like Markdown. Org decided to prefix its characters with a zero-width space so it is never visible
+    to you.
+
+    Not only is this a non-standard character that is not present on any keyboard, we imagine it to cause a lot of confusion
+    when you open up someone else's `org` file and see some syntax elements treated as raw text with no clear indication
+    of why. Was it a bug, or was it a zero-width space?
+
+*** Embedded LaTeX Environments
+
+    While latex environments absolutely exist in Norg, they are not as tightly intertwined with the syntax as they are with
+    `org`. In `org` you may `\\begin{}` and `\\end{}` in any part of the document, making it hard for parsers to
+    identify when to parse LaTeX and when to parse `org` syntax. In Norg all latex is contained within ranged tags for
+    ease of parsing and isolation.
+
+*** Export Snippets
+
+    Export snippets take on the form of `@@prefix:value@@`. These have no use in the context of how Norg approaches
+    exporting, so the feature has been promptly dropped in our implementation.
+
+*** Angle Links
+
+    In Norg, all links must be marked between `{}` curly brackets. It's not "allowed" to have raw inline links without
+    marking that segment of text as a link. As such angle links have no use within Norg.
+
+*** Drawers and Property Drawers
+
+    Drawers are ways of attaching metadata to an element or creating a collapsable section of text. This has been
+    replaced with rich metadata from inline link targets as well as with macros.
+
+*** The Zeroth Section
+
+    `Org` distinguishes the first section of a document and limits what syntax can be used inside of it.
+    Norg sees no difference whether a section of the document is at the beginning, end or in another dimension of
+    spacetime.
+
+*** The `|clock: |` Element
+
+    There are very few resources as to what this is online, but based off of the explanations of the spec we assume this
+    to be a standalone element like so:
+
+    @code org
+
+    clock: [inactive timestamp]
+
+    @end
+
+    This does not exist within Norg and clocking functionality is implemented through metadata/macros.
+
+** Inline Markup
+
+   Called "text markup" within the `org` specification or "attached modifiers" in the `norg` specification.
+
+*** General Changes
+
+    For starters, there are some general changes that Norg makes with inline markup:
+
+    - Strikethrough has been changed from the somewhat cryptic `+strikethrough+` to `-strikethrough-`
+    - Verbatim has been changed from `=verbatim=` to `|`verbatim|`.
+    - The concept of a "code" object (`~this~`) has been dropped and merged with the `|`verbatim`|` object.
+      We make the argument that semantically code is something you would like to have displayed verbatim and special
+      styling can be done through the use of macros instead of having two different syntax elements.
+    - Subscripts and superscripts are simpler in Norg than in `org`. Superscript is done `^like so^` and subscript
+      is done `,like so,`. Thanks to our attached modifier rules these never interfere with your regular text.
+
+*** Contexts in which Markup may be used
+
+    Within `org`, text markup may be used when the actual markup itself (e.g. `*example text*`) is immediately preceded
+    by `-`, `(`, `{`, `'`, `"`, or the beginning of a line. This behaviour is not notably consistent, may not work with
+    all natural languages which might have different punctuation rules and is far from complete.
+
+    Additionally, `org`'s permitted closing characters include "either a whitespace character, `-`, `.`, `,`, `;`, `:`,
+    `!`, `?`, `'`, `)`, `}`, `[`, `"`, `\\` (backslash), or the end of a line". Not only is this inconsistent with the
+    allowed preceding rules, it yet again does not play well with all locales.
+
+    Within Norg, preceding and succeeding rules are the same, and the opening and closing modifier must be immediately
+    preceded or succeeded by "anything in the general Unicode categories `Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po` or `Ps` or
+    whitespace" for the opening and closing modifier respectively. This ensures consistency across locales and across
+    the format itself.
+
+** TODO Statuses
+
+   Within Org it is common to see specialized statuses attached to headings like `TODO`, `DONE`, `CANCELLED`.
+   These allow more complex states than the simple done/undone/pending states permitted by TODO items in lists.
+
+   However, these pose quite a few issues. First of all, such statuses are /keywords/ (not to be confused with `org`'s
+   interpretation of keywords which look like so: `#+key: value`). The reason why Norg doesn't use keywords is explained
+   in {** Orgmode: Keywords Bad}[this section]. They confuse plain text with something that has semantic weight
+   attached. These TODO/DONE/CANCELLED keywords are also fully configurable. This is good for most cases, but pretty
+   taxing on parser developers if they ever want to create a compliant `org` parser as there is no real "default" set
+   of these TODO Statuses that you can support; furthermore, it messes with parsers that cannot make decisions or modifications to
+   its grammar dynamically like `tree-sitter`.
+
+   Additionally, why is this syntax not simply merged with the TODO syntax? Why is it not possible to create a list that
+   is `TODO` (`- TODO Something`(lang:org)), but instead one must use `- [ ] Something`? This also works the other way
+   around - why must we specify a `TODO` keyword in our headings when we could simply do `* [ ] Something`?
+
+   Norg merges the two syntaxes into a single unified `\( \)` syntax which can be applied to any element within the
+   syntax. Undone headings, footnotes, lists, definitions, quotes? All of that is possible. This generalized syntax not
+   only lends itself better towards parsers, but also lends itself better towards its users, allowing them to track
+   states of any part of the document. Below are some examples of this syntax:
+
+   @code norg
+
+   * ( ) Undone heading
+
+   > (x) Done quote
+
+   ^ (-) Pending footnote
+   I'm currently working on this footnote which is why I marked it pending.
+
+   @end
+
+   This is not the end of the story however. Instead of the basic done, undone and pending states which are the only
+   states present within `org` Norg implements an extra 8 statuses for every possible use case. Below are examples of
+   all of the different states in Norg, each attached to an unordered list item:
+
+   @code norg
+
+   - ( ) Undone
+   - (-) Pending
+   - (x) Done
+
+   - (?) Uncertain task (do I /really/ have to do this?)
+   - (=) On-hold
+   - (_) Cancelled (archived)
+
+   - (!) This task is urgent.
+
+   - (@ date) Task occurs on this date
+   - (< date) Task is due by this date
+   - (> date) Task starts on this date
+   - (+ date) This task recurs on this date
+
+   - (# A) Task has a priority of A
+
+   @end
+
+   These statuses may also be merged with the pipe (`\|`):
+
+   @code norg
+
+   - (< date|-) Task that I am actively pursuing and is due by `date`.
+
+   @end
+
+
+** Indentation
+
+   See {* Rule 1: Indentation = Bad}.
+
+** Links
+
+   TODO.
+
+** Metadata
+
+   TODO.
+
+
+* Why Janet?
+
+  A common question that is asked is why Norg decided to use Janet as its main scripting language. There are many
+  reasons, but the main reasons will be listed below.
+
+** Lisps are Good with Structured Data
+
+   Love them or hate them, lisps are physically built for working with objects that have structure to them.
+   In Norg, structures are all over the place, most notably in the form of nodes. Any part of the Norg document
+   can be accessed and every item (a list, a heading, a paragraph) can be manipulated and viewed in the form of a node.
+   Many nodes then build up a tree which constitutes the entire document.
+
+   Manipulating data related to these nodes is frictionless in a lisp as in a lisp everything is data. Weaving complex
+   operations together takes no effort and is much simpler to reason about in comparison to e.g. a pure functional
+   programming language like Haskell or a fully imperative language like Lua.
+
+** Janet is /Easy to Reason About/
+
+   Janet reads just like an imperative language - a sequence of steps that are performed one by one. Brackets mostly
+   signify scope.
+   This similarity of thought processes just like in imperative languages makes any common programmer feel right at
+   home.
+
+** Janet is /Lightweight/
+
+   Janet is an incredibly lightweight language. Its interpreter was built to be fast, portable and also small. Tight
+   integrations with C means there's little code duplication around. The syntax of the language is also small and
+   predictable, similarly to how Lua has a small but effective syntax set.
+
+** Janet is /Portable/
+
+   Because of its simplicity and portability Janet sees many integrations with other libraries. Parsing things
+   like JSON or TOML is wonderfully unsophisticated. Janet even sees bindings for `tree-sitter` and more.
+
+** Janet Has a /Built-in PEG Parser/
+
+   This is easily the biggest selling point of using Janet as a primary scripting language for Norg. There are many
+   situations where you might want to parse a snippet using Janet. These usually involve areas where the Norg
+   `tree-sitter` parser cannot reach, i.e. content of verbatim ranged tags or custom parsing of macro parameters.
+
+   PEG is a combinatoric parsing library. In layman's terms, it allows you to combine simple parsing functions together
+   to form a more complicated parser like Lego bricks.
+
+   A prime example of a use case within Norg is the `@table` macro. `@table` allows the user to write a table using
+   Markdown-like syntax which then gets translated to the more verbose Norg table syntax. Parsing the Markdown-like
+   table is not the job of the Norg parser, rather, it is up to the macro itself to properly parse the contents of the
+   verbatim ranged tag. For this reason a scripting language with good parsing support is critical and an inbuilt PEG
+   implementation is perfect for what we need.
+
+   ---
+
+  To summarize, finding a scripting language that:
+  - Works very well with structured data.
+  - Is approachable by almost any common programmer.
+  - Is lightweight, simple and extensible.
+  - Has parsing capabilities built in.
+
+  Proves to be mightily problematic without resorting to esoteric languages (hence breaking the second bullet point).
+
+  In our hours of searching, Janet was the only language that not only fulfilled those criteria, but also provided more
+  with a working package manager and a well-featured, community-maintained extension library (`spork`). We believe this
+  is as close to a perfect scripting language for a markup format as is possible!
+
+#comment
+vim:tw=120:
