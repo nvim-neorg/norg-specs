@@ -1,0 +1,13 @@
+document <- (heading / terminated_paragraph / "\n")+
+
+word <- [^\t                　\n\r]+
+whitespace <- [\t                　]+
+
+paragraph_segment <- (word / whitespace)+
+paragraph <- (paragraph_segment "\n")+
+terminated_paragraph <- paragraph "\n"
+
+title <- paragraph_segment
+heading_content <- terminated_paragraph+
+heading <- whitespace? "*"+ whitespace title "\n"* heading_content?
+
