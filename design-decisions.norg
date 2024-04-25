@@ -6,7 +6,7 @@ categories: [
     non-spec
 ]
 created: 2023-08-06
-updated: 2023-11-07T18:53:39+0100
+updated: 2024-04-25T15:02:44-0500
 version: 1.1.1
 @end
 
@@ -337,7 +337,7 @@ version: 1.1.1
     For starters, there are some general changes that Norg makes with inline markup:
 
     - Strikethrough has been changed from the somewhat cryptic `+strikethrough+` to `-strikethrough-`
-    - Verbatim has been changed from `=verbatim=` to `|`verbatim|`.
+    - Verbatim has been changed from `=verbatim=` to `|`verbatim`|`.
     - The concept of a "code" object (`~this~`) has been dropped and merged with the `|`verbatim`|` object.
       We make the argument that semantically code is something you would like to have displayed verbatim and special
       styling can be done through the use of macros instead of having two different syntax elements.
