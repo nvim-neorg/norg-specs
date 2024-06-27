@@ -139,7 +139,7 @@ version: 1.0
    - Any of the {** ranged tags}
    - Any of the {*** strong carryover tags}
 
-   $ Paragaph Break
+   $ Paragraph Break
    A paragraph break is defined as an _empty line_. In the simplest case that means two consecutive
    {*** line endings} but since Neorg is a /free-form/ markup language, a line which only contains
    whitespace is also considered empty.
@@ -244,7 +244,7 @@ version: 1.0
    Furthermore, in contrast to most other {* detached modifiers}, this detached modifier
    type has /no/ title, and consumes the following `paragraph` instead of only the next
    {# paragraph segments}[paragraph segment]. Said paragraph then becomes the modifier's /content/.
-   This means that in order to terminate the detached modifier contents, you must use a {$ paragaph
+   This means that in order to terminate the detached modifier contents, you must use a {$ paragraph
    break}.
 
    Below you will find examples of nestable detached modifiers.
@@ -914,9 +914,9 @@ version: 1.0
 
 ** Carryover Tags
    Carryover tags are a construct used to assign certain properties to the next item or whole
-   {# objects}[object].
+   {# object}[object].
 
-   /Note/: Internally, they are a type of {** macro tags}[macro tag], where the next element is given
+   /Note/: Internally, they are a type of {*** Macro Tags}[macro tag], where the next element is given
    as the last parameter to the macro. For more info see {*** macro tags} and the [semantics document].
 
    There are two types of carryover tag, the {*** weak carryover tags}[weak carryover tag] and the
@@ -1184,8 +1184,8 @@ version: 1.0
    Aside from the details described above, free-form attached modifiers have the following properties:
    - Backslashes (`\`) are treated as verbatim and do not mean an {*** escaping}[escape sequence]
      (see {* precedence}).
-   - Despite being called "free-form" they can still only span a single paragraph (see {# attached
-     modifier range}).
+   - Despite being called "free-form" they can still only span a single paragraph (see {# free-form
+   attached modifiers})
 
 ** Link Modifier
    The link modifier, `:`, is a special modifier type - it puts a twist on the original attached
@@ -1235,8 +1235,8 @@ version: 1.0
    serve different use cases.
 
    The content of attached modifier extensions consists of a set of references to many
-   {*** attributes}. These attributes are delimited by the {* contextual `|` delimiter}.
-   If the attribute is part of a hierarchy (see {*** attributes}), you may use the `:`
+   attributes. These attributes are delimited by the {* contextual `|` delimiter}.
+   If the attribute is part of a hierarchy, you may use the `:`
    character to link them together. Some inbuilt attributes are the `lang` and `color` hierarchies
    (a comprehensive list can be found in the [semantics document]).
 
@@ -1679,7 +1679,7 @@ version: 1.0
     |end
 
 * Standard Library
-  Norg comes loaded with a predetermined set of {*** attributes} and {** macro tags} for
+  Norg comes loaded with a predetermined set of attributes and {** macro tags} for
   different {* layers} of the syntax. These are defined in the [semantics document].
 
 * Precedence
