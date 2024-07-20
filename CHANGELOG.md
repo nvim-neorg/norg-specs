@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.0](https://github.com/nvim-neorg/norg-specs/compare/v1.2.0...v1.3.0) (2024-07-20)
+
+
+### Features
+
+* add AO section, inline macro expansion sections ([3e9b49a](https://github.com/nvim-neorg/norg-specs/commit/3e9b49aeff15563fea32a94c956176c999ee01cd))
+* add gtd 1.0.0 spec candidate ([39ed79c](https://github.com/nvim-neorg/norg-specs/commit/39ed79cb655fa1c32183af410d34efb1fb56a2fe))
+* create design-decisions document ([4bd49a8](https://github.com/nvim-neorg/norg-specs/commit/4bd49a8047d768020f2567d3b9ddd8c2c56ded82))
+* **semantics.norg:** add information about macro return values ([8c0656b](https://github.com/nvim-neorg/norg-specs/commit/8c0656b78c6f2ace004eec09769062a9f1c63582))
+* **semantics.norg:** write a few more sections ([6c01b55](https://github.com/nvim-neorg/norg-specs/commit/6c01b5569d1249de65ceda14c9df220837fe2b29))
+* **semantics:** add entry about `&...&` expansion overrides ([f4d696e](https://github.com/nvim-neorg/norg-specs/commit/f4d696ebfe9c227fc912ad4249c6b34f71f4ace4))
+* **semantics:** add entry about tables ([35a52c4](https://github.com/nvim-neorg/norg-specs/commit/35a52c4510f3deabfe52112836504ec7f8fa08fd))
+* **semantics:** add more entries w.r.t inbuilt macros and stdlib ([465a04f](https://github.com/nvim-neorg/norg-specs/commit/465a04f4d72fcde658fd07d35142777d465290e3))
+* **semantics:** add several sections ([9c98773](https://github.com/nvim-neorg/norg-specs/commit/9c98773e869e0c17c1de59a14cf7d004a3413851))
+* start work on the semantics document ([b7cd95c](https://github.com/nvim-neorg/norg-specs/commit/b7cd95c9c6522601a0f773840e1c2241e4cef68e))
+* **stdlib.norg:** implement `#eval` macro ([b7c55e4](https://github.com/nvim-neorg/norg-specs/commit/b7c55e403d39e1cd0a89b4f3c00612bff81c91ed))
+
+
+### Bug Fixes
+
+* be more specific about cell notation ([0205e74](https://github.com/nvim-neorg/norg-specs/commit/0205e74bf362a414c7de671b0294072c73fa41b3))
+* broken syntax in stdlib.norg ([1fab11d](https://github.com/nvim-neorg/norg-specs/commit/1fab11d0cbbcf78b1a51ec6c1eeb69909a6e801b))
+* **design-decisions:** typo, `|`verbatim|` -&gt; `|`verbatim`|` ([ac31109](https://github.com/nvim-neorg/norg-specs/commit/ac311093604d1a54ba468ab69934e931e45c5b40))
+* remove `name` and `color` macros, as they're superceded by the new `+` syntax ([896094b](https://github.com/nvim-neorg/norg-specs/commit/896094bea479e8e4d2147a841a983d947d366bc3))
+
 ## [1.2.0](https://github.com/nvim-neorg/norg-specs/compare/v1.1.1...v1.2.0) (2023-04-30)
 
 
