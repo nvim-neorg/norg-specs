@@ -1,16 +1,16 @@
 @document.meta
-title: The 1.0 Norg Specification
+title: Norg v2 Specification
 authors: [
     vhyrro
     mrossinek
 ]
 categories: specifications
-version: 1.0
+version: 2.0
 @end
 
 * Norg File Format Specification
 
-  This file contains the formal file format specification of the Norg syntax version 1.0.
+  This file contains the formal file format specification of the Norg syntax version 2.0.
   This document is written in the Norg format in its original form and, thus, attempts to be
   self-documenting.
 
@@ -109,7 +109,7 @@ version: 1.0
     to terminate {** paragraphs} and other elements like the endings of {**
     range-able detached modifiers}. They are distinct from {*** whitespace}.
 
-    %TODO: Get mrossinek's response on line endings.%
+    %TODO(vhyrro): Get mrossinek's response on line endings.%
 
     The following combinations are considered line endings:
     - A line feed `U+000A`

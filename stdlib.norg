@@ -23,6 +23,6 @@ This includes all carryover tags, ranged tags and their behaviours.
 =comment ...
 =end
 
-=eval language-name? &captures* >code
-.invoke-janet (neorg/execute (or &language-name& (neorg/ast/ranged-verbatim-tag/parameter &code& 0) (error "Language type to execute could not be inferred!")) \[&captures&\] (or (neorg/ast/ranged-verbatim-tag? &code& "code") (error "Expected code block to follow `#eval` block!")))
+=eval &captures* >code
+.invoke-janet (neorg/execute '\[&captures&\] (or (neorg/ast/ranged-verbatim-tag? ```&code&``` "code") (neorg/ast/ranged-verbatim-tag/content ```&code&```) (error "Expected code block to follow \`#eval\` block!")))
 =end
