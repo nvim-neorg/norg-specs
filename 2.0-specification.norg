@@ -1,0 +1,170 @@
+@document.meta
+title: The 1.0 Norg Specification
+authors: [
+    vhyrro
+    mrossinek
+]
+categories: specifications
+version: 1.0
+@end
+
+* Norg File Format Specification
+
+  This file contains the formal file format specification of the Norg syntax version 1.0.
+  This document is written in the Norg format in its original form and, thus, attempts to be
+  self-documenting.
+
+  Please note that this is *not* a reference implementation. This document acts as a specification
+  that must be strictly followed when implementing a parser - this prevents discrepancies across
+  applications.
+
+* Introduction
+
+  Norg is a structured, plaintext markup format. It's designed to be viewed
+  standalone while also providing a suite of markup utilities for typesetting
+  structured documents.
+
+  The format is geared towards a variety of use cases: from creating basic notes and writing project plans to
+  interactive code execution and spreadsheets. The syntax itself is lightweight and easy to
+  reason about.
+
+  Compared to other plain-text file formats like e.g. Markdown, Org, RST or AsciiDoc, Norg
+  sets itself apart most notably by following a strict philosophy and ruleset:
+  ~ *Consistency:* the syntax should be consistent. Even if you know only a
+    part of the syntax, learning new parts should not be surprising and rather
+    feel predictable and intuitive.
+  ~ *Unambiguity:* the syntax should leave _no_ room for ambiguity. This is
+    especially motivated by the use of
+    [tree-sitter]{https://tree-sitter.github.io/tree-sitter/} for the original
+    syntax parser, which takes a strict left-to-right parsing approach and only
+    has single-character look-ahead.
+  ~ *[Free-form]{https://en.wikipedia.org/wiki/Free-form_language}:* whitespace
+    is _only_ used to delimit tokens but has no other significance! This is
+    probably the most contrasting feature to other plain-text formats which
+    often adhere to the [off-side
+  rule]{https://en.wikipedia.org/wiki/Off-side_rule}, meaning that the syntax
+    relies on indentation to carry meaning.
+
+  Although built with the note-taking tool *Neorg* in mind, Norg can be utilized in a wide range of applications,
+  from external note-taking plugins to even messaging services through {* layers}, a pay-for-what-you-use
+  system that allows for selecting syntax relevant to a given application.
+
+* Concepts
+
+  To be able to fully comprehend this document, it's important to understand what Norg's syntax is built up of.
+
+  The syntax follows a hierarchical structure - a set of categories (e.g.
+  paragraphs, detached modifiers) is established, and each category is given
+  its own governing syntax rules. All of Norg's syntax is then derived from
+  these categories.
+
+  For a person implementing this specification, you will realistically not be
+  interesting in the various categories. For instance, headings are part of a category
+  called detached modifiers, but you do not need to know the definition of a
+  detached modifier to understand how to parse a heading.
+
+  For this reason, you can initially skip the {* Categories} section when reading the specification.
+  It may be beneficial to read it eventually though.
+
+** Characters
+
+   The smallest unit of text in Norg is the /character/. A character is any
+   Unicode [code point]{https://en.wikipedia.org/wiki/Code_point} or
+   [grapheme]{https://www.unicode.org/glossary/#grapheme}.
+
+   We identify several types of characters, listed below.
+
+*** Whitespace
+
+    Any set of text can be delimited by whitespace. Consecutive whitespace characters
+    are collapsed to a single space during rendering.
+
+    Whitespace constitutes any code point in the [Unicode Zs general category]{https://www.fileformat.info/info/unicode/category/Zs/list.htm}.
+
+    Tabs are not expanded to spaces during rendering and since whitespace has no semantic meaning there is no need
+    to define a default tab stop. However, if a parser must (for implementation reasons) define a
+    tab stop, we suggest setting it to 4 spaces.
+
+    Any line may be preceded by a variable amount of whitespace, which should be ignored. Upon
+    encountering a newline, it is recommended for parsers to continue consuming (and
+    discarding) consecutive whitespace characters exhaustively.
+
+    The "start of a line" is considered to be /after/ this initial whitespace has been parsed.
+    Keep this in mind when reading the rest of the document.
+
+*** Punctuation
+
+    A character is considered punctuation if belongs to any of the following general Unicode categories:
+    - `Pc`
+    - `Pd`
+    - `Pe`
+    - `Pf`
+    - `Pi`
+    - `Po` 
+    - `Ps`
+
+*** Line Endings
+
+    Line endings in Norg serve as a termination character. They are used e.g.
+    to terminate {** paragraphs} and other elements like the endings of {**
+    range-able detached modifiers}. They are distinct from {*** whitespace}.
+
+    %TODO: Get mrossinek's response on line endings.%
+
+    The following combinations are considered line endings:
+    - A line feed `U+000A`
+    - A form feed `U+000C`
+    - A carriage return `U+000D`
+
+    The following combinations are considered paragraph breaks:
+    - A single line feed
+    - A single carriage return
+    - A carriage return immediately followed by a line feed
+
+*** Text
+
+    All other characters not described by the previous sections should be considered a "text" character.
+    Consecutive text characters make up /words/.
+
+*** Escaped Character
+
+    Any character can be escaped through the use of the backslash (`\\`). The escape sequence consumes only
+    the next character.
+
+    An escaped character should be treated distinct from a regular bit of text or whitespace. This becomes important
+    during parsing of {* inline items}.
+
+** Paragraphs
+
+   Paragraphs are a combination of {*** line endings}, {*** whitespace} and {*** text}.
+   They also contain any quantity of {* inline items}.
+
+   Paragraphs are terminated/delimited either by a paragraph break (described previously in {*** line endings}) or by the EOF (end of file).
+   They are also implicitly terminated by other {* block-level items}.
+
+   Examples:
+   @table
+   |--------------------------------------|
+   | Hello, world! | <p>Hello, world!</p> |
+   |--------------------------------------|
+   | Hello, |  <p>Hello, world!</p>       |
+   | world! |                             |
+   |--------------------------------------|
+   | Hello, |  <p>Hello,</p>              |
+   |        |  <p>world!</p>              |
+   | world! |                             |
+   |--------------------------------------|
+   @end
+
+* Layers
+
+  Norg is built up of layers, or in other words a set of features that a parser/tool can support
+  depending on how much of the specification they'd like to deal with.
+
+  It's recommended to stick to these layers when implementing Norg in your own application (as it's
+  easy to tell end users that an application supports e.g. "layer 2" of the Norg specification), but
+  of course these can't apply to every possible use case. In such case you can use a /custom layer/
+  and pick and choose what you want to support. Just make sure to let your users know which features
+  you've implemented, so they don't get confused!
+
+  %TODO(vhyrro): Finish once the spec is done%
