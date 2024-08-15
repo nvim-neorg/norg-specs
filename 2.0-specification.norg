@@ -171,22 +171,8 @@ version: 2.0
    Paragraphs are a combination of {*** line endings}, {*** whitespace} and {*** text}.
    They also contain any quantity of {* inline items}.
 
-   Paragraphs are terminated/delimited either by a paragraph break (described previously in {*** line endings}) or by the EOF (end of file).
+   Paragraphs are terminated/delimited by some types of {*** line endings} or by the EOF (end of file).
    They are also implicitly terminated by other {* block-level items}.
-
-   Examples:
-   @table
-   |--------------------------------------|
-   | Hello, world! | <p>Hello, world!</p> |
-   |--------------------------------------|
-   | Hello, |  <p>Hello, world!</p>       |
-   | world! |                             |
-   |--------------------------------------|
-   | Hello, |  <p>Hello,</p>              |
-   |        |  <p>world!</p>              |
-   | world! |                             |
-   |--------------------------------------|
-   @end
 
 * Layers
 
