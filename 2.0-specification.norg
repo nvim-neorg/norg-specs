@@ -105,21 +105,52 @@ version: 2.0
 
 *** Line Endings
 
-    Line endings in Norg serve as a termination character. They are used e.g.
-    to terminate {** paragraphs} and other elements like the endings of {**
-    range-able detached modifiers}. They are distinct from {*** whitespace}.
+    Line endings are distinct from {*** whitespace} in Norg as they describe
+    boundaries between parts of text. Norg complies with the
+    {https://www.unicode.org/standard/reports/tr13/tr13-5.html}[Unicode newline
+    guidelines] and uses the same terms as present in that document.
 
-    %TODO(vhyrro): Get mrossinek's response on line endings.%
+    Below are the accepted combinations of newline characters and their functions:
+    - LS - should be parsed as-is and act as a Line Separator.
+    - PS - should be parsed as-is and act as a Paragraph Separator.
+    - NLF (any of `CR`, `LF`, `CRLF`, or `NEL`) *should not* be treated as an LS character as outlined in the Unicode guidelines, but rather
+      as a regular, non-separating newline character. This is so the flow of paragraphs is retained.
+    - Two consecutive NLF sequences - should emulate the behaviour of a Paragraph Separator.
 
-    The following combinations are considered line endings:
-    - A line feed `U+000A`
-    - A form feed `U+000C`
-    - A carriage return `U+000D`
-
-    The following combinations are considered paragraph breaks:
-    - A single line feed
-    - A single carriage return
-    - A carriage return immediately followed by a line feed
+    Examples:
+    @table
+    |----------------------------------------|
+    | Hello,<CR> |  <p>Hello, world!</p>     |
+    | world!     |                           |
+    |----------------------------------------|
+    | Hello,<LF> |  <p>Hello, world!</p>     |
+    | world!     |                           |
+    |----------------------------------------|
+    | Hello,<CRLF> | <p>Hello, world!</p>    |
+    | world!       |                         |
+    |----------------------------------------|
+    | Hello,<NEL>  | <p>Hello, world!</p>    |
+    | world!       |                         |
+    |----------------------------------------|
+    | Hello,<LS> | <p>Hello,<br/> world!</p> |
+    | world!     |                           |
+    |----------------------------------------|
+    | Hello,<PS> | <p>Hello,</p>             |
+    | world!     | <p>world!</p>             |
+    |----------------------------------------|
+    | Hello,<CR><CR> | <p>Hello,</p>         |
+    | world!         | <p>world!</p>         |
+    |----------------------------------------|
+    | Hello,<LF><LF> | <p>Hello,</p>         |
+    | world!         | <p>world!</p>         |
+    |----------------------------------------|
+    | Hello,<CRLF><CRLF> | <p>Hello,</p>     |
+    | world!             | <p>world!</p>     |
+    |----------------------------------------|
+    | Hello,<NEL><NEL> | <p>Hello,</p>       |
+    | world!           | <p>world!</p>       |
+    |----------------------------------------|
+    @end
 
 *** Text
 
