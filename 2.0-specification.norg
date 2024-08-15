@@ -85,9 +85,10 @@ version: 2.0
     to define a default tab stop. However, if a parser must (for implementation reasons) define a
     tab stop, we suggest setting it to 4 spaces.
 
-    Any line may be preceded by a variable amount of whitespace, which should be ignored. Upon
-    encountering a newline, it is recommended for parsers to continue consuming (and
-    discarding) consecutive whitespace characters exhaustively.
+    Any line may be preceded by a variable amount of whitespace, which should
+    be ignored. Upon encountering a {*** line endings}[line ending], it is
+    recommended for parsers to continue consuming (and discarding) consecutive
+    whitespace characters exhaustively.
 
     The "start of a line" is considered to be /after/ this initial whitespace has been parsed.
     Keep this in mind when reading the rest of the document.
