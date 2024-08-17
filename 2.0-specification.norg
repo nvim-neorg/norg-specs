@@ -33,6 +33,8 @@ version: 2.0
   ~ *Consistency:* the syntax should be consistent. Even if you know only a
     part of the syntax, learning new parts should not be surprising and rather
     feel predictable and intuitive.
+  ~ *Simplicity*: the syntax itself should not do any typesetting by default, but should provide all
+     the utilities required for users to perform typesetting themselves. 
   ~ *Unambiguity:* the syntax should leave _no_ room for ambiguity. This is
     especially motivated by the use of
     [tree-sitter]{https://tree-sitter.github.io/tree-sitter/} for the original
