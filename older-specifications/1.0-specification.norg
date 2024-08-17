@@ -145,6 +145,7 @@ version: 1.0
    whitespace is also considered empty.
 
 * Detached Modifiers
+
   Norg has several detached modifiers. The name originates from their differentiation to the
   {* attached modifiers}, which will be discussed later. These make up the majority of the syntax.
 
