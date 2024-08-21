@@ -220,6 +220,9 @@ version: 2.0
    | ***** *Bold* and /italic/ |  <h5> <b>Title</b> and <i>italic</i> </h5>  |
    @end
 
+   Headings provide structure to the document and therefore can only be placed in the root
+   of the document.
+
 * Layers
 
   Norg is built up of layers, or in other words a set of features that a parser/tool can support
