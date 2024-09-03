@@ -201,11 +201,14 @@ version: 2.0
    @end
 
    Terms:
+
    $ asterisks
    An set of consecutive asterisks (`*`).
    Headings do not have a limit on the amount of levels.
+
    $ title
    A {** titles}[title] object.
+
    $$ content
    An arbitrary amount of block-level items.
    A heading consumes content until:
@@ -222,6 +225,55 @@ version: 2.0
 
    Headings provide structure to the document and therefore can only be placed in the root
    of the document.
+
+** Definitions/Footnotes
+
+   Definitions and footnotes follow the same syntax but use different characters.
+
+   There are two variants of the syntax:
+   @code
+   <char> <title>
+   <paragraph>
+   @end
+
+   or
+
+   @code
+   <char><char> <title>
+   ...<content>
+   <char><char>
+   @end
+
+   $ char
+   `$` for definitions and `^` for footnotes, respectively.
+
+   $ title
+   A {** titles}[title] object.
+
+   $ paragraph
+   A single {** Paragraphs}[paragraph] object.
+
+   $$ content
+   An arbitrary amount of block-level items.
+   $$
+
+   Examples:
+   @table
+   | --------------------------- | ------------------------------------------- |
+   |                             | <dl>                                        |
+   | $ Term                      | <dt>Term</dt>                               |
+   | Definition.                 | <dd> <p>Definition</p> </dd>                |
+   |                             | </dl>                                       |
+   | --------------------------- | ------------------------------------------- |
+   |                             | <dl>                                        |
+   | $$ Term                     | <dt>Term</dt>                               |
+   | Long term.                  | <dd>                                        |
+   |                             | <p>Long term.</p>                           |
+   | Extra content.              | <p>Extra content</p>                        |
+   | $$                          | </dd>                                       |
+   |                             | </dl>                                       |
+   | --------------------------- | ------------------------------------------- |
+   @end
 
 * Layers
 
