@@ -51,6 +51,18 @@ version: 2.0
   from external note-taking plugins to even messaging services through {* layers}, a pay-for-what-you-use
   system that allows for selecting syntax relevant to a given application.
 
+* Notation
+
+  Syntax is described using the following notation:
+  - Special syntax is wrapped in `<>` characters. For example: `<title>`.
+  - One or more repetitions of an object (with no whitespace inbetween) is denoted via `+`: `<char>+`.
+  - Obligatory whitespace (one or more) is denoted as a single space.
+  - Obligatory newlines (one or more) are denoted as a single newline character.
+
+  Examples:
+  - `<special> <title>` - some special character, one or more whitespace, then a title.
+  - %TODO: Expand%
+
 * Concepts
 
   This chapter defines the fundamental concepts of the Norg format, upon which other syntax elements build upon.
