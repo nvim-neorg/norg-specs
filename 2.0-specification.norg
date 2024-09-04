@@ -201,11 +201,14 @@ version: 2.0
    @end
 
    Terms:
+
    $ asterisks
    An set of consecutive asterisks (`*`).
    Headings do not have a limit on the amount of levels.
+
    $ title
    A {** titles}[title] object.
+
    $$ content
    An arbitrary amount of block-level items.
    A heading consumes content until:
@@ -222,6 +225,77 @@ version: 2.0
 
    Headings provide structure to the document and therefore can only be placed in the root
    of the document.
+
+** Rangeable Detached Modifiers
+
+   Definitions, footnotes and tables follow the same syntax but use different characters.
+   They're grouped into a single category called /rangeable detached modifiers/.
+
+   There are two variants of the syntax:
+   @code
+   <char> <title>
+   <paragraph>
+   @end
+
+   or
+
+   @code
+   <char><char> <title>
+   ...<content>
+   <char><char>
+   @end
+
+   $ char
+   `$` for definitions, `^` for footnotes and `:` for tables, respectively.
+
+   $$ title
+   For definitions and footnotes: a {** titles}[title] object.
+
+   An exception is made for tables: a so-called verbatim title should be parsed instead - a title with no inline
+   item parsing, all of its content should be treated as raw text.
+   $$
+
+   $ paragraph
+   A single {** Paragraphs}[paragraph] object.
+
+   $$ content
+   An arbitrary amount of block-level items.
+   $$
+
+   Examples:
+   @table
+   | --------------------------- | ------------------------------------------- |
+   |                             | <dl>                                        |
+   | $ Term                      | <dt>Term</dt>                               |
+   | Definition.                 | <dd> <p>Definition</p> </dd>                |
+   |                             | </dl>                                       |
+   | --------------------------- | ------------------------------------------- |
+   |                             | <dl>                                        |
+   | $$ Term                     | <dt>Term</dt>                               |
+   | Long term.                  | <dd>                                        |
+   |                             | <p>Long term.</p>                           |
+   | Extra content.              | <p>Extra content</p>                        |
+   | $$                          | </dd>                                       |
+   |                             | </dl>                                       |
+   | --------------------------- | ------------------------------------------- |
+   |                             | <div class="footnote">                      |
+   |                             | <p>                                         |
+   | ^ Footnote Title            | <span class="title">Footnote title:</span>  |
+   | Footnote content.           | Footnote content.                           |
+   |                             | </p>                                        |
+   |                             | </div>                                      |
+   | --------------------------- | ------------------------------------------- |
+   |                             | <div class="footnote">                      |
+   |                             | <p>                                         |
+   | ^^ 1                        | <span class="title">1:</span>               |
+   | Long footnote.              | Long footnote.<br />                        |
+   |                             | </p>                                        |
+   | Extra content.              | <p>                                         |
+   | ^^                          | Extra content.                              |
+   |                             | </p>                                        |
+   |                             | </div>                                      |
+   | --------------------------- | ------------------------------------------- |
+   @end
 
 * Layers
 
