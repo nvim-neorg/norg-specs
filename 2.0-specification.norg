@@ -175,6 +175,54 @@ version: 2.0
    Paragraphs are terminated/delimited by some types of {*** line endings} or by the EOF (end of file).
    They are also implicitly terminated by other {* block-level items}.
 
+** Titles
+
+   A title can be thought of as a one-line paragraph. It's used exclusively for the following constructs:
+   - {** Headings}
+   - {** Definitions}
+   - {** Footnotes}
+
+* Block Syntax
+
+  Block-level syntax entails any object that structures the document.
+
+** Paragraphs
+
+   Paragraphs are block-level items and act as containers for {* inline syntax}.
+
+** Headings
+
+   Headings are a way of delimiting parts of a document based on its content.
+
+   Syntax:
+   @code
+   <asterisks> <title>
+   ...<content>
+   @end
+
+   Terms:
+   $ asterisks
+   An set of consecutive asterisks (`*`).
+   Headings do not have a limit on the amount of levels.
+   $ title
+   A {** titles}[title] object.
+   $$ content
+   An arbitrary amount of block-level items.
+   A heading consumes content until:
+   - An appropriate {** delimiting modifiers}[delimiting modifier] is found.
+   - Another heading with a lower level is encountered.
+   $$
+
+   Below are some examples of headings, alongside their HTML representations:
+   @table
+   | * Title   |  <h1>Title</h1>  |
+   | *** Title |  <h3>Title</h3>  |
+   | ***** *Bold* and /italic/ |  <h5> <b>Title</b> and <i>italic</i> </h5>  |
+   @end
+
+   Headings provide structure to the document and therefore can only be placed in the root
+   of the document.
+
 * Layers
 
   Norg is built up of layers, or in other words a set of features that a parser/tool can support
