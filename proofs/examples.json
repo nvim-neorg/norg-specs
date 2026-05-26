@@ -1,0 +1,337 @@
+{
+  "source": "/home/vhyrro/dev/projects/norg-specs/1.0-specification.norg",
+  "examples": [
+    {
+      "line": 123,
+      "text": "   I am a paragraph segment.\n   I am another paragraph segment.\n   Together we form a paragraph."
+    },
+    {
+      "line": 220,
+      "text": "    * Heading level 1\n    ** Heading level 2\n    *** Heading level 3\n    **** Heading level 4\n    ***** Heading level 5\n    ****** Heading level 6\n    ******* Heading level 7 (falls back to level 6 in the tree-sitter parser)"
+    },
+    {
+      "line": 253,
+      "text": "    - Unordered list level 1\n    -- Unordered list level 2\n    --- Unordered list level 3\n    ---- Unordered list level 4\n    ----- Unordered list level 5\n    ------ Unordered list level 6\n    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)\n\n    - Unordered list level 1\n      This text is still part of the level 1 list item.\n    -- Unordered list level 2\n       This text is still part of the level 2 list item.\n    --- Unordered list level 3\n        This text is still part of the level 3 list item.\n    ---- Unordered list level 4\n         This text is still part of the level 4 list item.\n    ----- Unordered list level 5\n          This text is still part of the level 5 list item.\n    ------ Unordered list level 6\n           This text is still part of the level 6 list item.\n    ------- Unordered list level 7 (falls back to level 6 in the tree-sitter parser)\n            This text is still part of the level 7 list item."
+    },
+    {
+      "line": 282,
+      "text": "    ~ Ordered list level 1\n    ~~ Ordered list level 2\n    ~~~ Ordered list level 3\n    ~~~~ Ordered list level 4\n    ~~~~~ Ordered list level 5\n    ~~~~~~ Ordered list level 6\n    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)\n\n    ~ Ordered list level 1\n      This text is still part of the level 1 list item.\n    ~~ Ordered list level 2\n       This text is still part of the level 2 list item.\n    ~~~ Ordered list level 3\n        This text is still part of the level 3 list item.\n    ~~~~ Ordered list level 4\n         This text is still part of the level 4 list item.\n    ~~~~~ Ordered list level 5\n          This text is still part of the level 5 list item.\n    ~~~~~~ Ordered list level 6\n           This text is still part of the level 6 list item.\n    ~~~~~~~ Ordered list level 7 (falls back to level 6 in the tree-sitter parser)\n            This text is still part of the level 7 list item."
+    },
+    {
+      "line": 312,
+      "text": "    > Quote level 1\n    >> Quote level 2\n    >>> Quote level 3\n    >>>> Quote level 4\n    >>>>> Quote level 5\n    >>>>>> Quote level 6\n    >>>>>>> Quote level 7 (falls back to level 6 in the tree-sitter parser)\n\n    > Quote level 1\n      This text is still part of the level 1 quote.\n    >> Quote level 2\n       This text is still part of the level 2 quote.\n    >>> Quote level 3\n        This text is still part of the level 3 quote.\n    >>>> Quote level 4\n         This text is still part of the level 4 quote.\n    >>>>> Quote level 5\n          This text is still part of the level 5 quote.\n    >>>>>> Quote level 6\n           This text is still part of the level 6 quote.\n    >>>>>>> Quote level 7 (falls back to level 6 in the tree-sitter parser)\n            This text is still part of the level 7 quote."
+    },
+    {
+      "line": 340,
+      "text": "    >I am not a quote\n\n    some preceding text > I am also not a quote\n\n    >- I am not a valid detached modifier\n\n    > > I am only a level 1 quote\n\n    *\n        I am not a valid heading title."
+    },
+    {
+      "line": 370,
+      "text": "    $ Term\n    Definition content."
+    },
+    {
+      "line": 376,
+      "text": "    $$ Term\n    Content of the definition.\n\n    Which scans up to the closing modifier.\n    $$"
+    },
+    {
+      "line": 388,
+      "text": "    ^ Single Footnote\n    Optional footnote content."
+    },
+    {
+      "line": 394,
+      "text": "    ^^ Ranged Footnote\n    Content of the footnote.\n\n    Which scans up to the closing modifier.\n    ^^"
+    },
+    {
+      "line": 404,
+      "text": "    : A1\n      Content of table cell at `A1`.\n    :: A2\n    > Content of table cell at `A2` (in a quote).\n    ::"
+    },
+    {
+      "line": 417,
+      "text": "    : A1 : Content of table cell at `A1`."
+    },
+    {
+      "line": 428,
+      "text": "    The following items naturally group because they are range-able, for example forming a\n    definition list:\n    $ Term 1\n      Definition 1!\n    $ Term 2\n      Definition 2!"
+    },
+    {
+      "line": 437,
+      "text": "    Together, these form one whole unordered list:\n    - List item 1\n    - List item 2"
+    },
+    {
+      "line": 443,
+      "text": "    - List item in one list\n\n    - This item is in another list, because we used a {$ paragraph break} to split these items"
+    },
+    {
+      "line": 461,
+      "text": "    * Heading level 1\n      Text under first level heading.\n\n    ** Heading level 2\n       Text under second level heading.\n       ---\n\n      Text under first level heading again."
+    },
+    {
+      "line": 474,
+      "text": "    * Heading level 1\n      Text under first level heading.\n\n    ** Heading level 2\n       Text under second level heading.\n       ===\n\n    Text belonging to the document's root."
+    },
+    {
+      "line": 488,
+      "text": "    * Heading level 1\n      Text under first level heading.\n      ___\n      This is a new paragraph separated from the previous one by a horizontal line.\n      This text still belongs to the first level heading."
+    },
+    {
+      "line": 535,
+      "text": "    - ( ) Undone\n    - (x) Done\n\n    - (# B| ) Undone with a priority of B\n    - (+) Recurring\n    - (+ 5th Jan) Recurring every 5th of January"
+    },
+    {
+      "line": 588,
+      "text": "     {@ 5th Aug 2022 - 20th August 2022}\n     {@ 5th Aug 2022-20th August 2022} <- Also valid"
+    },
+    {
+      "line": 593,
+      "text": "     {@ 5th - 20th August 2022}"
+    },
+    {
+      "line": 608,
+      "text": "     * (# A) This heading has priority A (highest priority)"
+    },
+    {
+      "line": 625,
+      "text": "     - (< Tue 5th Feb) Do this before the 5th of February."
+    },
+    {
+      "line": 634,
+      "text": "     - (> Tue 5th Feb) This task starts after the 5th of February."
+    },
+    {
+      "line": 650,
+      "text": "    - :\n      This is some text.\n      $ Term\n        And this is the term's definition."
+    },
+    {
+      "line": 667,
+      "text": "      - :\n        This is part of the list item.\n        @code lua\n        print(\"This is also a part of the list item\")\n\n        -- Despite the fact that there is a double newline dividing the `print` statement and this\n        -- comment, it is not a paragraph break, therefore it does not terminate the slide.\n        @end\n        $ Term\n        Here is a definition!\n\n      Now that there is a {$ paragraph break} between this paragraph and the previous item\n      this paragraph no longer belongs to the slide."
+    },
+    {
+      "line": 684,
+      "text": "      -- :\n         Content of the slide.\n      - Because this item is a level lower than the item containing the slide above\n        the slide is terminated."
+    },
+    {
+      "line": 701,
+      "text": "    - ::\n      This is some content.\n\n      $ Term\n        Definition.\n    - This is the second item of the list.\n      The indent segment did not need to be terminated.\n\n    - ::\n      This is another list.\n\n      |details\n      *hello* world!"
+    },
+    {
+      "line": 746,
+      "text": "    #tag-name.subtag parameter1 parameter2"
+    },
+    {
+      "line": 751,
+      "text": "    #tag-name.subtag parameter1\\ with\\ spaces parameter2"
+    },
+    {
+      "line": 790,
+      "text": "    =see url\n    (see {&url&})\n    =end"
+    },
+    {
+      "line": 797,
+      "text": "    This is a recipe for a cake\n    .see https://wikipedia.com/some-cool-cake-recipe\n    \\- let's begin cooking!"
+    },
+    {
+      "line": 804,
+      "text": "    This is a recipe for a cake\n    (see {https://wikipedia.com/some-cool-cake-recipe})\n    \\- let's begin cooking!"
+    },
+    {
+      "line": 811,
+      "text": "    This is a recipe for a cake (see {https://wikipedia.com/some-cool-cake-recipe}) - let's begin\n    cooking!"
+    },
+    {
+      "line": 834,
+      "text": "     * This is an example heading."
+    },
+    {
+      "line": 833,
+      "text": "     |example\n     * This is an example heading.\n     |end"
+    },
+    {
+      "line": 840,
+      "text": "     |comment\n     This is a very long comment with some content\n     and with some markup!\n\n     * Heading\n       /italic/ and *bold*."
+    },
+    {
+      "line": 851,
+      "text": "     |details\n     * Here is some hidden markup!\n       Wowzers."
+    },
+    {
+      "line": 859,
+      "text": "     #color red\n     |group\n     This will be red.\n\n     So will this.\n\n     * So will this\n       And this."
+    },
+    {
+      "line": 880,
+      "text": "       =comment ...\n       =end"
+    },
+    {
+      "line": 885,
+      "text": "       =group ...\n       &...&\n       =end"
+    },
+    {
+      "line": 939,
+      "text": "     - List item 1\n     +color red\n     - List item 2 (which is red)\n     - List item 3 (which is normal-colored)"
+    },
+    {
+      "line": 947,
+      "text": "     +color red\n     * Heading 1 (which is red)\n       This is some content. (which is still red)\n     ** Heading 2 (which is normal-colored)\n        This is also some content. (which is normal-colored)"
+    },
+    {
+      "line": 956,
+      "text": "     - List item 1\n     +color red\n     - List item 2 (which is red)\n     -- But this isn't red\n     -- Neither is this\n     +color green\n     - ::\n       This is green.\n\n       -- This is also green\n       -- And so is this.\n       ---"
+    },
+    {
+      "line": 982,
+      "text": "     What is your favorite activity? Hint: there's only one correct answer :)\n     #choice\n     - ( ) Sleeping\n     - ( ) Learning\n     - (x) Writing `.norg` documents"
+    },
+    {
+      "line": 992,
+      "text": "     #color red\n     * Heading 1\n       This is some content.\n     ** Heading 2\n        This is also some content."
+    },
+    {
+      "line": 1007,
+      "text": "    #color blue\n    This entire paragraph\n    will now appear in blue\n    color.\n\n    This next paragraph is normal-colored.\n    +color red\n    But this single line is colored red,\n    whereas this line is normal-colored again.\n\n    #color blue\n    This part is blue,\n    +color red\n    but the latter carryover tag takes precedence, making this part red,\n    and this part blue again, since the weak carryover tag does not affect this segment."
+    },
+    {
+      "line": 1030,
+      "text": "   =LoremIpsum\n   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut\n   labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris\n   nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate\n   velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\n   proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n   =end\n\n   This is a paragraph, and below you will find the lorem ipsum text:\n   .LoremIpsum\n   This is still the same paragraph (assuming the macro invocation only inserted text; which it did\n   in this specific example)."
+    },
+    {
+      "line": 1062,
+      "text": "    *this\n\n    text*"
+    },
+    {
+      "line": 1069,
+      "text": "    *this\n    text*"
+    },
+    {
+      "line": 1096,
+      "text": "   *Bold text*\n\n   *Bold text*,\n   .*Bold text*,\n\n   *Bold\n   text*\n\n   */Bold and italic/* <- closing modifiers closed in the opposite order they were opened\n   */Bold and italic/ and only bold*\n\n   Text */with/ _different_ ^markup^ !types!*"
+    },
+    {
+      "line": 1112,
+      "text": "   * Bold text *\n\n   *Bold text *\n\n   other text*Bold text*\n\n   *Bold text*other text\n\n   *\n   Bold text*\n\n   *Bold\n   text\n   *\n\n   *Bold\n\n   text*\n\n   Closed in the wrong order:\n   */Bold and italic*/\n\n   Also closed in the wrong order:\n   */Bold and italic* and only italic/"
+    },
+    {
+      "line": 1145,
+      "text": "   Cats %TODO: create section about cats% are very cute animals."
+    },
+    {
+      "line": 1153,
+      "text": "   This part of the text is %colored red%(color:red)!"
+    },
+    {
+      "line": 1173,
+      "text": "   Here, I can write `| leading and trailing whitespace (with a ` char)  |` within a verbatim block\n   without accidentally terminating it.\n\n   Here, I can use a literal `$` inside inline math: $| 10$ + 10$ = 20$ |$."
+    },
+    {
+      "line": 1196,
+      "text": "   abso/freaking/lutely!"
+    },
+    {
+      "line": 1202,
+      "text": "   abso:/freaking/:lutely!"
+    },
+    {
+      "line": 1207,
+      "text": "   Ex:*ample* text"
+    },
+    {
+      "line": 1244,
+      "text": "    `print(\"This is some python\")`(lang:python) <- The lang:python attribute highlights the text as python\n    *some green and bold text!*(color:green)    <- some green and bold text\n\n    {* Link location}[this is an important link](important|color:red) <- Highlights the link as big,\n                                                                         bold (important) and red."
+    },
+    {
+      "line": 1274,
+      "text": "  $ Term\n    This is a definition of that term."
+    },
+    {
+      "line": 1281,
+      "text": "  $ Term : This is a definition of that term."
+    },
+    {
+      "line": 1285,
+      "text": "  : A1 : Content of the cell at A1\n  : A2 : Content of the cell at A2"
+    },
+    {
+      "line": 1291,
+      "text": "  : A1\n  Content of the cell at A1\n  : A2\n  Content of the cell at A2"
+    },
+    {
+      "line": 1316,
+      "text": "  this is not a {\n  * linkable}\n\n  nor is this a [linkable\n  ]\n\n  <\n  this certainly isn't a linkable\n  >"
+    },
+    {
+      "line": 1351,
+      "text": "    {:path/to/other-file:}"
+    },
+    {
+      "line": 1372,
+      "text": "    {:path/to/file:123}\n    {:path/to/file:# Location within that file}\n    {:path/to/file:** Level 2 heading}"
+    },
+    {
+      "line": 1380,
+      "text": "    {:path:/ file} <- invalid\n    {:path:@ timestamp} <- invalid\n    {:path:https://my-url} <- also invalid"
+    },
+    {
+      "line": 1390,
+      "text": "    Line 1\n    Line 2\n\n    This is a reference to line {2}.\n    This is a reference to line {:file:4} in a different file."
+    },
+    {
+      "line": 1403,
+      "text": "    {https://github.com/nvim-neorg/neorg}"
+    },
+    {
+      "line": 1415,
+      "text": "    * I am a level 1 heading\n\n    Strict link to a level 1 heading:\n    {* I am a level 1 heading}"
+    },
+    {
+      "line": 1450,
+      "text": "     {/ my-file.txt:123} <- This is a link to `my-file.txt` at line 123"
+    },
+    {
+      "line": 1463,
+      "text": "     Frank's birthday is on {@ 5th May}."
+    },
+    {
+      "line": 1474,
+      "text": "     Cats are {? mammals}, they make for great {? house pets} too!"
+    },
+    {
+      "line": 1495,
+      "text": "     +bibliography ./myreferences.bib\n     % my_bibliography\n\n     This is a reference to a bibliography: {= Neorg2022}(my_bibliography)."
+    },
+    {
+      "line": 1535,
+      "text": "    {* Heading Name : *** Level 3 heading}"
+    },
+    {
+      "line": 1558,
+      "text": "   {* I am a standalone link}"
+    },
+    {
+      "line": 1565,
+      "text": "   Click {* I am a link}[here] to find out more."
+    },
+    {
+      "line": 1578,
+      "text": "   [Neorg] is a fancy organizational tool for everyone.\n\n   I like shilling [Neorg]{https://github.com/nvim-neorg/neorg} sorry :("
+    },
+    {
+      "line": 1600,
+      "text": "   One thing to mention is <inline link targets> - they allow you to link to any location in a\n   document.\n\n   ...\n\n   Refer to {# inline link targets} if you are interested in learning more."
+    },
+    {
+      "line": 1617,
+      "text": "    {link}\n\n    {* \n    text}\n\n    {* text }\n\n    {* some\n    text   }\n\n    {:link:}\n\n    {:link:20}\n\n    {# link\n       text}\n\n    {* a link\n    to a heading}\n\n    {* text}[content ]\n\n    {* a\n    link to a heading}[with\n    a description]\n\n    [te\n    xt]{# linkable}\n\n    {* Link to {# headings}[heading]}[*markup*]"
+    },
+    {
+      "line": 1651,
+      "text": "    {*text}\n\n    {:file:https://github.com}\n    {:file:/ file.txt}\n    {:file:@ Wednesday 30th Jan}\n\n    {\n    * text}\n\n    {\n        * text\n    }\n\n    {* text\n    }\n\n    { * text}\n\n    {* text}[\n        text\n    ]\n\n    {* text}[text\n    ]\n\n    {* text}[\n    text]"
+    },
+    {
+      "line": 1712,
+      "text": "  *{# i am a bold link!}*"
+    },
+    {
+      "line": 1717,
+      "text": "  *am I {* bold?} - no!"
+    }
+  ]
+}

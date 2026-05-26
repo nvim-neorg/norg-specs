@@ -1,0 +1,333 @@
+Norg 1.0: offending / ambiguous syntax per finding
+==================================================
+
+Companion to FINDINGS.md. Each entry gives the smallest Norg construct that
+triggers the finding. These are fragments, not necessarily complete documents.
+Notation: \n = LF, \t = tab, \f = FF, · = one space. Indentation is display
+only. Full analysis and spec line references are in FINDINGS.md.
+
+
+F1 - Word / punctuation gap
+    Hello, world!
+    Punctuation has no paragraph-segment production: words are regular
+    characters, and regular characters exclude punctuation.
+
+
+F2 - Whitespace is Zs only, but tabs act as whitespace
+    \t* Heading
+    The leading \t is a literal U+0009. The prose defines whitespace as Zs,
+    but indentation and tab stops only make sense if tabs participate.
+
+
+F3 - Attached-modifier boundary at paragraph edges
+    *Bold text*
+    %| vim: set tw=100 :|%
+    Both openers are preceded by paragraph start and both closers are followed
+    by paragraph end, which the literal boundary rule does not allow.
+
+
+F4 - Detached '%' attributes have no definition
+    % note
+    %null%
+    The first is the undocumented detached "Attributes" modifier; the second
+    is the attached null modifier. Layer 1 calls '%' a "null detached modifier".
+
+
+F5 - Layer numbering of variables and the null modifier
+    &variable&
+    Called a layer 5 attached modifier at line 1158, but listed under layer 4
+    at line 1768. Layer 1 also conflates detached and attached '%'.
+
+
+F6 - Precedence list is incomplete
+    * Heading
+    ---
+    #tag
+    Delimiting modifiers (---, ===, ___) and suffixes (: / ::) are absent from
+    the precedence list; tags vs detached modifiers are also unordered.
+
+
+F7 - Level 7 fallback is implementation behaviour
+    ******* Level 7 heading
+    ------- Level 7 list item
+    The grammar allows arbitrary runs; "falls back to level 6 in the
+    tree-sitter parser" is parser behaviour, not a format rule.
+
+
+F8 - ':' and '::' are several constructs with one spelling
+    : A1
+    :: A2
+    :
+    ::
+    The first two are table-cell openers; the last two are suffix/closer forms.
+    The disambiguator is whitespace vs immediate line ending, never stated as a
+    precedence rule.
+
+
+F9 - Extensions cannot end a line
+    - (x)
+    - (x) task
+    The extension "must be followed by whitespace", so the first line is
+    invalid and TODO states on empty items cannot be written without a trailing
+    space.
+
+
+F10 - '**' disqualified vs '**' heading
+    ** Heading
+    **bold**
+    Two consecutive attached modifiers are disqualified "in all circumstances",
+    but the first line is a valid level-2 heading.
+
+
+F11 - Link location is not a grammar
+    { * text}
+    {# link text}
+    {:file:}
+    {:C:\path\file:}
+    Why the '#' form is valid and the '*' form is not is not derivable; the
+    trailing file colon is also ambiguous with a Windows path and other colons.
+
+
+F12 - Nested linkables require a stack
+    {* Link to {# headings}[heading]}[*markup*]
+    Matching the nested pairs needs a stack or unbounded look-ahead, despite
+    the claim that the format needs only single-character look-ahead.
+
+
+F13 - Timestamp ordinals and the two meanings of '-'
+    <12th August 2022>
+    <5th August 2022-20th August 2022>
+    <-44 15th March>
+    <day-of-month> is said to be numeric with at most 3 digits, but every
+    example uses an ordinal; '-' is both the range separator and the B.C. sign.
+
+
+F14 - ' : ' has no scope restriction
+    foo : bar
+    *bold : text*
+    As written the intersecting modifier is a global textual rewrite. The
+    second line splits into two segments with unclosed modifiers.
+
+
+F15 - Tag names and parameters
+    #tag!
+    #a/b
+    @code··lua··
+    The grammar does not say what terminates an illegal name, and parameter
+    whitespace/escaping is unspecified ('·' is one space).
+
+
+F16 - Escaping inside inline verbatim is unspecified
+    `a\`b`
+    Inline code is a verbatim attached modifier, but the escaping exclusion
+    names only free-form and ranged verbatim; it is contradictory whether the
+    backslash can protect the backtick.
+
+
+F17 - FF is a line ending but not a permitted combination
+    a\f\nb
+    U+000C is listed as a line ending, but the permitted combinations are only
+    LF, CR, and CRLF, so '\f\n' is either two endings or an invalid pair.
+
+
+F18 - Whitespace-only lines and paragraph breaks
+    a\n·\nb
+    A paragraph break is "two consecutive line endings" and also "an empty
+    line"; a line containing only whitespace is also empty. '·' is one space.
+
+
+F19 - Tree building is prose, not a grammar
+    * A
+    - B
+    ** C
+    ---
+    "Same or lower level", mixed heading/list stacks, grouping across blank
+    lines, and closing-delimiter interaction are not defined precisely enough
+    to implement from the text alone.
+
+
+F20 - Table motions
+    | A1 | B1 |
+    | A2 |    |
+    The '_' (floor) and '/' (ceiling) motions do not define underflow at
+    column 1, no populated cell, repetition/combination, or header participation.
+
+
+F21 - Closing after a line ending is not rejected
+    *Bold
+    text
+    *
+    The closing '*' is preceded by a line ending. Line endings are explicitly
+    not whitespace, so the stated rule does not reject this invalid example.
+
+
+F22 - Opening at paragraph start is not covered
+    *Bold
+    text*
+    The opening '*' is preceded by paragraph start, which is neither
+    whitespace nor punctuation.
+
+
+F23 - Empty titles and empty content
+    *·
+    -·
+    After the mandatory whitespace, the title/content is empty. The spec never
+    says whether '* ' and '- ' are valid ('·' is one space).
+
+
+F24 - Dot hierarchy edge cases
+    #.leading
+    #trailing.
+    #double..dot
+    The '.' hierarchy delimiter has no rule for empty components or escaped
+    dots.
+
+
+F25 - '=' overload
+    =name
+    =end
+    ===
+    ==
+    '=' is a macro tag, a strong tag closer, and part of '==='; '==' is neither
+    a tag nor a delimiter.
+
+
+F26 - Linkable closer rule is stricter than the attached-modifier rule
+    {* text
+    }
+    A linkable closer may not be preceded by a line ending; the attached-
+    modifier section omits the same rule and relies only on an invalid example.
+
+
+F27 - Link resolution is document-global
+    * Same
+    * Same
+
+    {* Same}
+    The first match from the top of the document wins, so link validity depends
+    on the whole document; a local syntax parser cannot resolve it.
+
+
+F28 - Empty ranged titles need a trailing space
+    $$
+    $$·
+    '$$' alone is the closer. '$$ ' opens a ranged definition with an empty
+    title; there is no way to write that title without the trailing space.
+
+
+F29 - '=end' is two productions at once
+    =name
+    =end
+    '=end' is both the closer for the innermost '=name' macro and a macro tag
+    whose name is 'end'.
+
+
+F30 - Arity is not in the modifier table
+    *
+    **
+    $
+    $$
+    ---
+    The table has no arity column; arities are recoverable only from the
+    individual sections and examples.
+
+
+F31 - Tag parameter whitespace is unspecified
+    @code··lua··
+    The two spaces after the name and the trailing spaces are preserved by one
+    model and dropped by another ('·' is one space).
+
+
+F32 - File links have three spellings
+    {:file:}
+    {:file:20}
+    {/ file}
+    {file://...}
+    {:file:https://github.com}
+    The compatibility matrix is stated only in prose and examples; the three
+    forms are never given mutually exclusive productions.
+
+
+F33 - Link scoping collides with other colons
+    {* Heading Name : *** Level 3 heading}
+    {* Name : Name}
+    ':' is also the file-location closer, table-cell sigil, link modifier, and
+    slide suffix; no rule says which colon wins inside '{...}'.
+
+
+F34 - Inline link targets are second-class
+    <https://example.com>
+    [desc]<https://example.com>
+    The '<...>' grammar is absent: whether '>' or '\>' can appear, whether it
+    can span a line ending, and why descriptions are forbidden are unstated.
+
+
+F35 - Descriptions share the linkable line-ending rule without saying so
+    {* text}[
+     text
+    ]
+    The same edge-line-ending rule as '{...}' is applied to '[...]' only by
+    example. A rejected description becomes plain text, so inner markup is
+    still scanned as ordinary paragraph text.
+
+
+F36 - Verbatim closers are not exempt from the boundary rules
+    `a`b
+    The natural closer is followed by a regular character, so the boundary rule
+    rejects it and the code span is left unclosed.
+
+
+F37 - Escaping inside inline verbatim is contradictory
+    `a\`b`
+    `| a ` b |`
+    If escaping works inside inline code, the backslash protects the backtick;
+    if the body is literal, it does not. The free-form section says the
+    delimiter cannot be represented at all.
+
+
+F38 - Escaped characters and doubled runs
+    \**bold
+    The backslash makes the first '*' literal, leaving one unprotected '*'.
+    Whether the escaped character still counts toward "two or more consecutive"
+    is unspecified.
+
+
+F39 - Unclosed attached modifiers have no specified result
+    *Bold
+    text*Bold*
+    An opener with no closer and a closer with no opener are both unspecified;
+    the spec only says an unclosed linkable "may be an error".
+
+
+F40 - Consecutive empty lines
+    a\n\n\nb
+    Two empty lines could be one paragraph break, two breaks, or an empty
+    paragraph between them. The prose does not say which.
+
+
+F41 - Description inline scope is unspecified
+    *[desc *bold*]*
+    It is unstated whether markup inside '[...]' shares the surrounding
+    attached-modifier stack or starts a fresh inline scope; the two readings
+    pair the stars differently.
+
+
+F42 - Linkables outrank escaping
+    [a \] b]
+    [a \[ b]
+    [`]`]
+    Linkable matching runs before escaping, so the escaped-looking ']' still
+    closes the link and the escaped '[' does not open one. A backslash cannot
+    protect a linkable delimiter.
+
+
+F43 - Nested linkables inside a location are matched, not parsed
+    {* Link to {# headings}[heading]}[*markup*]
+    The inner link is matched only to find the outer closer; the spec does not
+    say whether it is a semantic link or merely target text.
+
+
+F44 - Description after an inline target is undefined
+    [desc]<https://example.com>
+    Inline '<...>' targets cannot have descriptions, but it is unstated whether
+    a following '[...]' is an error, a standalone anchor, or ignored.

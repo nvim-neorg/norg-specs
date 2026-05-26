@@ -1,13 +1,22 @@
-document <- (heading / terminated_paragraph / "\n")+
+document      <- (blank_line / heading / paragraph)*
 
-word <- [^\t                　\n\r]+
-whitespace <- [\t                　]+
+blank_line    <- indent line_ending
 
-paragraph_segment <- (word / whitespace)+
-paragraph <- (paragraph_segment "\n")+
-terminated_paragraph <- paragraph "\n"
+zs            <- [                　]
+whitespace    <- (zs / "\t")+
+indent        <- (zs / "\t")*
 
-title <- paragraph_segment
-heading_content <- terminated_paragraph+
-heading <- whitespace? "*"+ whitespace title "\n"* heading_content?
+punctuation   <- [!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~]
+line_ending   <- "\r\n" / "\r" / "\n" / "\f"
 
+regular       <- !(whitespace / line_ending / punctuation) .
+word          <- regular+
+
+paragraph_segment <- (word / punctuation / whitespace)+
+
+heading_start <- indent "*"+ whitespace
+title         <- paragraph_segment
+
+paragraph     <- paragraph_segment (line_ending !heading_start !blank_line paragraph_segment)* line_ending?
+
+heading       <- heading_start title? line_ending?

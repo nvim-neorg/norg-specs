@@ -1,0 +1,1122 @@
+[
+  {
+    "file": "attached_attributes.txt",
+    "name": "Bold attribute",
+    "input": "*bold*(attribute)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attached_attributes.txt",
+    "name": "Verbatim attribute",
+    "input": "`print(\"hello world\")`(python)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attached_attributes.txt",
+    "name": "Link location attribute",
+    "input": "{* link}(attribute)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link\n        (link_location\n          (link_target_heading1)\n          (paragraph))\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attached_attributes.txt",
+    "name": "Link location with description attribute",
+    "input": "{* link}[description](attribute)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link\n        (link_location\n          (link_target_heading1)\n          (paragraph))\n        (link_description\n          (paragraph))\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attached_attributes.txt",
+    "name": "Anchor declaration attribute",
+    "input": "[anchor](attribute)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          (paragraph))\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attached_attributes.txt",
+    "name": "Anchor definition attribute",
+    "input": "[anchor]{* link}(attribute)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          (paragraph))\n        (link_location\n          (link_target_heading1)\n          (paragraph))\n        (attribute\n          (word))))))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Strong Carryover on paragraph",
+    "input": "#comment\nThis is a comment.\n\nThis is no longer part of the comment.\n",
+    "expected": "(document\n  (paragraph\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))))\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Strong Carryover on generic list",
+    "input": "#ordered\n- List item 1\n- List item 2\n\nThis is no longer infected.\n",
+    "expected": "(document\n  (generic_list\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))))\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Strong Carryover on quote",
+    "input": "#ordered\n> quote item 1\n> quote item 2\n\nThis is no longer infected.\n",
+    "expected": "(document\n  (quote\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))))\n    (quote1\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (quote1\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Weak Carryover on generic list",
+    "input": "- List item 1\n+color blue\n- List item 2\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (unordered_list1\n      (weak_carryover_set\n        (weak_carryover\n          (tag_name\n            (word))\n          (tag_parameters\n            (tag_param))))\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Weak Carryover on quote",
+    "input": "> quote item 1\n+color blue\n> quote item 2\n",
+    "expected": "(document\n  (quote\n    (quote1\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (quote1\n      (weak_carryover_set\n        (weak_carryover\n          (tag_name\n            (word))\n          (tag_parameters\n            (tag_param))))\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Strong Carryover with parameters",
+    "input": "#name bob\n> Hi, my name is Bob.\n\nLol\n",
+    "expected": "(document\n  (quote\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (quote1\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "attributes.txt",
+    "name": "Disallow Weak Carryover within Ranged Tag",
+    "input": "@code python\n+this is a python comment\nprint(\"Hello World\")\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment)\n      (paragraph_segment))\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "definitions.txt",
+    "name": "Single paragraph definition",
+    "input": "$ Single-paragraph definition\nThis is the actual definition.\n\nThis is no longer part of the definition.\n",
+    "expected": "(document\n  (definition_list\n    (single_definition\n      (single_definition_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "definitions.txt",
+    "name": "Multi paragraph definition",
+    "input": "$$ Multi-paragraph definition\nThis is the actual definition.\n\nThis is also still part of the definition.\n$$\nThis is no longer part of the definition.\n",
+    "expected": "(document\n  (definition_list\n    (multi_definition\n      (multi_definition_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))\n      (paragraph\n        (paragraph_segment))\n      (multi_definition_suffix)))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Link parts inside verbatim",
+    "input": "`[open` not verbatim\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim))))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Plain text URL should not contain link modifier",
+    "input": "https://github.com/nvim-neorg/neorg\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Although the above is true, we still want to be able to do this:",
+    "input": "You may want to stress the *begin*:ning of a word.\nOr the end in some:/thing/.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (italic))))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Reset attached modifiers after detached modifier",
+    "input": "- _:\n- _x_\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment\n          (underline))))))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Repeated attached modifiers should be treated as raw text",
+    "input": "^^, text, ^^\n%%text%%\n%%%text%%%\n*///example//*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment\n      (bold))))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Link modifiers with incomplete markup",
+    "input": "text:`verbatim`text\n\ntext`verbatim`:text\n\ntext `verbatim:text\n\ntext verbatim`:text\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Link modifiers with surrounding whitespace",
+    "input": ":*text*:\ntext:*more text*:text\n`some text`: text\ntext :*more text*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold))\n    (paragraph_segment\n      (link_modifier)\n      (bold)\n      (link_modifier))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (bold))))",
+    "expected_error": false
+  },
+  {
+    "file": "edge_cases.txt",
+    "name": "Closing modifier of links/inline link anchors right after a detached modifier should not fail.",
+    "input": "- ]Test\n> >Test\n* >Example]\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment))))\n  (quote\n    (quote1\n      (quote1_prefix)\n      (paragraph\n        (paragraph_segment))))\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "escape.txt",
+    "name": "Test escaping new lines",
+    "input": "one\\\nword\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Todo Item + priority",
+    "input": "- ( |# A) todo item + priority\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_undone)\n        (priority\n          (priority_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Priority + Todo Item",
+    "input": "- (# B|_) priority + todo item\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (priority\n          (priority_data))\n        (todo_item_cancelled))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Todo Item + Timestamp",
+    "input": "- ( |@ Sun) todo item + timestamp\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_undone)\n        (timestamp\n          (timestamp_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Timestamp + Todo Item",
+    "input": "- (@ Mon|+) timestamp + todo item\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (timestamp\n          (timestamp_data))\n        (todo_item_recurring))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Priority + Timestamp",
+    "input": "- (# C|@ 2021) priority + timestamp\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (priority\n          (priority_data))\n        (timestamp\n          (timestamp_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Timestmap + Priority",
+    "input": "- (@ 2022|# E) timestamp + priority\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (timestamp\n          (timestamp_data))\n        (priority\n          (priority_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "extensions.txt",
+    "name": "Todo Item + Priority + Timestamp",
+    "input": "- (x|# F|@ 1 May) todo item + priority + timestamp\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_done)\n        (priority\n          (priority_data))\n        (timestamp\n          (timestamp_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "footnotes.txt",
+    "name": "Single paragraph footnote",
+    "input": "^ Single-paragraph footnote\nThis is the actual footnote.\n\nThis is no longer part of the footnote.\n",
+    "expected": "(document\n  (footnote_list\n    (single_footnote\n      (single_footnote_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "footnotes.txt",
+    "name": "Multi paragraph footnote",
+    "input": "^^ Multi-paragraph footnote\nThis is the actual footnote.\n\nThis is also still part of the footnote.\n^^\nThis is no longer part of the footnote.\n",
+    "expected": "(document\n  (footnote_list\n    (multi_footnote\n      (multi_footnote_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))\n      (paragraph\n        (paragraph_segment))\n      (multi_footnote_suffix)))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Bold",
+    "input": "Here is some *|free form bold|* markup.\nHere is some *| free form bold|* markup.\nHere is some *|free form bold |* markup.\nHere is some *| free form bold |* markup.\nHere is some *| free form\nbold |* markup.\n*| Extend as *far* as possible |*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Italic",
+    "input": "Here is some /|free form italic|/ markup.\nHere is some /| free form italic|/ markup.\nHere is some /|free form italic |/ markup.\nHere is some /| free form italic |/ markup.\nHere is some /| free form\nitalic |/ markup.\n/| Extend as /far/ as possible |/\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Strikethrough",
+    "input": "Here is some -|free form strikethrough|- markup.\nHere is some -| free form strikethrough|- markup.\nHere is some -|free form strikethrough |- markup.\nHere is some -| free form strikethrough |- markup.\nHere is some -| free form\nstrikethrough |- markup.\n-| Extend as -far- as possible |-\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Underline",
+    "input": "Here is some _|free form underline|_ markup.\nHere is some _| free form underline|_ markup.\nHere is some _|free form underline |_ markup.\nHere is some _| free form underline |_ markup.\nHere is some _| free form\nunderline |_ markup.\n_| Extend as _far_ as possible |_\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Spoiler",
+    "input": "Here is some !|free form spoiler|! markup.\nHere is some !| free form spoiler|! markup.\nHere is some !|free form spoiler |! markup.\nHere is some !| free form spoiler |! markup.\nHere is some !| free form\nspoiler |! markup.\n!| Extend as !far! as possible |!\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Superscript",
+    "input": "Here is some ^|free form superscript|^ markup.\nHere is some ^| free form superscript|^ markup.\nHere is some ^|free form superscript |^ markup.\nHere is some ^| free form superscript |^ markup.\nHere is some ^| free form\nsuperscript |^ markup.\n^| Extend as ^far^ as possible |^\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Subscript",
+    "input": "Here is some ,|free form subscript|, markup.\nHere is some ,| free form subscript|, markup.\nHere is some ,|free form subscript |, markup.\nHere is some ,| free form subscript |, markup.\nHere is some ,| free form\nsubscript |, markup.\n,| Extend as ,far, as possible |,\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Verbatim",
+    "input": "Here is some `|free form verbatim|` markup.\nHere is some `| free form verbatim|` markup.\nHere is some `|free form verbatim |` markup.\nHere is some `| free form verbatim |` markup.\nHere is some `| free form\nverbatim |` markup.\n`| Extend as `far` as possible |`\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Inline Comment",
+    "input": "Here is some %|free form inline_comment|% markup.\nHere is some %| free form inline_comment|% markup.\nHere is some %|free form inline_comment |% markup.\nHere is some %| free form inline_comment |% markup.\nHere is some %| free form\ninline_comment |% markup.\n%| Extend as %far% as possible |%\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Inline Math",
+    "input": "Here is some $|free form inline_math|$ markup.\nHere is some $| free form inline_math|$ markup.\nHere is some $|free form inline_math |$ markup.\nHere is some $| free form inline_math |$ markup.\nHere is some $| free form\ninline_math |$ markup.\n$| Extend as $far$ as possible |$\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Free form Inline Macro",
+    "input": "Here is some &|free form inline macro|& markup.\nHere is some &| free form inline macro|& markup.\nHere is some &|free form inline macro |& markup.\nHere is some &| free form inline macro |& markup.\nHere is some &| free form\ninline macro |& markup.\n&| Extend as &far& as possible |&\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Bold",
+    "input": "*|Bold and /italic/|*\n*|Bold and -struck through-|*\n*|Bold and _underlined_|*\n*|Bold and !spoiler!|*\n*|Bold and ^superscript^|*\n*|Bold and ,subscript,|*\n*|Bold and /|italic|/|*\n*|Bold and -|struck through|-|*\n*|Bold and _|underlined|_|*\n*|Bold and !|spoiler|!|*\n*|Bold and ^|superscript|^|*\n*|Bold and ,|subscript|,|*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Italic",
+    "input": "/|Italic and *bold*|/\n/|Italic and -struck through-|/\n/|Italic and _underlined_|/\n/|Italic and !spoiler!|/\n/|Italic and ^superscript^|/\n/|Italic and ,subscript,|/\n/|Italic and *|bold|*|/\n/|Italic and -|struck through|-|/\n/|Italic and _|underlined|_|/\n/|Italic and !|spoiler|!|/\n/|Italic and ^|superscript|^|/\n/|Italic and ,|subscript|,|/\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Strikethrough",
+    "input": "-|Strikethrough and *bold*|-\n-|Strikethrough and /italic/|-\n-|Strikethrough and _underlined_|-\n-|Strikethrough and !spoiler!|-\n-|Strikethrough and ^superscript^|-\n-|Strikethrough and ,subscript,|-\n-|Strikethrough and *|bold|*|-\n-|Strikethrough and /|italic|/|-\n-|Strikethrough and _|underlined|_|-\n-|Strikethrough and !|spoiler|!|-\n-|Strikethrough and ^|superscript|^|-\n-|Strikethrough and ,|subscript|,|-\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (strikethrough\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Underline",
+    "input": "_|Underline and *bold*|_\n_|Underline and /italic/|_\n_|Underline and -struck through-|_\n_|Underline and !spoiler!|_\n_|Underline and ^superscript^|_\n_|Underline and ,subscript,|_\n_|Underline and *|bold|*|_\n_|Underline and /|italic|/|_\n_|Underline and -|strikethrough|-|_\n_|Underline and !|spoiler|!|_\n_|Underline and ^|superscript|^|_\n_|Underline and ,|subscript|,|_\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Spoiler",
+    "input": "!|Spoiler and *bold*|!\n!|Spoiler and /italic/|!\n!|Spoiler and -struck through-|!\n!|Spoiler and _underline_|!\n!|Spoiler and ^superscript^|!\n!|Spoiler and ,subscript,|!\n!|Spoiler and *|bold|*|!\n!|Spoiler and /|italic|/|!\n!|Spoiler and -|strikethrough|-|!\n!|Spoiler and _|underline|_|!\n!|Spoiler and ^|superscript|^|!\n!|Spoiler and ,|subscript|,|!\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (spoiler\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Superscript",
+    "input": "^|Superscript and *bold*|^\n^|Superscript and /italic/|^\n^|Superscript and -struck through-|^\n^|Superscript and _underline_|^\n^|Superscript and !spoiler!|^\n^|Superscript and ,subscript,|^\n^|Superscript and *|bold|*|^\n^|Superscript and /|italic|/|^\n^|Superscript and -|strikethrough|-|^\n^|Superscript and _|underline|_|^\n^|Superscript and !|spoiler|!|^\n^|Superscript and ,|subscript|,|^\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (superscript\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Free form Subscript",
+    "input": ",|Subscript and *bold*|,\n,|Subscript and /italic/|,\n,|Subscript and -struck through-|,\n,|Subscript and _underline_|,\n,|Subscript and !spoiler!|,\n,|Subscript and ^superscript^|,\n,|Subscript and *|bold|*|,\n,|Subscript and /|italic|/|,\n,|Subscript and -|strikethrough|-|,\n,|Subscript and _|underline|_|,\n,|Subscript and !|spoiler|!|,\n,|Subscript and ^|superscript|^|,\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (subscript\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Nesting into Inline Comment",
+    "input": "%|Inline comment and *bold*|%\n%|Inline comment and /italic/|%\n%|Inline comment and -struck through-|%\n%|Inline comment and _underline_|%\n%|Inline comment and !spoiler!|%\n%|Inline comment and ^superscript^|%\n%|Inline comment and ,subscript,|%\n%|Inline comment and *|bold|*|%\n%|Inline comment and /|italic|/|%\n%|Inline comment and -|strikethrough|-|%\n%|Inline comment and _|underline|_|%\n%|Inline comment and !|spoiler|!|%\n%|Inline comment and ^|superscript|^|%\n%|Inline comment and ,|subscript|,|%\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (italic)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (strikethrough)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (underline)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (spoiler)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (superscript)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (subscript)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (bold\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (italic\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (strikethrough\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (underline\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (spoiler\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (superscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))\n    (paragraph_segment\n      (inline_comment\n        (free_form_open)\n        (subscript\n          (free_form_open)\n          (free_form_close))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Deep Nesting",
+    "input": "*|Bold /italic _underlined -struck through-_/|*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (italic\n          (underline\n            (strikethrough)))\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "No nested markup inside free form verbatim",
+    "input": "`|*not bold*|`\n`|/not italic/|`\n`|-not struck through-|`\n`|_not underlined_|`\n`|!not spoiler!|`\n`|^not superscripted^|`\n`|,not subscripted,|`\n`|+not inline comment+|`\n`|$not inline math$|`\n`|&not inline macro&|`\n`|no:*link modifier*|`\n`|hidden \\*escaped char|`\n`|*|not free form bold|*|`\n`|/|not free form italic|/|`\n`|-|not free form struck through|-|`\n`|_|not free form underlined|_|`\n`|!|not free form spoiler|!|`\n`|^|not free form superscripted|^|`\n`|,|not free form subscripted|,|`\n`|+|not free form inline comment|+|`\n`|$|not free form inline math|$|`\n`|&|not free form inline macro|&|`\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (verbatim\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "No nested markup inside free form inline math",
+    "input": "$|*not bold*|$\n$|/not italic/|$\n$|-not struck through-|$\n$|_not underlined_|$\n$|!not spoiler!|$\n$|^not superscripted^|$\n$|,not subscripted,|$\n$|`not verbatim`|$\n$|+not inline comment+|$\n$|&not inline macro&|$\n$|no:*link modifier*|$\n$|hidden \\*escaped char|$\n$|*|not free form bold|*|$\n$|/|not free form italic|/|$\n$|-|not free form struck through|-|$\n$|_|not free form underlined|_|$\n$|!|not free form spoiler|!|$\n$|^|not free form superscripted|^|$\n$|,|not free form subscripted|,|$\n$|`|not free form verbatim|`|$\n$|+|not free form inline comment|+|$\n$|&|not free form inline macro|&|$\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_math\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "No nested markup inside free form inline macro",
+    "input": "&|*not bold*|&\n&|/not italic/|&\n&|-not struck through-|&\n&|_not underlined_|&\n&|!no spoiler!|&\n&|^not superscripted^|&\n&|,not subscripted,|&\n&|`no verbatim`|&\n&|+no inline comment+|&\n&|$no inline math$|&\n&|no:*link modifier*|&\n&|hidden \\*escaped char|&\n&|*|not free form bold|*|&\n&|/|not free form italic|/|&\n&|-|not free form struck through|-|&\n&|_|not free form underlined|_|&\n&|!|not free form spoiler|!|&\n&|^|not free form superscripted|^|&\n&|,|not free form subscripted|,|&\n&|`|not free form verbatim|`|&\n&|+|not free form inline comment|+|&\n&|$|not free form inline math|$|&\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (inline_macro\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Unclosed free form markup",
+    "input": "*| test one\n\n/| test two\n_| test three\n\n(the spacing is deliberate)\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment)\n    (paragraph_segment))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "free_form_markup.txt",
+    "name": "Closing free form modifier delimiter without surrounding attached modifier",
+    "input": "*|some|text|*\n/|*some|* text |/\n_| some text ||_\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (free_form_open)\n        (free_form_close)))\n    (paragraph_segment\n      (italic\n        (free_form_open)\n        (bold)\n        (free_form_close)))\n    (paragraph_segment\n      (underline\n        (free_form_open)\n        (free_form_close)))))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 1 Headings",
+    "input": "* This is a heading\n  In this heading there is some text\n  ===\n\nThis is no longer part of the heading.\n\n",
+    "expected": "(document\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 2 Headings",
+    "input": "** This is a level 2 heading\n   That has text underneath\n\n* And here is a level 1 heading\n  ** With a level 2 heading\n     And some content\n     ===\n\nAnd here is some more text that has broken out of the matrix.\n\n",
+    "expected": "(document\n  (heading2\n    (heading2_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 3 Headings",
+    "input": "*** This is a level 3 heading\n    That has text underneath\n\n* And here is a level 1 heading\n  ** With a level 2 heading\n     And some content\n     *** Then a level 3 heading\n         With more content\n         ===\n\nAnd here is some more text that has broken out of the matrix.\n\n",
+    "expected": "(document\n  (heading3\n    (heading3_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))\n      content: (heading3\n        (heading3_prefix)\n        title: (paragraph_segment)\n        content: (paragraph\n          (paragraph_segment)))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 4 Headings",
+    "input": "**** This is a level 4 heading\n     That has text underneath\n\n* And here is a level 1 heading\n  ** With a level 2 heading\n     And some content\n     *** Then a level 3 heading\n         With more content\n         **** And a level 4 heading\n              With a lil content\n              ===\n\nAnd here is some more text that has broken out of the matrix.\n\n",
+    "expected": "(document\n  (heading4\n    (heading4_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))\n      content: (heading3\n        (heading3_prefix)\n        title: (paragraph_segment)\n        content: (paragraph\n          (paragraph_segment))\n        content: (heading4\n          (heading4_prefix)\n          title: (paragraph_segment)\n          content: (paragraph\n            (paragraph_segment))))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 5 Headings",
+    "input": "***** This is a level 5 heading\n      That has text underneath\n\n* And here is a level 1 heading\n  ** With a level 2 heading\n     And some content\n     *** Then a level 3 heading\n         With more content\n         **** And a level 4 heading\n              ***** And then a level 5 heading\n              ===\n\nAnd here is some more text that has broken out of the matrix.\n\n",
+    "expected": "(document\n  (heading5\n    (heading5_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))\n      content: (heading3\n        (heading3_prefix)\n        title: (paragraph_segment)\n        content: (paragraph\n          (paragraph_segment))\n        content: (heading4\n          (heading4_prefix)\n          title: (paragraph_segment)\n          content: (heading5\n            (heading5_prefix)\n            title: (paragraph_segment))))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Level 6 Headings",
+    "input": "****** This is a level 6 heading\n      That has text underneath\n\n* And here is a level 1 heading\n  ** With a level 2 heading\n     And some content\n     *** Then a level 3 heading\n         With more content\n         **** And a level 4 heading\n              ***** And then a level 5 heading\n                    Content\n                    ****** And finally a level 6 heading\n              ===\n\nAnd here is some more text that has broken out of the matrix.\n\n",
+    "expected": "(document\n  (heading6\n    (heading6_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))\n      content: (heading3\n        (heading3_prefix)\n        title: (paragraph_segment)\n        content: (paragraph\n          (paragraph_segment))\n        content: (heading4\n          (heading4_prefix)\n          title: (paragraph_segment)\n          content: (heading5\n            (heading5_prefix)\n            title: (paragraph_segment)\n            content: (paragraph\n              (paragraph_segment))\n            content: (heading6\n              (heading6_prefix)\n              title: (paragraph_segment)))))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Indentation Reversion",
+    "input": "Time to test indentation reversion.\n\n* This is a heading\n  ** It contains a level 2 heading\n     Which in turn contains some text.\n     ---\n  This should reverse the indentation and\n  it should be part of the first-level\n  heading now\n  *** This is now a third-level heading\n      ---\n  And it has reversed too\n  *** Another third-level heading\n  ===\n\nThis should no longer be part of the heading.\n\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment))\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (heading2\n      (heading2_prefix)\n      title: (paragraph_segment)\n      content: (paragraph\n        (paragraph_segment))\n      (weak_paragraph_delimiter))\n    content: (paragraph\n      (paragraph_segment)\n      (paragraph_segment)\n      (paragraph_segment))\n    content: (heading3\n      (heading3_prefix)\n      title: (paragraph_segment)\n      (weak_paragraph_delimiter))\n    content: (paragraph\n      (paragraph_segment))\n    content: (heading3\n      (heading3_prefix)\n      title: (paragraph_segment)))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Malformed indentation reversion",
+    "input": "* Heading\n  A paragraph\n  --- \n  This should not be reverted since the previous element\n  has whitespace afterwards.\n  It should instead be treated as an unordered list element.\n\n  This --- should also not revert the heading.\n  --neither- should this\n  ---\n\nThis should though.\n\n",
+    "expected": "(document\n  (heading1\n    (heading1_prefix)\n    title: (paragraph_segment)\n    content: (paragraph\n      (paragraph_segment))\n    content: (generic_list\n      (unordered_list3\n        (unordered_list3_prefix)\n        content: (paragraph\n          (paragraph_segment)\n          (paragraph_segment)\n          (paragraph_segment))))\n    content: (paragraph\n      (paragraph_segment)\n      (paragraph_segment))\n    (weak_paragraph_delimiter))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "headings.txt",
+    "name": "Horizontal Line",
+    "input": "This is some text.\n___\nSeparated by a horizontal line.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment))\n  (horizontal_line)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "indents.txt",
+    "name": "Basic indent segment",
+    "input": "- ::\n  This is a paragraph.\n\n  This is another paragraph inside of the same list item.\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (indent_segment1\n        (indent_segment_begin)\n        (paragraph\n          (paragraph_segment))\n        (paragraph\n          (paragraph_segment))))))",
+    "expected_error": false
+  },
+  {
+    "file": "indents.txt",
+    "name": "Indent segment delimiter precedence",
+    "input": "* Heading\n- ::\n  Text\n  ---\nThis should still be part of the heading.\n",
+    "expected": "(document\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment)\n    (generic_list\n      (unordered_list1\n        (unordered_list1_prefix)\n        (indent_segment1\n          (indent_segment_begin)\n          (paragraph\n            (paragraph_segment))\n          (weak_paragraph_delimiter))))\n    (paragraph\n      (paragraph_segment))))",
+    "expected_error": false
+  },
+  {
+    "file": "indents.txt",
+    "name": "Indent segment delimiter precedence with surrounding headings",
+    "input": "* Heading One\n* Heading Two\n  - ::\n    This is some content.\n    ---\n  The paragraph delimiter should belong to the indent segment,\n  not to the heading.\n* Heading Three\n",
+    "expected": "(document\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment))\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment)\n    (generic_list\n      (unordered_list1\n        (unordered_list1_prefix)\n        (indent_segment1\n          (indent_segment_begin)\n          (paragraph\n            (paragraph_segment))\n          (weak_paragraph_delimiter))))\n    (paragraph\n      (paragraph_segment)\n      (paragraph_segment)))\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "indents.txt",
+    "name": "Nested indent segments with strong paragraph delimiter as terminator",
+    "input": "- ::\n  This is an indent segment.\n\n  This paragraph should also belong to the indent segment.\n\n  -- ::\n     This is now part of the second indent segment.\n\n     @code lua\n     print(\"Hello!\")\n     @end\n     ===\n\nThis is not a part of any indent segment.\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (indent_segment1\n        (indent_segment_begin)\n        (paragraph\n          (paragraph_segment))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list2\n          (unordered_list2_prefix)\n          (indent_segment2\n            (indent_segment_begin)\n            (paragraph\n              (paragraph_segment))\n            (ranged_verbatim_tag\n              (tag_name\n                (word))\n              (tag_parameters\n                (tag_param))\n              (ranged_verbatim_tag_content\n                (paragraph_segment))\n              (ranged_verbatim_tag_end)))))))\n  (strong_paragraph_delimiter)\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "indents.txt",
+    "name": "Slide",
+    "input": "- :\n  @code lua\n  print(\"This is a slide\")\n  @end\n- :\n  $ Term\n    Definition\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (slide\n        (ranged_verbatim_tag\n          (tag_name\n            (word))\n          (tag_parameters\n            (tag_param))\n          (ranged_verbatim_tag_content\n            (paragraph_segment))\n          (ranged_verbatim_tag_end)))))\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (slide\n        (definition_list\n          (single_definition\n            (single_definition_prefix)\n            (paragraph_segment)\n            (paragraph\n              (paragraph_segment))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "intersecting.txt",
+    "name": "Useless intersecting modifier",
+    "input": "segment : segment\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment)\n    (intersecting_modifier)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "intersecting.txt",
+    "name": "Intersecting modifier main motivation: nice tables",
+    "input": ": A1 : 1\n: A2 : 2\n: A3 : 3\n",
+    "expected": "(document\n  (table\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment)))\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment)))\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "links.txt",
+    "name": "Basic Links",
+    "input": "{* Heading level 1}\n{** Heading level 2}\n{*** Heading level 3}\n{**** Heading level 4}\n{***** Heading level 5}\n{****** Heading level 6}\n{******* Heading level 7 and higher falls back to 6}\n{? Wiki}\n{# Generic}\n{$ Definition}\n{^ Footnote}\n{:norg_file:}\n{:norg_file:* Heading level 1}\n{:norg_file:** Heading level 2}\n{:norg_file:*** Heading level 3}\n{:norg_file:**** Heading level 4}\n{:norg_file:***** Heading level 5}\n{:norg_file:****** Heading level 6}\n{:norg_file:******* Heading level 7 and higher falls back to 6}\n{:norg_file:# Generic}\n{:norg_file:$ Definition}\n{:norg_file:^ Footnote}\n{:norg_file:100}\n{https://github.com/}\n{100}\n{file:///dev/null}\n{/ external_file.txt}\n{@ Tue 3rd November 2022 8:30 GMT}\n{:norg_file:/ external_file.txt}\n{:norg_file:@ Tue 3rd November 2022 8:30 GMT}\n{:norg_file:https://github.com/}\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading1)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading2)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading3)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading4)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading5)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_wiki)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_generic)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_definition)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_footnote)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading1)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading2)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading3)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading4)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading5)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_generic)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_definition)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_footnote)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_line_number)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_line_number)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_external_file)\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_timestamp)\n          text: (paragraph))))\n    (ERROR\n      (link_file_text))\n    (paragraph_segment)\n    (ERROR\n      (link_file_text))\n    (paragraph_segment)\n    (ERROR\n      (link_file_text))\n    (paragraph_segment)))",
+    "expected_error": true
+  },
+  {
+    "file": "links.txt",
+    "name": "Links with text",
+    "input": "{* Heading level 1}[custom text]\n{** Heading level 2}[custom text]\n{*** Heading level 3}[custom text]\n{**** Heading level 4}[custom text]\n{***** Heading level 5}[custom text]\n{****** Heading level 6}[custom text]\n{******* Heading level 7 and higher falls back to 6}[custom text]\n{? Wiki}[custom text]\n{# Generic}[custom text]\n{$ Definition}[custom text]\n{^ Footnote}[custom text]\n{:norg_file:}[custom text]\n{:norg_file:* Heading level 1}[custom text]\n{:norg_file:** Heading level 2}[custom text]\n{:norg_file:*** Heading level 3}[custom text]\n{:norg_file:**** Heading level 4}[custom text]\n{:norg_file:***** Heading level 5}[custom text]\n{:norg_file:****** Heading level 6}[custom text]\n{:norg_file:******* Heading level 7 and higher falls back to 6}[custom text]\n{:norg_file:# Generic}[custom text]\n{:norg_file:$ Definition}[custom text]\n{:norg_file:^ Footnote}[custom text]\n{:norg_file:100}[custom text]\n{https://github.com/}[custom text]\n{100}[custom text]\n{file:///dev/null}[custom text]\n{/ external_file.txt}[custom text]\n{@ Tue 3rd November 2022 8:30 GMT}[custom text]\n{:norg_file:/ external_file.txt}[custom text]\n{:norg_file:@ Tue 3rd November 2022 8:30 GMT}\n{:norg_file:https://github.com/}[custom text]\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading1)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading2)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading3)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading4)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading5)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_wiki)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_generic)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_definition)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_footnote)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading1)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading2)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading3)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading4)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading5)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_generic)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_definition)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_footnote)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          file: (link_file_text)\n          type: (link_target_line_number)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_line_number)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_external_file)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (link\n        (link_location\n          type: (link_target_timestamp)\n          text: (paragraph))\n        (link_description\n          text: (paragraph))))\n    (ERROR\n      (link_file_text))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (ERROR\n      (link_file_text))\n    (paragraph_segment)\n    (ERROR\n      (link_file_text))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))))",
+    "expected_error": true
+  },
+  {
+    "file": "links.txt",
+    "name": "Anchors",
+    "input": "[heading anchor]\n[wiki anchor]\n[generic anchor]\n[definition anchor]\n[footnote anchor]\n[norg file anchor]\n[line number anchor]\n[external heading anchor]\n[external generic anchor]\n[external definition anchor]\n[external footnote anchor]\n[non-norg file anchor]\n[url anchor]\n[file anchor]\n[invalid external with file anchor]\n[invalid url with file anchor]\n\n[heading anchor]{* Heading level 1}\n[heading anchor]{** Heading level 2}\n[heading anchor]{*** Heading level 3}\n[heading anchor]{**** Heading level 4}\n[heading anchor]{***** Heading level 5}\n[heading anchor]{****** Heading level 6}\n[heading anchor]{******* Heading level 7 and higher falls back to 6}\n[wiki anchor]{? Wiki}\n[generic anchor]{# Generic}\n[definition anchor]{$ Definition}\n[footnote anchor]{^ Footnote}\n[norg file anchor]{:norg_file:}\n[line number anchor]{123}\n[line number anchor]{:norg_file:123}\n[external heading anchor]{:norg_file:* Heading level 1}\n[external heading anchor]{:norg_file:** Heading level 2}\n[external heading anchor]{:norg_file:*** Heading level 3}\n[external heading anchor]{:norg_file:**** Heading level 4}\n[external heading anchor]{:norg_file:***** Heading level 5}\n[external heading anchor]{:norg_file:****** Heading level 6}\n[external heading anchor]{:norg_file:******* Heading level 7 and higher falls back to 6}\n[external generic anchor]{:norg_file:# Generic}\n[external definition anchor]{:norg_file:$ Definition}\n[external footnote anchor]{:norg_file:^ Footnote}\n[non-norg file anchor]{/ external_file.txt}\n[timestamp]{@ Tue 3rd November 2022 8:30 GMT}\n[url anchor]{https://github.com/}\n[file anchor]{file:///dev/null}\n[invalid external with file anchor]{:file:/ external_file.txt}\n[invalid timestamp with file anchor]{:file:@ Tue 3rd November 2022 8:30 GMT}\n[invalid url with file anchor]{:file:https://github.com/}\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph)))))\n  (paragraph\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading1)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading2)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading3)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading4)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading5)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_wiki)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_generic)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_definition)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_footnote)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_line_number)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_line_number)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading1)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading2)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading3)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading4)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading5)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_heading6)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_generic)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_definition)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          file: (link_file_text)\n          type: (link_target_footnote)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_external_file)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_timestamp)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          text: (paragraph))\n        (link_location\n          type: (link_target_url)\n          text: (paragraph))))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph)))\n      (ERROR\n        (link_file_text)))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph)))\n      (ERROR\n        (link_file_text)))\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          text: (paragraph)))\n      (ERROR\n        (link_file_text)))))",
+    "expected_error": true
+  },
+  {
+    "file": "links.txt",
+    "name": "Verbatim links",
+    "input": "`{* not a link}`\n`{:also_not_a_link:}`\n`{:$again_not_a_link:}`\n`{* not a link}[not a description]`\n`[not an anchor]`\n`[not an anchor]{* not a link}`\n${* not a link}$\n${:also_not_a_link:}$\n${:$again_not_a_link:}$\n${* not a link}[not a description]$\n$[not an anchor]$\n$[not an anchor]{* not a link}$\n&{* not a link}&\n&{:also_not_a_link:}&\n&{:$again_not_a_link:}&\n&{* not a link}[not a description]&\n&[not an anchor]&\n&[not an anchor]{* not a link}&\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))))",
+    "expected_error": false
+  },
+  {
+    "file": "links.txt",
+    "name": "Anchors inside unordered list. Regression test against #28",
+    "input": "- [anchor]\n\n[anchor]{https://example.com/}\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment\n          (anchor_declaration\n            (link_description\n              (paragraph)))))))\n  (paragraph\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          (paragraph))\n        (link_location\n          (link_target_url)\n          (paragraph))))))",
+    "expected_error": false
+  },
+  {
+    "file": "links.txt",
+    "name": "Whitespace rules of linkables",
+    "input": "This is [ not a link ] description.\nThis is { not a link } location.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "links.txt",
+    "name": "Anchor with custom description",
+    "input": "[heading anchor][with custom description]\n\n[heading anchor]{* Heading level 1}\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (anchor_declaration\n        (link_description\n          (paragraph))\n        (link_description\n          (paragraph)))))\n  (paragraph\n    (paragraph_segment\n      (anchor_definition\n        (link_description\n          (paragraph))\n        (link_location\n          (link_target_heading1)\n          (paragraph))))))",
+    "expected_error": false
+  },
+  {
+    "file": "links.txt",
+    "name": "Scoped links",
+    "input": "{* Heading level 1 : ** heading level 2}\n\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link\n        (link_location\n          (link_target_heading1)\n          (paragraph)\n          (link_target_scope)\n          (link_target_heading2)\n          (paragraph))))))",
+    "expected_error": false
+  },
+  {
+    "file": "lists.txt",
+    "name": "Unordered List",
+    "input": "- Unordered list level 1\n-- Unordered list level 2\n--- Unordered list level 3\n---- Unordered list level 4\n----- Unordered list level 5\n------ Unordered list level 6\n------- Unordered list level 7 falls back to 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (paragraph\n                  (paragraph_segment)))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "lists.txt",
+    "name": "Ordered List",
+    "input": "~ Ordered list level 1\n~~ Ordered list level 2\n~~~ Ordered list level 3\n~~~~ Ordered list level 4\n~~~~~ Ordered list level 5\n~~~~~~ Ordered list level 6\n~~~~~~~ Ordered list level 7 falls back to 6\n\n",
+    "expected": "(document\n  (generic_list\n    (ordered_list1\n      (ordered_list1_prefix)\n      (paragraph\n        (paragraph_segment))\n      (ordered_list2\n        (ordered_list2_prefix)\n        (paragraph\n          (paragraph_segment))\n        (ordered_list3\n          (ordered_list3_prefix)\n          (paragraph\n            (paragraph_segment))\n          (ordered_list4\n            (ordered_list4_prefix)\n            (paragraph\n              (paragraph_segment))\n            (ordered_list5\n              (ordered_list5_prefix)\n              (paragraph\n                (paragraph_segment))\n              (ordered_list6\n                (ordered_list6_prefix)\n                (paragraph\n                  (paragraph_segment)))\n              (ordered_list6\n                (ordered_list6_prefix)\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "lists.txt",
+    "name": "List Item Paragraph",
+    "input": "- List item\ncan be continued here\nbecause it consumes an entire paragraph.\n\nThis is now longer part of the list item.\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)\n        (paragraph_segment)\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "lists.txt",
+    "name": "Mixed List",
+    "input": "- Unordered list item\n~ Ordered list item\n-- unordered nested item\n--- unordered nested item\n~~~ ordered nested item\n~~~~ ordered nested item\n---- unordered nested item\n~~~~~ ordered nested item\n----- unordered nested item\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (paragraph\n        (paragraph_segment)))\n    (ordered_list1\n      (ordered_list1_prefix)\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (paragraph\n            (paragraph_segment)))\n        (ordered_list3\n          (ordered_list3_prefix)\n          (paragraph\n            (paragraph_segment))\n          (ordered_list4\n            (ordered_list4_prefix)\n            (paragraph\n              (paragraph_segment)))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (paragraph\n              (paragraph_segment))\n            (ordered_list5\n              (ordered_list5_prefix)\n              (paragraph\n                (paragraph_segment)))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (paragraph\n                (paragraph_segment)))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "macros.txt",
+    "name": "Macro Tag",
+    "input": "=macro\nThis is some macro text.\n=end\n",
+    "expected": "(document\n  (macro_tag\n    (tag_name\n      (word))\n    (macro_tag_content\n      (paragraph\n        (paragraph_segment)))\n    (macro_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "macros.txt",
+    "name": "Empty macro tag",
+    "input": "=empty\n\n=end\n",
+    "expected": "(document\n  (macro_tag\n    (tag_name\n      (word))\n    (macro_tag_content\n      (paragraph))\n    (macro_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Standalone markup",
+    "input": "*bold*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Bold",
+    "input": "Here is a *bold* word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Italic",
+    "input": "Here is an /italic/ word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (italic))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Strikethrough",
+    "input": "Here is a -struck through- word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (strikethrough))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Underline",
+    "input": "Here is an _underlined_ word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (underline))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Spoiler",
+    "input": "Here is a !spoiler! word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (spoiler))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Verbatim",
+    "input": "Here is a `verbatim` word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Superscript",
+    "input": "Here is a ^superscript^ word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (superscript))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Subscript",
+    "input": "Here is a ,subscript, word.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (subscript))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Inline Comment",
+    "input": "This sentence contains an %inlined comment%.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_comment))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Inline Math",
+    "input": "This sentence contains some $inline math$.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_math))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Inline Macro",
+    "input": "This sentence contains a &inline macro& reference.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_macro))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Inline Link Target",
+    "input": "This sentence contains an <inline link target>.\nAnd this is NOT a valid < link target > because it has whitespaces on the inside.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_link_target\n        (paragraph)))\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Bold",
+    "input": "*Bold and /italic/*\n*Bold and -struck through-*\n*Bold and _underlined_*\n*Bold and !spoiler!*\n*Bold and ^superscript^*\n*Bold and ,subscript,*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (italic)))\n    (paragraph_segment\n      (bold\n        (strikethrough)))\n    (paragraph_segment\n      (bold\n        (underline)))\n    (paragraph_segment\n      (bold\n        (spoiler)))\n    (paragraph_segment\n      (bold\n        (superscript)))\n    (paragraph_segment\n      (bold\n        (subscript)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Italic",
+    "input": "/Italic and *bold*/\n/Italic and -struck through-/\n/Italic and _underlined_/\n/Italic and !spoiler!/\n/Italic and ^superscript^/\n/Italic and ,subscript,/\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (italic\n        (bold)))\n    (paragraph_segment\n      (italic\n        (strikethrough)))\n    (paragraph_segment\n      (italic\n        (underline)))\n    (paragraph_segment\n      (italic\n        (spoiler)))\n    (paragraph_segment\n      (italic\n        (superscript)))\n    (paragraph_segment\n      (italic\n        (subscript)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Strikethrough",
+    "input": "-Struck through and *bold*-\n-Struck through and /italic/-\n-Struck through and _underlined_-\n-Struck through and !spoiler!-\n-Struck through and ^superscript^-\n-Struck through and ,subscript,-\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (strikethrough\n        (bold)))\n    (paragraph_segment\n      (strikethrough\n        (italic)))\n    (paragraph_segment\n      (strikethrough\n        (underline)))\n    (paragraph_segment\n      (strikethrough\n        (spoiler)))\n    (paragraph_segment\n      (strikethrough\n        (superscript)))\n    (paragraph_segment\n      (strikethrough\n        (subscript)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Underline",
+    "input": "_Underlined and *bold*_\n_Underlined and /italic/_\n_Underlined and -struck through-_\n_Underlined and !spoiler!_\n_Underlined and ^superscript^_\n_Underlined and ,subscript,_\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (underline\n        (bold)))\n    (paragraph_segment\n      (underline\n        (italic)))\n    (paragraph_segment\n      (underline\n        (strikethrough)))\n    (paragraph_segment\n      (underline\n        (spoiler)))\n    (paragraph_segment\n      (underline\n        (superscript)))\n    (paragraph_segment\n      (underline\n        (subscript)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Spoiler",
+    "input": "!Spoiler and *bold*!\n!Spoiler and /italic/!\n!Spoiler and -struck through-!\n!Spoiler and _underlined_!\n!Spoiler and ^superscript^!\n!Spoiler and ,subscript,!\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (spoiler\n        (bold)))\n    (paragraph_segment\n      (spoiler\n        (italic)))\n    (paragraph_segment\n      (spoiler\n        (strikethrough)))\n    (paragraph_segment\n      (spoiler\n        (underline)))\n    (paragraph_segment\n      (spoiler\n        (superscript)))\n    (paragraph_segment\n      (spoiler\n        (subscript)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Superscript",
+    "input": "^Superscript and *bold*^\n^Superscript and /italic/^\n^Superscript and -struck through-^\n^Superscript and _underlined_^\n^Superscript and !spoiler!^\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (superscript\n        (bold)))\n    (paragraph_segment\n      (superscript\n        (italic)))\n    (paragraph_segment\n      (superscript\n        (strikethrough)))\n    (paragraph_segment\n      (superscript\n        (underline)))\n    (paragraph_segment\n      (superscript\n        (spoiler)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Subscript",
+    "input": ",Subscript and *bold*,\n,Subscript and /italic/,\n,Subscript and -struck through-,\n,Subscript and _underlined_,\n,Subscript and !spoiler!,\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (subscript\n        (bold)))\n    (paragraph_segment\n      (subscript\n        (italic)))\n    (paragraph_segment\n      (subscript\n        (strikethrough)))\n    (paragraph_segment\n      (subscript\n        (underline)))\n    (paragraph_segment\n      (subscript\n        (spoiler)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Deep Nesting",
+    "input": "*Bold /italic _underlined -struck through-_/*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold\n        (italic\n          (underline\n            (strikethrough)))))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Empty Markup",
+    "input": "This is not ** bold.\nThis is not // italic.\nThis is not -- struck through.\nThis is not __ underlined.\nThis is not !! a spoiler.\nThis is not `` verbatim.\nThis is not ^^ superscript.\nThis is not ,, subscript.\nThis is not %% an inline comment.\nThis is not $$ inline math.\nThis is not && an inline macro reference.\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Escaped Markup",
+    "input": "This is not \\*bold\\*\nThis is not \\/italic\\/\nThis is not \\-struck through\\-\nThis is not \\_underlined\\_\nThis is not \\!a spoiler\\!\nThis is not \\`verbatim\\`\nThis is not \\^superscript\\^\nThis is not \\,subscript\\,\nThis is not \\%an inline comment\\%\nThis is not \\$inline math\\$\nThis is not \\&inline macro reference\\&\nThis is not \\<an inline link target\\>\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))\n    (paragraph_segment\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char))\n      (escape_sequence\n        (escape_sequence_prefix)\n        (any_char)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Link Modifier",
+    "input": "Intra:*word*:bold\nIntra:/word/:italic\nIntra:-word-:strikethrough\nIntra:_word_:underline\nIntra:!word!:spoiler\nIntra:^word^:superscript\nIntra:,word,:subscript\nIntra:`word`:verbatim\nIntra:%word%:comment\nIntra:$word$:math\nIntra:&word&:macro\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (link_modifier)\n      (bold)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (italic)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (strikethrough)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (underline)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (spoiler)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (superscript)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (subscript)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (verbatim)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (inline_comment)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (inline_math)\n      (link_modifier))\n    (paragraph_segment\n      (link_modifier)\n      (inline_macro)\n      (link_modifier))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "No nested markup inside verbatim",
+    "input": "`*not bold*`\n`/not italic/`\n`-not struck through-`\n`_not underlined_`\n`!no spoiler!`\n`^not superscripted^`\n`,not subscripted,`\n`%no inline comment%`\n`$no inline math$`\n`&no inline macro&`\n`<no link target>`\n`no:*link modifier*`\n`non-hidden \\*escaped char`\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim))\n    (paragraph_segment\n      (verbatim\n        (escape_sequence\n          (escape_sequence_prefix)\n          (any_char))))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Nesting into Inline Comment",
+    "input": "%*not bold*%\n%/not italic/%\n%-not struck through-%\n%_not underlined_%\n%!no spoiler!%\n%^not superscripted^%\n%,not subscripted,%\n%`no verbatim`%\n%$no inline math$%\n%&no inline macro&%\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_comment\n        (bold)))\n    (paragraph_segment\n      (inline_comment\n        (italic)))\n    (paragraph_segment\n      (inline_comment\n        (strikethrough)))\n    (paragraph_segment\n      (inline_comment\n        (underline)))\n    (paragraph_segment\n      (inline_comment\n        (spoiler)))\n    (paragraph_segment\n      (inline_comment\n        (superscript)))\n    (paragraph_segment\n      (inline_comment\n        (subscript)))\n    (paragraph_segment\n      (inline_comment\n        (verbatim)))\n    (paragraph_segment\n      (inline_comment\n        (inline_math)))\n    (paragraph_segment\n      (inline_comment\n        (inline_macro)))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "No nested markup inside inline math",
+    "input": "$*not bold*$\n$/not italic/$\n$-not struck through-$\n$_not underlined_$\n$!no spoiler!$\n$^not superscripted^$\n$,not subscripted,$\n$`no verbatim`$\n$%no inline comment%$\n$&no inline macro&$\n$<no link target>$\n$no:*link modifier*$\n$non-hidden \\*escaped char*$\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math))\n    (paragraph_segment\n      (inline_math\n        (escape_sequence\n          (escape_sequence_prefix)\n          (any_char))))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "No nested markup inside inline macros",
+    "input": "&*not bold*&\n&/not italic/&\n&-not struck through-&\n&_not underlined_&\n&!no spoiler!&\n&^not superscripted^&\n&,not subscripted,&\n&`no verbatim`&\n&%no inline comment%&\n&$no inline math$&\n&<no link target>&\n&no:*link modifier*&\n&non-hidden \\*escaped char*&\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro))\n    (paragraph_segment\n      (inline_macro\n        (escape_sequence\n          (escape_sequence_prefix)\n          (any_char))))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "Verbatim precedence",
+    "input": "*not bold `because verbatim* has higher precedence`\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (verbatim))))",
+    "expected_error": false
+  },
+  {
+    "file": "markup.txt",
+    "name": "First closing modifier has precedence",
+    "input": "*first bold* some /italic/ and not bold*\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (bold)\n      (italic))))",
+    "expected_error": false
+  },
+  {
+    "file": "priorities.txt",
+    "name": "Priority",
+    "input": "- (# A) priority\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (priority\n          (priority_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 1 Quotes",
+    "input": "> This is a first level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote1\n      (quote1_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 2 Quotes",
+    "input": ">> This is a second level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote2\n      (quote2_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 3 Quotes",
+    "input": ">>> This is a third level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote3\n      (quote3_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 4 Quotes",
+    "input": ">>>> This is a forth level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote4\n      (quote4_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 5 Quotes",
+    "input": ">>>>> This is a fifth level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote5\n      (quote5_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Level 6 Quotes",
+    "input": ">>>>>> This is a sixth level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote6\n      (quote6_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Fallback to Level 6 Quotes",
+    "input": ">>>>>>> This falls back to a sixth level quote.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote6\n      (quote6_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Nested Quotes",
+    "input": "> This is a first level quote.\n>> This is a second level quote.\n>>> This is a third level quote.\n>>>> This is a forth level quote.\n>>>>> This is a fifth level quote.\n>>>>>> This is a sixth level quote.\n>>>>>>> This falls back to a sixth level quote.\n>>>>>> This is a sixth level quote.\n>>>>> Here, the fifth level quote continues.\n>>>> Here, the forth level quote continues.\n>>> Here, the third level quote continues.\n>> Here, the second level quote continues.\n> Here, the first level quote continues.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote1\n      (quote1_prefix)\n      content: (paragraph\n        (paragraph_segment))\n      (quote2\n        (quote2_prefix)\n        content: (paragraph\n          (paragraph_segment))\n        (quote3\n          (quote3_prefix)\n          content: (paragraph\n            (paragraph_segment))\n          (quote4\n            (quote4_prefix)\n            content: (paragraph\n              (paragraph_segment))\n            (quote5\n              (quote5_prefix)\n              content: (paragraph\n                (paragraph_segment))\n              (quote6\n                (quote6_prefix)\n                content: (paragraph\n                  (paragraph_segment)))\n              (quote6\n                (quote6_prefix)\n                content: (paragraph\n                  (paragraph_segment)))\n              (quote6\n                (quote6_prefix)\n                content: (paragraph\n                  (paragraph_segment))))\n            (quote5\n              (quote5_prefix)\n              content: (paragraph\n                (paragraph_segment))))\n          (quote4\n            (quote4_prefix)\n            content: (paragraph\n              (paragraph_segment))))\n        (quote3\n          (quote3_prefix)\n          content: (paragraph\n            (paragraph_segment))))\n      (quote2\n        (quote2_prefix)\n        content: (paragraph\n          (paragraph_segment))))\n    (quote1\n      (quote1_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "quotes.txt",
+    "name": "Quote End",
+    "input": "> This is one quote.\n\n> And this is another.\n\nThis is no longer part of the quote.\n",
+    "expected": "(document\n  (quote\n    (quote1\n      (quote1_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (quote\n    (quote1\n      (quote1_prefix)\n      content: (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tables.txt",
+    "name": "Single paragraph table cell",
+    "input": ": Single-paragraph table cell\nThis is the actual cell content.\n\nThis is no longer part of the cell.\n",
+    "expected": "(document\n  (table\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tables.txt",
+    "name": "Multi paragraph table cell",
+    "input": ":: Multi-paragraph definition\nThis is the actual cell content.\n\nThis is also still part of the cell.\n::\nThis is no longer part of the cell.\n",
+    "expected": "(document\n  (table\n    (multi_table_cell\n      (multi_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))\n      (paragraph\n        (paragraph_segment))\n      (multi_table_cell_suffix)))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tables.txt",
+    "name": "Table grouping",
+    "input": ": First cell\nContent\n:: Second cell\nContent\n::\n: Third cell\nContent\n",
+    "expected": "(document\n  (table\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment)))\n    (multi_table_cell\n      (multi_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment))\n      (multi_table_cell_suffix))\n    (single_table_cell\n      (single_table_cell_prefix)\n      (paragraph_segment)\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Regular Ranged Tag",
+    "input": "|table\n*heading* | /heading/\nvalue | something else\n|end\nNo longer part of the ranged tag.\n",
+    "expected": "(document\n  (ranged_tag\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph\n        (paragraph_segment\n          (bold)\n          (italic))\n        (paragraph_segment)))\n    (ranged_tag_end))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Verbatim Tag",
+    "input": "@math\nf(x) = \\int\n@end\nNo longer part of the ranged tag.\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word))\n    (ranged_verbatim_tag_content\n      (paragraph_segment))\n    (ranged_verbatim_tag_end))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Verbatim Tag with Parameters",
+    "input": "@code lua\nprint(\"Hello world\")\n@end\nNo longer part of the ranged tag.\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment))\n    (ranged_verbatim_tag_end))\n  (paragraph\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "@end Tag without Ranged Verbatim Tag",
+    "input": "@my.tag\n@end\n\nThis\n@end\nshouldn't be a closing tag.\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word)\n      (word))\n    (ranged_verbatim_tag_end))\n  (paragraph\n    (paragraph_segment)\n    (paragraph_segment)\n    (paragraph_segment)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Disallow Ranged Tag within Ranged Tag",
+    "input": "@code java\n@MyAnnotation\npublic class MyClass {}\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment)\n      (paragraph_segment))\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Tag with strong carryover",
+    "input": "#color blue\n|table\n*heading* | /heading/\nvalue | something else\n|end\n",
+    "expected": "(document\n  (ranged_tag\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph\n        (paragraph_segment\n          (bold)\n          (italic))\n        (paragraph_segment)))\n    (ranged_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Verbatim Tag with strong carryover",
+    "input": "#color blue\n@code java\n@MyAnnotation\npublic class MyClass {}\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment)\n      (paragraph_segment))\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Tag with weak carryover",
+    "input": "+color blue\n|table\n*heading* | /heading/\nvalue | something else\n|end\n",
+    "expected": "(document\n  (ranged_tag\n    (weak_carryover_set\n      (weak_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph\n        (paragraph_segment\n          (bold)\n          (italic))\n        (paragraph_segment)))\n    (ranged_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Verbatim Tag with weak carryover",
+    "input": "+color blue\n@code java\n@MyAnnotation\npublic class MyClass {}\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (weak_carryover_set\n      (weak_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment)\n      (paragraph_segment))\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Tag with strong and weak carryover",
+    "input": "#name test\n+color blue\n|table\n*heading* | /heading/\nvalue | something else\n|end\n",
+    "expected": "(document\n  (ranged_tag\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (weak_carryover_set\n      (weak_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph\n        (paragraph_segment\n          (bold)\n          (italic))\n        (paragraph_segment)))\n    (ranged_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Verbatim Tag with strong and weak carryover",
+    "input": "#name test\n+color blue\n@code java\n@MyAnnotation\npublic class MyClass {}\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (weak_carryover_set\n      (weak_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param))\n    (ranged_verbatim_tag_content\n      (paragraph_segment)\n      (paragraph_segment))\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Ranged Tag with wrong order of carryovers",
+    "input": "+color blue\n#name test\n|table\n*heading* | /heading/\nvalue | something else\n|end\n",
+    "expected": "(document\n  (paragraph\n    (paragraph_segment\n      (weak_carryover_set\n        (weak_carryover\n          (tag_name\n            (word))\n          (tag_parameters\n            (tag_param))))\n      (MISSING \"_space\")))\n  (ranged_tag\n    (strong_carryover_set\n      (strong_carryover\n        (tag_name\n          (word))\n        (tag_parameters\n          (tag_param))))\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph\n        (paragraph_segment\n          (bold)\n          (italic))\n        (paragraph_segment)))\n    (ranged_tag_end)))",
+    "expected_error": true
+  },
+  {
+    "file": "tags.txt",
+    "name": "Empty ranged tag",
+    "input": "|empty\n\n|end\n",
+    "expected": "(document\n  (ranged_tag\n    (tag_name\n      (word))\n    (ranged_tag_content\n      (paragraph))\n    (ranged_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Empty verbatim ranged tag",
+    "input": "@empty\n\n@end\n",
+    "expected": "(document\n  (ranged_verbatim_tag\n    (tag_name\n      (word))\n    (ranged_verbatim_tag_content)\n    (ranged_verbatim_tag_end)))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Infirm tag",
+    "input": ".macro\n\n",
+    "expected": "(document\n  (infirm_tag\n    (tag_name\n      (word))))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Infirm tag with parameters",
+    "input": ".macro param1 param2\n\n",
+    "expected": "(document\n  (infirm_tag\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param)\n      (tag_param))))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Infirm tag with dot separated name",
+    "input": ".macro.with.odd.name\n\n",
+    "expected": "(document\n  (infirm_tag\n    (tag_name\n      (word))))",
+    "expected_error": false
+  },
+  {
+    "file": "tags.txt",
+    "name": "Infirm tag with dot separated name and parameters",
+    "input": ".macro.with.odd.name param1 param2\n\n",
+    "expected": "(document\n  (infirm_tag\n    (tag_name\n      (word))\n    (tag_parameters\n      (tag_param)\n      (tag_param))))",
+    "expected_error": false
+  },
+  {
+    "file": "timestamps.txt",
+    "name": "Timestamps",
+    "input": "- (@ Sun, 1 May 2022 22:21 CEST) timestamp\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension (timestamp\n        (timestamp_data)))\n      (paragraph\n        (paragraph_segment)))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Undone Todo",
+    "input": "- ( ) Undone task level 1\n-- ( ) Undone task level 2\n--- ( ) Undone task level 3\n---- ( ) Undone task level 4\n----- ( ) Undone task level 5\n------ ( ) Undone task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_undone))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_undone))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_undone))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_undone))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_undone))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_undone))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Done Todo",
+    "input": "- (x) Done task level 1\n-- (x) Done task level 2\n--- (x) Done task level 3\n---- (x) Done task level 4\n----- (x) Done task level 5\n------ (x) Done task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_done))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_done))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_done))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_done))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_done))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_done))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Pending Todo",
+    "input": "- (-) Pending task level 1\n-- (-) Pending task level 2\n--- (-) Pending task level 3\n---- (-) Pending task level 4\n----- (-) Pending task level 5\n------ (-) Pending task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_pending))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_pending))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_pending))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_pending))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_pending))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_pending))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "On Hold Todo",
+    "input": "- (=) On hold task level 1\n-- (=) On hold task level 2\n--- (=) On hold task level 3\n---- (=) On hold task level 4\n----- (=) On hold task level 5\n------ (=) On hold task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_on_hold))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_on_hold))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_on_hold))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_on_hold))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_on_hold))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_on_hold))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Cancelled Todo",
+    "input": "- (_) Cancelled task level 1\n-- (_) Cancelled task level 2\n--- (_) Cancelled task level 3\n---- (_) Cancelled task level 4\n----- (_) Cancelled task level 5\n------ (_) Cancelled task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_cancelled))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_cancelled))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_cancelled))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_cancelled))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_cancelled))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_cancelled))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Urgent Todo",
+    "input": "- (!) Urgent task level 1\n-- (!) Urgent task level 2\n--- (!) Urgent task level 3\n---- (!) Urgent task level 4\n----- (!) Urgent task level 5\n------ (!) Urgent task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_urgent))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_urgent))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_urgent))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_urgent))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_urgent))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_urgent))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Recurring Todo",
+    "input": "- (+) Recurring task level 1\n-- (+) Recurring task level 2\n--- (+) Recurring task level 3\n---- (+) Recurring task level 4\n----- (+) Recurring task level 5\n------ (+) Recurring task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_recurring))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_recurring))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_recurring))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_recurring))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_recurring))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_recurring))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Uncertain Todo",
+    "input": "- (?) Uncertain task level 1\n-- (?) Uncertain task level 2\n--- (?) Uncertain task level 3\n---- (?) Uncertain task level 4\n----- (?) Uncertain task level 5\n------ (?) Uncertain task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_uncertain))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_uncertain))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_uncertain))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_uncertain))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_uncertain))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_uncertain))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "todos.txt",
+    "name": "Recurring Todo with Time Indicator",
+    "input": "- (+ 2nd February) Recurring task level 1\n-- (+ 2nd February) Recurring task level 2\n--- (+ 2nd February) Recurring task level 3\n---- (+ 2nd February) Recurring task level 4\n----- (+ 2nd February) Recurring task level 5\n------ (+ 2nd February) Recurring task level 6\n\n",
+    "expected": "(document\n  (generic_list\n    (unordered_list1\n      (unordered_list1_prefix)\n      (detached_modifier_extension\n        (todo_item_recurring\n          (timestamp_data)))\n      (paragraph\n        (paragraph_segment))\n      (unordered_list2\n        (unordered_list2_prefix)\n        (detached_modifier_extension\n          (todo_item_recurring\n            (timestamp_data)))\n        (paragraph\n          (paragraph_segment))\n        (unordered_list3\n          (unordered_list3_prefix)\n          (detached_modifier_extension\n            (todo_item_recurring\n              (timestamp_data)))\n          (paragraph\n            (paragraph_segment))\n          (unordered_list4\n            (unordered_list4_prefix)\n            (detached_modifier_extension\n              (todo_item_recurring\n                (timestamp_data)))\n            (paragraph\n              (paragraph_segment))\n            (unordered_list5\n              (unordered_list5_prefix)\n              (detached_modifier_extension\n                (todo_item_recurring\n                  (timestamp_data)))\n              (paragraph\n                (paragraph_segment))\n              (unordered_list6\n                (unordered_list6_prefix)\n                (detached_modifier_extension\n                  (todo_item_recurring\n                    (timestamp_data)))\n                (paragraph\n                  (paragraph_segment))))))))))",
+    "expected_error": false
+  },
+  {
+    "file": "trailing.txt",
+    "name": "Trailing Modifier",
+    "input": "* Heading~\nThis is still part of the heading.\n",
+    "expected": "(document\n  (heading1\n    (heading1_prefix)\n    (paragraph_segment)))\n\n=====\nTrailing modifier overwrites following detached modifier\n=====\nThis is some text~\n\\- and this is not a list item, but a sentence being continued after a Gedankenstrich\n---\n(document\n      (paragraph\n        (paragraph_segment\n          (escape_sequence\n            (escape_sequence_prefix)\n            (any_char)))))",
+    "expected_error": false
+  }
+]
